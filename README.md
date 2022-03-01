@@ -3,6 +3,6 @@ We are bears and we are sleepy, all the time.
 
 
 
-Project used for the Software engineering class.
+Project used for the Software engineering team project.
 
-frameworks & languages to use: Go, mongoDB, JS, React, JQuery
+
