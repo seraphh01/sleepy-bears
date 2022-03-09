@@ -14,4 +14,5 @@ Project used for the Software engineering team project.
 ![app diagram](diagrams/application_architecture.drawio.png)
 
 <h1>Database ERD</h1>
+
 ![db diagram](diagrams/database_diagram.drawio.png)
