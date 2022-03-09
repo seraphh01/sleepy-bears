@@ -16,3 +16,5 @@ Project used for the Software engineering team project.
 <h1>Database ERD</h1>
 
 ![db diagram](diagrams/database_diagram.drawio.png)
+
+<svg src="diagrams/application_architecture.drawio.xml"/>
