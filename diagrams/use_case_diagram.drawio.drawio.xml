@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-03-14T08:38:28.372Z" agent="5.0 (Windows)" etag="yJE-RBJMfuGpJ4zGDUPY" version="16.6.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-03-14T08:41:47.741Z" agent="5.0 (Windows)" etag="BU4cXbaQZGir_rUXptZs" version="16.6.2" type="github">
   <diagram id="6I0OCvxSQrVGMHxT2VVA" name="Page-1">
     <mxGraphModel dx="1483" dy="806" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -174,6 +174,36 @@
         </mxCell>
         <mxCell id="NZ0SsQnIN1OoFwFoMDWm-105" value="Add grades for students" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1215" y="1130" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-108" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;" edge="1" parent="1" source="NZ0SsQnIN1OoFwFoMDWm-107" target="NZ0SsQnIN1OoFwFoMDWm-100">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-114" value="&amp;lt;&amp;lt;includes&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="NZ0SsQnIN1OoFwFoMDWm-107" target="NZ0SsQnIN1OoFwFoMDWm-110">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-115" value="&amp;lt;&amp;lt;includes&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="NZ0SsQnIN1OoFwFoMDWm-107" target="NZ0SsQnIN1OoFwFoMDWm-109">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-116" value="&amp;lt;&amp;lt;includes&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="NZ0SsQnIN1OoFwFoMDWm-107" target="NZ0SsQnIN1OoFwFoMDWm-111">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-117" value="&amp;lt;&amp;lt;includes&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="NZ0SsQnIN1OoFwFoMDWm-107" target="NZ0SsQnIN1OoFwFoMDWm-112">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-107" value="Become chief of department" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="820" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-109" value="Specify max number of students for optional course" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="760" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-110" value="View &amp;amp; approve list of optional courses" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="660" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-111" value="View the teacher with best/worst results" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="830" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NZ0SsQnIN1OoFwFoMDWm-112" value="View disciplines given by a teacher" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="950" width="120" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
