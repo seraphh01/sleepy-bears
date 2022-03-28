@@ -5,15 +5,31 @@
         <div class="login-app-title"><h1>Academic Info</h1></div>
     </div>
     <div class="parent row">
-        <div class="login-prompt"><h4>Login to continue</h4></div>
+        <div class="login-prompt"><h4>Login to continue:</h4></div>
     </div>
     
 
     <div class="row">
-        <div class="flex-item">Academic Info</div>
-        <div class="flex-item">Academic Info</div>
-        <div class="flex-item">Academic Info</div>
-        <div class="flex-item">Academic Info</div>
+        <div class="login-input-form row">
+            <label class="label" for="email">Email:</label><br>
+            <input type="email" id="email"><br>
+
+            <label class="label" for="password">Password:</label><br>
+            <input type="password" id="password" ng-model="password">
+            
+        </div>
+    </div>
+
+    <div class="submit-section row submit-section">
+        <button *ngIf="register == true" type="button" (click)="onRegister()">Register</button>
+        <button *ngIf="register == false" type="button" (click)="onLogin()">Login</button>
+    
+    </div>
+
+    <div class="register-prompt row label">
+        <a href="#" (click)="register=true" *ngIf="register == false">Don't have an account? Register here</a>
+        <a href="#" (click)="register=false" *ngIf="register == true">Already have an account? Login here</a>
+        
     </div>
     
     

@@ -10,6 +10,7 @@
     background-color: black;
     flex-wrap:wrap;
     opacity: 0.8;   
+    border-radius: 30px;
 }
 
 .flex-item{
@@ -42,4 +43,22 @@
 
 .row{
     width: 100%;
+}
+
+.label {
+    color: white;
+}
+
+.login-input-form{
+    padding: 10px;
+    margin: auto;
+    width: 50%;
+}
+
+.register-prompt {
+    text-align: center;
+}
+
+.submit-section{
+    text-align: center;
 }
