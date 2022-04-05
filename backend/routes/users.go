@@ -13,15 +13,13 @@ import (
 )
 
 var validate = validator.New()
-
 var userCollection *mongo.Collection = OpenCollection(Client, "User")
 
 func GetUsers(c *gin.Context) {
-
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
 	var users []bson.M
-
 	cursor, err := userCollection.Find(ctx, bson.M{})
 
 	if err != nil {
@@ -36,9 +34,6 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	defer cancel()
-
 	fmt.Println(users)
-
 	c.JSON(http.StatusOK, users)
 }
