@@ -8,7 +8,7 @@ import (
 
 //CheckUserType renews the user tokens when they login
 func CheckUserType(c *gin.Context, role string) (err error) {
-	userType := c.GetString("UserType")
+	userType := c.GetString("usertype")
 	err = nil
 	if userType != role {
 		err = errors.New("Unauthorized to access this resource")
@@ -20,7 +20,7 @@ func CheckUserType(c *gin.Context, role string) (err error) {
 
 //MatchUserTypeToUid only allows the user to access their data and no other data. Only the admin can access all user data
 func MatchUserTypeToUid(c *gin.Context, userId string) (err error) {
-	userType := c.GetString("UserType")
+	userType := c.GetString("usertype")
 	uid := c.GetString("uid")
 	err = nil
 

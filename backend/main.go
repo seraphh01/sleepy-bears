@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"backend/controllers"
+	"backend/routes"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,8 @@ func main() {
 	router.Use(gin.Logger())
 	router.Use(cors.Default())
 
-	router.GET("/users", controllers.GetUsers)
+	routes.AuthRoutes(router)
+	routes.UserRoutes(router)
 
 	router.Run(":" + port)
 }

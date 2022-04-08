@@ -6,13 +6,14 @@ import (
 	"backend/models"
 	"context"
 	"fmt"
-	"github.com/go-playground/validator/v10"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -61,7 +62,7 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 
-		count, err := userCollection.CountDocuments(ctx, bson.M{"Username": user.Username})
+		count, err := userCollection.CountDocuments(ctx, bson.M{"username": user.Username})
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while checking for the Username"})
@@ -78,9 +79,9 @@ func SignUp() gin.HandlerFunc {
 		}
 
 		user.ID = primitive.NewObjectID()
-		token, refreshToken, _ := helpers.GenerateAllTokens(*user.Email, *user.Name, *user.Username, *user.UserType, *&user.User_id)
+		token, refreshToken, _ := helpers.GenerateAllTokens(*user.Email, *user.Name, *user.Username, *user.UserType, *&user.UserId)
 		user.Token = &token
-		user.Refresh_token = &refreshToken
+		user.RefreshToken = &refreshToken
 
 		resultInsertionNumber, insertErr := userCollection.InsertOne(ctx, user)
 		if insertErr != nil {
@@ -106,8 +107,7 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		err := userCollection.FindOne(ctx, bson.M{"Username": user.Username}).Decode(&foundUser)
+		err := userCollection.FindOne(ctx, bson.M{"username": user.Username}).Decode(&foundUser)
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "login or password is incorrect"})
@@ -125,10 +125,10 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "user not found"})
 			return
 		}
-		token, refreshToken, _ := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.Name, *foundUser.Username, *foundUser.UserType, foundUser.User_id)
+		token, refreshToken, _ := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.Name, *foundUser.Username, *foundUser.UserType, foundUser.UserId)
 
-		helpers.UpdateAllTokens(token, refreshToken, foundUser.User_id)
-		err = userCollection.FindOne(ctx, bson.M{"User_id": foundUser.User_id}).Decode(&foundUser)
+		helpers.UpdateAllTokens(token, refreshToken, foundUser.UserId)
+		err = userCollection.FindOne(ctx, bson.M{"userid": foundUser.UserId}).Decode(&foundUser)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -189,7 +189,7 @@ func GetUsers() gin.HandlerFunc {
 //GetUser is the api used to get a single user
 func GetUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId := c.Param("User_id")
+		userId := c.Param("userId")
 
 		if err := helpers.MatchUserTypeToUid(c, userId); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -199,7 +199,7 @@ func GetUser() gin.HandlerFunc {
 
 		var user models.User
 
-		err := userCollection.FindOne(ctx, bson.M{"User_id": userId}).Decode(&user)
+		err := userCollection.FindOne(ctx, bson.M{"userId": userId}).Decode(&user)
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

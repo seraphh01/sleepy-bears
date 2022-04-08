@@ -12,7 +12,7 @@ import (
 // Authz validates token and authorizes users
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		clientToken := c.Request.Header.Get("Token")
+		clientToken := c.Request.Header.Get("token")
 		if clientToken == "" {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("No Authorization header provided")})
 			c.Abort()
@@ -27,10 +27,10 @@ func Authentication() gin.HandlerFunc {
 		}
 
 		c.Set("email", claims.Email)
-		c.Set("Name", claims.Name)
-		c.Set("Username", claims.Username)
+		c.Set("name", claims.Name)
+		c.Set("username", claims.Username)
 		c.Set("uid", claims.Uid)
-		c.Set("UserType", claims.UserType)
+		c.Set("usertype", claims.UserType)
 
 		c.Next()
 
