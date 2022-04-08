@@ -9,8 +9,8 @@ type User struct {
   Username           *string            `json:"Username" validate:"required,min=8,max=32"`
   Email              *string            `json:"Email" validate:"email,required"`
   Password           *string            `json:"Password" validate:"required,min=8,max=20"`
+  UserType           *string            `json:"UserType" validate:"required,eq=STUDENT|eq=TEACHER|eq=ADMIN|eq=CHIEF"`
   Name               *string            `json:"Name" validate:"required"`
-  PhoneNumber        *string            `json:"PhoneNumber" validate:"required"`
-  Role               *string            `json:"Role"`
+  PhoneNumber        *string            `json:"PhoneNumber" validate:"required,min=8"`
   ProfileDescription *string            `json:"ProfileDescription"`
 }
