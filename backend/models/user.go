@@ -14,5 +14,4 @@ type User struct {
 	ProfileDescription *string            `json:"profiledescription"`
 	Token              *string            `json:"token"`
 	RefreshToken       *string            `json:"refreshtoken"`
-	UserId             string             `json:"userid"`
 }

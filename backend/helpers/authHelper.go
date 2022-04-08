@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//CheckUserType renews the user tokens when they login
+//CheckUserType renews the user tokens when they log in
 func CheckUserType(c *gin.Context, role string) (err error) {
 	userType := c.GetString("usertype")
 	err = nil
@@ -19,13 +19,13 @@ func CheckUserType(c *gin.Context, role string) (err error) {
 }
 
 //MatchUserTypeToUid only allows the user to access their data and no other data. Only the admin can access all user data
-func MatchUserTypeToUid(c *gin.Context, userId string) (err error) {
+func MatchUserTypeToUid(c *gin.Context, username_ string) (err error) {
 	userType := c.GetString("usertype")
-	uid := c.GetString("uid")
+	username := c.GetString("username")
 	err = nil
 
-	if userType == "STUDENT" && uid != userId {
-		err = errors.New("Unauthorized to access this resource")
+	if userType == "STUDENT" && username != username_ {
+		err = errors.New("Unauthorized to access this resource!")
 		return err
 	}
 	err = CheckUserType(c, userType)
