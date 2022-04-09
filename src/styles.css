@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+.login_body{
+    background-image: url("../images/bg_login.jpg");
+    background-position: 0%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
