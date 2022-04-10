@@ -1,36 +1,37 @@
+<div class="login-body">
+    <div class="login-flex-container">
+        <div class="parent row">
+            <div class="login-app-title"><h1>Academic Info</h1></div>
+        </div>
+        <div class="parent row">
+            <div class="login-prompt"><h4>Login to continue:</h4></div>
+        </div>
+        
 
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="login-input-form row">
+                        <label class="label" for="username">Username:</label><br>
+                        <input type="text" id="username" formControlName="username"><br>
+            
+                        <label class="label" for="password">Password:</label><br>
+                        <input type="password" id="password" formControlName="password">
+                    
+                    
+                </div>
+            </div>
 
-<div class="login-flex-container">
-    <div class="parent row">
-        <div class="login-app-title"><h1>Academic Info</h1></div>
-    </div>
-    <div class="parent row">
-        <div class="login-prompt"><h4>Login to continue:</h4></div>
-    </div>
-    
+            <div class="submit-section row submit-section">
+                <button  type="submit" (click)="onLogin()" (submit)="onLogin()">Login</button>
+            
+            </div>
+        </form>
 
-    <div class="row">
-        <div class="login-input-form row">
-            <label class="label" for="email">Email:</label><br>
-            <input type="email" id="email"><br>
-
-            <label class="label" for="password">Password:</label><br>
-            <input type="password" id="password" ng-model="password">
+        <div class="register-prompt row label">
+            <a href="#" >Don't have an account? lol</a>
             
         </div>
-    </div>
-
-    <div class="submit-section row submit-section">
-        <button *ngIf="register == true" type="button" (click)="onRegister()">Register</button>
-        <button *ngIf="register == false" type="button" (click)="onLogin()">Login</button>
-    
-    </div>
-
-    <div class="register-prompt row label">
-        <a href="#" (click)="register=true" *ngIf="register == false">Don't have an account? Register here</a>
-        <a href="#" (click)="register=false" *ngIf="register == true">Already have an account? Login here</a>
+        
         
     </div>
-    
-    
 </div>
