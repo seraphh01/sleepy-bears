@@ -1,37 +1,29 @@
-<div class="login-body">
-    <div class="login-flex-container">
-        <div class="parent row">
-            <div class="login-app-title"><h1>Academic Info</h1></div>
-        </div>
-        <div class="parent row">
-            <div class="login-prompt"><h4>Login to continue:</h4></div>
-        </div>
-        
-
-        <form [formGroup]="form">
-            <div class="row">
-                <div class="login-input-form row">
-                        <label class="label" for="username">Username:</label><br>
-                        <input type="text" id="username" formControlName="username"><br>
-            
+<div class="login-box">
+    <form>
+        <div class="login-flex-container">
+            <div class="parent row">
+                <div class="login-app-title"><h1>Academic Info</h1></div>
+            </div>
+            <br>
+            <div class="parent row">
+                <div class="login-prompt"><h4>Login to continue:</h4></div><br>
+            </div>
+            <form [formGroup]="form">
+                <div class="row">
+                    <div class="user-box">
+                        <label class="label" for="username">Username:</label><br><br>
+                        <input type="text" id="username" formControlName="username"><br><br>
+                    </div>
+                    <div class="user-box">
                         <label class="label" for="password">Password:</label><br>
                         <input type="password" id="password" formControlName="password">
-                    
-                    
+                    </div>
                 </div>
-            </div>
-
-            <div class="submit-section row submit-section">
-                <button  type="submit" (click)="onLogin()" (submit)="onLogin()">Login</button>
-            
-            </div>
-        </form>
-
-        <div class="register-prompt row label">
-            <a href="#" >Don't have an account? lol</a>
-            
+                <button  class="button" type="submit" (click)="onLogin()" (submit)="onLogin()">Login</button>
+            </form>
+            <div class="register-prompt row label">
+                <a href="#" >Don't have an account? lol</a>
+            </div>    
         </div>
-        
-        
-    </div>
+    </form>
 </div>
