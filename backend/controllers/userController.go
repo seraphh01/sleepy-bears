@@ -210,3 +210,82 @@ func GetUser() gin.HandlerFunc {
 
 	}
 }
+
+func UpdateUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		username := c.Param("username")
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var user models.User
+
+		if err := c.BindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var foundUser models.User
+		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&foundUser)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "user was not found"})
+			return
+		}
+
+		validationErr := validate.Struct(user)
+		if validationErr != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+			return
+		}
+		password := HashPassword(*user.Password)
+		user.Password = &password
+		count, err := userCollection.CountDocuments(ctx, bson.M{"username": user.Username})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if *user.Username != *foundUser.Username && count > 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "this Username already exists"})
+			return
+		}
+		update := bson.M{"username": user.Username, "email": user.Email, "password": user.Password, "usertype": user.UserType, "name": user.Name, "profiledescription": user.ProfileDescription}
+		result, err := userCollection.UpdateOne(ctx, bson.M{"username": username}, bson.M{"$set": update})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var updatedUser models.User
+		if result.MatchedCount == 1 {
+			err := userCollection.FindOne(ctx, bson.M{"username": user.Username}).Decode(&updatedUser)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+		}
+		c.JSON(http.StatusOK, updatedUser)
+	}
+}
+
+func DeleteUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		username := c.Param("username")
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		result, err := userCollection.DeleteOne(ctx, bson.M{"username": username})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		if result.DeletedCount < 1 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User was not found!"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"success": "User was deleted!"})
+	}
+}
