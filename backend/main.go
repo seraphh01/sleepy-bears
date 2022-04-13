@@ -22,6 +22,7 @@ func main() {
 
 	routes.AuthRoutes(router)
 	routes.UserRoutes(router)
+	routes.CourseRoutes(router)
 
 	router.Run("127.0.0.1:" + port)
 }
