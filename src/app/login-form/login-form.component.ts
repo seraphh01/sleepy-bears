@@ -37,10 +37,9 @@ export class LoginFormComponent implements OnInit {
 
     if(this.username != undefined && this.password != undefined){
       this.authService.login(this.username, this.password).subscribe(result => {
-        confirm("Logged in succesfully!");
         
         this.redirect(result);
-      }, _ => {
+      }, error => {
         confirm("Invalid username or password!");
       });
     }else{
@@ -51,6 +50,9 @@ export class LoginFormComponent implements OnInit {
   public getPage(usertype: string){
     let pages: {[key: string] : string} = {
       "ADMIN": "admins"
+      // "STUDENT": "students",
+      // "TEACHER": "teacher",
+      // "HEAD": "head",
     }
 
     if(pages[usertype]){
