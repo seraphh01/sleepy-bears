@@ -26,13 +26,11 @@
     display: flex;
     flex-wrap: wrap;
     width: 80%;
-    background-color: #999999;
+    background-color: #EEEEEE;
     padding: 20px;
     box-sizing: border-box;
-    text-align: left;
-    justify-content: center;
-    flex-direction: column;
-    padding-left: 50px;
+    flex-flow: column;
+    padding: 50px;
 }
 
 .row{
@@ -63,6 +61,22 @@
 
 .redirect:hover {
     cursor: pointer;
-    color: wheat;
+    color: white;
+}
+
+.middle-content {
+    background-color: burlywood;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: auto;
+    margin-top: 50px;
+}
+
+.top-content {
+    background-color: burlywood;
+    border-radius: 10px;
+    padding: 50px;
+    color: azure;
+    text-align: right;
 }
 
