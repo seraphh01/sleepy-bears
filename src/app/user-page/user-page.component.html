@@ -14,10 +14,21 @@
                 <h1>Enter Page:</h1>
                 <br>
 
-                <h2 *ngIf="this.user.usertype=='STUDENT'"><span class="redirect">> Student page</span></h2>
-                <h2 *ngIf="this.user.usertype=='ADMIN'"><span class="redirect">> Admin</span></h2>
-                <h2 *ngIf="this.user.usertype=='TEACHER'"><span class="redirect">> Teacher</span></h2>
-                <h2 *ngIf="this.user.usertype=='CHIEF'"><span class="redirect">> Teacher</span></h2>
+                <h2 *ngIf="this.user.usertype=='STUDENT'">
+                    <span class="redirect" (click)="goToUserTypePage()">> Student page</span>
+                </h2>
+
+                <h2 *ngIf="this.user.usertype=='ADMIN'">
+                    <span class="redirect" (click)="goToUserTypePage()">> Admin</span>
+                </h2>
+
+                <h2 *ngIf="this.user.usertype=='TEACHER'">
+                    <span class="redirect" (click)="goToUserTypePage()">> Teacher</span>
+                </h2>
+
+                <h2 *ngIf="this.user.usertype=='CHIEF'">
+                    <span class="redirect" (click)="goToUserTypePage()">> Teacher</span>
+                </h2>
                 
             </div>
             <div *ngIf="!this.user">
