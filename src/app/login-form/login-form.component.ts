@@ -37,8 +37,8 @@ export class LoginFormComponent implements OnInit {
 
     if(this.username != undefined && this.password != undefined){
       this.authService.login(this.username, this.password).subscribe(result => {
-        
-        this.redirect(result);
+        sessionStorage.setItem("token", result.token);
+        this.redirect();
       }, error => {
         confirm("Invalid username or password!");
       });
@@ -47,8 +47,7 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  public redirect(userData: any){
-    
-    this.router.navigate([`users/${this.username}/${userData.token}`]);
+  public redirect(){
+    this.router.navigate([`users/${this.username}`]);
   }
 }

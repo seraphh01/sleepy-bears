@@ -37,10 +37,14 @@ export class AuthService {
     return this.http.post<any>(`${this.url}/users/signup`, data);
   }
 
-  public getUser(username: string, token: string): Observable<UserModel>{
+  public getUser(username: string): Observable<UserModel>{
     let headers = new HttpHeaders().set(
-      "token", token
+      "token", sessionStorage.getItem("token")!
     );
     return this.http.get<UserModel>(`${this.url}/users/${username}`, {headers: headers});
+  }
+
+  public clearToken(){
+    sessionStorage.removeItem("token");
   }
 }

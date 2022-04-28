@@ -80,3 +80,16 @@
     text-align: right;
 }
 
+.logout-button {
+    padding: 10px 30px;
+    background-color: azure;
+    border-radius: 10px;
+}
+
+.logout-button:hover {
+    cursor: pointer;
+    background-color: gray;
+    color: azure;
+    box-shadow: 1px 3px 2px black;
+}
+
