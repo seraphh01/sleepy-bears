@@ -2,6 +2,52 @@ html{
     height: 100%;
 }
 
+.box{
+  -webkit-transition: all 2s ease;  
+  -moz-transition: all 2s ease;  
+  -o-transition: all 2s ease;  
+  -ms-transition: all 2s ease; 
+  transition: all 1s ease;
+  display: flex;
+  justify-content: space-between;
+  background-color: linear-gradient(#141e30,#243b55);
+  height: 60px;
+  width: 400px;
+}
+
+#boxButton{
+  display:none ;
+  background-color: red;
+  color:white;
+  font-weight: 50px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+
+.grow{
+  background-color: red;
+}
+
+.exit{
+  background-color: linear-gradient(#141e30,#243b55);
+}
+
+.growText{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  font-weight: 550;
+  padding-left: 10px;
+}
+
+
+.growButton{
+  display: block;
+  width: 150px;
+  height: 5px;
+  color: black;
+}
+
 .login-box {
     margin: 0;
     padding: 0;
