@@ -8,7 +8,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 const routes: Routes = [
   {path:"", component: LoginFormComponent},
   {path:'users/:username', component: UserPageComponent},
-  {path:'admins/:username/:token', component: AdminPageComponent}
+  {path:'ADMIN/:username', component: AdminPageComponent}
 ]
 
 @NgModule({

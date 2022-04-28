@@ -20,6 +20,7 @@ export class UserPageComponent implements OnInit {
     let username = this.route.snapshot.paramMap.get("username");
     
     this.username = username!;
+
     this.authService.getUser(this.username!).subscribe((res) => {
       this.user = res;
       console.log(res);
@@ -29,5 +30,12 @@ export class UserPageComponent implements OnInit {
   public logOut(){
     this.authService.clearToken();
     this.router.navigate([""]);
+  }
+
+  public goToUserTypePage(){
+    let userType = this.user!.usertype;
+    let userName = this.user!.username;
+
+    this.router.navigate([`${userType}/${userName}`]);
   }
 }
