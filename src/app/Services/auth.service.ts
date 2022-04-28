@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, shareReplay } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RegisterModel } from '../models/register.model';
+import { UserModel } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,12 @@ export class AuthService {
     // } as RegisterModel;
 
     return this.http.post<any>(`${this.url}/users/signup`, data);
+  }
+
+  public getUser(username: string, token: string): Observable<UserModel>{
+    let headers = new HttpHeaders().set(
+      "token", token
+    );
+    return this.http.get<UserModel>(`${this.url}/users/${username}`, {headers: headers});
   }
 }

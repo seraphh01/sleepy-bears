@@ -47,24 +47,8 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  public getPage(usertype: string){
-    let pages: {[key: string] : string} = {
-      "ADMIN": "admins"
-      // "STUDENT": "students",
-      // "TEACHER": "teacher",
-      // "HEAD": "head",
-    }
-
-    if(pages[usertype]){
-      return pages[usertype]
-    }
-
-    return "users";
-  }
-
   public redirect(userData: any){
-    let page = this.getPage(userData.usertype);
     
-    this.router.navigate([`${page}/${this.username}/${userData.token}`]);
+    this.router.navigate([`users/${this.username}/${userData.token}`]);
   }
 }
