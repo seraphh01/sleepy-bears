@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { UserModel } from '../models/user.model';
+import { AuthService } from '../Services/auth.service';
 
 @Component({
   selector: 'app-user-page',
@@ -7,17 +9,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent implements OnInit {
-  public username?: String;
+  public user!: UserModel;
+  public username?: string;
+  private token!: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService) { 
+
+  }
 
   ngOnInit(): void {
-    console.log("hello from userpage")
     let username = this.route.snapshot.paramMap.get("username");
+    let token = this.route.snapshot.paramMap.get("token");
     
-    console.log(username);
-    
-    this.username = username ? username : "undefined";
+    this.username = username!;
+    this.token = token!;
+    this.authService.getUser(this.username!, this.token!).subscribe((res) => {
+      this.user = res;
+      console.log(res);
+    });
   }
 
 }

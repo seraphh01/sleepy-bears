@@ -1,3 +1,21 @@
-<h1>User page</h1>
 
-<p *ngIf="username">Logged in as {{username}}</p>
+<div class="container">
+    <div class="left-menu">
+        <img class="bears" src="../../assets/images/bears.png">
+        <div *ngIf="username" class="greeting row">Welcome,<br>{{username}}!</div>
+    </div>
+    <div class="content">
+        <h1>Enter Page:</h1>
+        <br>
+        <div *ngIf="this.user">
+            <h2 *ngIf="this.user.usertype=='STUDENT'"><span class="redirect">> Student page</span></h2>
+            <h2 *ngIf="this.user.usertype=='ADMIN'"><span class="redirect">> Admin</span></h2>
+            <h2 *ngIf="this.user.usertype=='TEACHER'"><span class="redirect">> Teacher</span></h2>
+            <h2 *ngIf="this.user.usertype=='CHIEF'"><span class="redirect">> Teacher</span></h2>
+            
+        </div>
+        
+        
+    </div>
+</div>
+
