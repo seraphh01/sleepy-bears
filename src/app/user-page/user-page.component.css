@@ -52,6 +52,13 @@
     display: inline-block;
     border-radius: 10px;
     margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.bears:hover {
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 0px;
 }
 
 .redirect:hover {
