@@ -3,20 +3,25 @@
     <div class="left-menu">
         <img class="bears" src="../../assets/images/bears.png">
         <div *ngIf="username" class="greeting row">Welcome,<br>{{username}}!</div>
+        <button class="logout-button" (click)="logOut()">Log Out</button>
     </div>
     <div class="content">
         <div class="top-content" *ngIf="this.user">
             <h1>Logged in as {{this.user.name}}</h1>
         </div>
         <div class="middle-content">
-            <h1>Enter Page:</h1>
-            <br>
             <div *ngIf="this.user">
+                <h1>Enter Page:</h1>
+                <br>
+
                 <h2 *ngIf="this.user.usertype=='STUDENT'"><span class="redirect">> Student page</span></h2>
                 <h2 *ngIf="this.user.usertype=='ADMIN'"><span class="redirect">> Admin</span></h2>
                 <h2 *ngIf="this.user.usertype=='TEACHER'"><span class="redirect">> Teacher</span></h2>
                 <h2 *ngIf="this.user.usertype=='CHIEF'"><span class="redirect">> Teacher</span></h2>
                 
+            </div>
+            <div *ngIf="!this.user">
+                <h1>unable to fetch user. Missing token</h1>
             </div>
         </div>
     </div>
