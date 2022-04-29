@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -287,5 +288,84 @@ func DeleteUser() gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"success": "User was deleted!"})
+	}
+}
+
+func GenerateUser(name string, CNP string) models.User {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	var generatedUser models.User
+
+	generatedUser.Name = &name
+
+	generatedUser.ID = primitive.NewObjectID()
+
+	var role = "STUDENT"
+	generatedUser.UserType = &role
+
+	var username = strings.ReplaceAll(name, " ", "") + "." + CNP
+	generatedUser.Username = &username
+
+	var email = username + "@sleepybears.com"
+	generatedUser.Email = &email
+
+	var password = "password" + CNP[7:]
+	generatedUser.Password = &password
+	validationErr := validate.Struct(&generatedUser)
+	if validationErr != nil {
+		var badUser models.User
+		var error = "USER VALIDATION ERROR"
+		badUser.Name = &error
+		return badUser
+	}
+	hashedPassword := HashPassword(password)
+	generatedUser.Password = &hashedPassword
+
+	token, refreshToken, _ := helpers.GenerateAllTokens(*generatedUser.Email, *generatedUser.Name, *generatedUser.Username, *generatedUser.UserType)
+	generatedUser.Token = &token
+	generatedUser.RefreshToken = &refreshToken
+
+	count, err := userCollection.CountDocuments(ctx, bson.M{"username": generatedUser.Username})
+	if err != nil {
+		var badUser models.User
+		var error = "Error making user w/ " + CNP
+		badUser.Name = &error
+		return badUser
+	}
+
+	if count > 0 {
+		var badUser models.User
+		var error = "CNP ALREADY EXISTS"
+		badUser.Name = &error
+		return badUser
+	}
+
+	_, insertErr := userCollection.InsertOne(ctx, generatedUser)
+	if insertErr != nil {
+		var badUser models.User
+		var error = "USER GENERATION ERROR"
+		badUser.Name = &error
+		return badUser
+	}
+	generatedUser.Password = &password
+	return generatedUser
+}
+
+func GenerateUsers() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var userDTOList models.UserDTOList
+		if err := c.BindJSON(&userDTOList); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var generatedUsers []models.User
+		for _, user := range userDTOList.UserDTOs {
+			generatedUsers = append(generatedUsers, GenerateUser(*user.Name, *user.CNP))
+		}
+		c.JSON(http.StatusOK, generatedUsers)
 	}
 }
