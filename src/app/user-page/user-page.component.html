@@ -11,7 +11,7 @@
         </div>
         <div class="top-content profile" *ngIf="this.user">
             <h1>Profile: {{this.user.profileDescription}}</h1>
-            <app-user-profile></app-user-profile>
+            <app-user-profile [user]="this.user"></app-user-profile>
         </div>
         <div class="middle-content">
             <div *ngIf="this.user">
@@ -37,7 +37,7 @@
                 
             </div>
             <div *ngIf="!this.user">
-                <h1>unable to fetch user. Missing token</h1>
+                <h1>Unable to fetch user.</h1>
             </div>
         </div>
     </div>
