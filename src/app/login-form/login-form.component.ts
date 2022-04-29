@@ -4,6 +4,7 @@ import { AuthService } from '../Services/auth.service';
 import { Router, ActivatedRoute, Route } from '@angular/router';
 import { asLiteral } from '@angular/compiler/src/render3/view/util';
 import { RegisterModel } from '../models/register.model';
+
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -40,7 +41,15 @@ export class LoginFormComponent implements OnInit {
         sessionStorage.setItem("token", result.token);
         this.redirect();
       }, error => {
-        confirm("Invalid username or password!");
+          let containerBody = <HTMLElement>document.querySelector('.box');
+          containerBody.classList.add('grow');
+          let containerText = <HTMLElement>document.getElementById('boxText');
+          containerText.innerHTML = "Invalid Username or Password";
+          containerText.classList.add('growText');
+          let containerButton = <HTMLElement>document.getElementById('boxButton');
+          containerButton.style.display = 'unset';
+          containerButton.style.width = '40px';
+          containerButton.style.height = '20px';
       });
     }else{
       alert("Username or password is empty");
