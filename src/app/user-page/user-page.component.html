@@ -9,25 +9,30 @@
         <div class="top-content" *ngIf="this.user">
             <h1>Logged in as {{this.user.name}}</h1>
         </div>
+        <div class="top-content profile" *ngIf="this.user">
+            <h1>Profile: {{this.user.profileDescription}}</h1>
+            <app-user-profile></app-user-profile>
+        </div>
         <div class="middle-content">
             <div *ngIf="this.user">
-                <h1>Enter Page:</h1>
+                <h1>{{this.user!.name}}'s Page:</h1>
                 <br>
 
                 <h2 *ngIf="this.user.usertype=='STUDENT'">
-                    <span class="redirect" (click)="goToUserTypePage()">> Student page</span>
+                    <app-student-page></app-student-page>
                 </h2>
 
                 <h2 *ngIf="this.user.usertype=='ADMIN'">
-                    <span class="redirect" (click)="goToUserTypePage()">> Admin</span>
+                    <app-admin-page></app-admin-page>
                 </h2>
 
                 <h2 *ngIf="this.user.usertype=='TEACHER'">
-                    <span class="redirect" (click)="goToUserTypePage()">> Teacher</span>
+                    <app-teacher-page></app-teacher-page>
                 </h2>
 
                 <h2 *ngIf="this.user.usertype=='CHIEF'">
-                    <span class="redirect" (click)="goToUserTypePage()">> Teacher</span>
+                    <app-teacher-page></app-teacher-page>
+                    <app-chief-page></app-chief-page>
                 </h2>
                 
             </div>
