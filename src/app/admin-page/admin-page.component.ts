@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RegisterModel } from '../models/register.model';
 import { Validators } from '@angular/forms';
 import { AuthService } from '../Services/auth.service';
+import { RegisterService } from '../Services/register.service';
+import { RegisterDto } from '../models/register-dto.model';
 
 @Component({
   selector: 'app-admin-page',
@@ -11,50 +13,21 @@ import { AuthService } from '../Services/auth.service';
   styleUrls: ['./admin-page.component.css']
 })
 export class AdminPageComponent implements OnInit {
-  public register?: RegisterModel;
+  public register?: RegisterDto;
   public username?: String;
-  public token?:String;
   public form: FormGroup;
 
-  constructor(private route: ActivatedRoute, private authService: AuthService) { 
+  constructor(private route: ActivatedRoute, private authService: AuthService, private registerService: RegisterService) { 
     this.form = new FormGroup (
       {
-        email : new FormControl('', [Validators.required, Validators.email]),
-        username: new FormControl(
-        '', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]
-        ),
-        password: new FormControl(
-          '', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]
-        ),
-        usertype: new FormControl(
-          'STUDENT', [Validators.required]
-        ),
-        name: new FormControl(''),
-        profileDescription: new FormControl('A new user')
+        name: new FormControl('', Validators.required),
+        cnp: new FormControl('', [Validators.required, Validators.minLength(13), Validators.maxLength(13)] )
       }
     );
 
     this.form.valueChanges.subscribe((val) => {
       this.register = val;
-
     });
-  }
-
-  private userTypeValidator(): ValidatorFn {
-
-    return (control: AbstractControl) : ValidationErrors | null => {
-      const value = control.value;
-
-      if(!value){
-        return null;
-      }
-  
-      if(value == "ADMIN" || value=="STUDENT" || value == "TEACHER" || value == "HEAD"){
-        return {validType: true};
-      }
-  
-      return null;
-    }   
   }
 
   ngOnInit(): void {
@@ -62,7 +35,6 @@ export class AdminPageComponent implements OnInit {
     let token = this.route.snapshot.paramMap.get("token");
     
     this.username = username ? username : "undefined";
-    this.token = token ? token : "undefined";
   }
 
   public addUser(){
@@ -72,8 +44,6 @@ export class AdminPageComponent implements OnInit {
       return;
     }
 
-    this.authService.register(this.register!).subscribe((res) =>{
-      console.log(res);
-    });
+    this.registerService.RegisterStudent([this.register!]);
   }
 }

@@ -5,32 +5,11 @@
 <p>Register a new user:</p>
 
 <form [formGroup]="form">
-    <label for="email">Email: </label>
-    <input type="email" id="email" formControlName="email">
-    <span class="invalid-input" *ngIf="!this.form.get('email')?.valid"> Invalid email</span>
-
-    <br><br>
-
-    <label for="username">Username: </label>
-    <input type="text" id="username" formControlName="username">
-    <span class="invalid-input" *ngIf="!this.form.get('username')?.valid"> Invalid username</span>
-    <br><br>
-
-    <label for="password">Password: </label>
-    <input type="password" id="password" formControlName="password">
-    <span class="invalid-input" *ngIf="!this.form.get('password')?.valid"> Invalid password</span>
-    <br><br>
-
-    <label for="usertype">Usertype: </label>
-    <input type="text" id="usertype" formControlName="usertype">
-    <span class="invalid-input" *ngIf="!this.form.get('usertype')?.valid"> Invalid usertype</span>
-    <br><br>
-
     <label for="name">Name: </label>
     <input type="text" id="name" formControlName="name"><br><br>
 
-    <label for="profile">Profile Description: </label>
-    <input type="text" id="profile" formControlName="profileDescription"><br><br>
+    <label for="cnp">CNP: </label>
+    <input type="text" id="cnp" formControlName="cnp"><br><br>
 
     <button [disabled]="!this.form.valid" type="submit" (click)="addUser()" (submit)="addUser()">Register</button>
 </form>

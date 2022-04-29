@@ -3,13 +3,12 @@ import { Observable, shareReplay } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RegisterModel } from '../models/register.model';
 import { UserModel } from '../models/user.model';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private port: String= "5000";
-  private url: String = `http://localhost:${this.port}`;
 
 
   constructor(private http: HttpClient) { }
@@ -20,7 +19,7 @@ export class AuthService {
       username: username,
       password: password
     };
-    return this.http.post<any>(this.url + "/users/login", data);
+    return this.http.post<any>(environment.url + "/users/login", data);
   }
 
   public register(data: RegisterModel){
@@ -34,14 +33,14 @@ export class AuthService {
     //   profileDescription:"hello"
     // } as RegisterModel;
 
-    return this.http.post<any>(`${this.url}/users/signup`, data);
+    return this.http.post<any>(`${environment.url}/users/signup`, data);
   }
 
   public getUser(username: string): Observable<UserModel>{
     let headers = new HttpHeaders().set(
       "token", sessionStorage.getItem("token")!
     );
-    return this.http.get<UserModel>(`${this.url}/users/${username}`, {headers: headers});
+    return this.http.get<UserModel>(`${environment.url}/users/${username}`, {headers: headers});
   }
 
   public clearToken(){
