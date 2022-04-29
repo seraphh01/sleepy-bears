@@ -182,7 +182,11 @@ func GetUsers() gin.HandlerFunc {
 		if err = result.All(ctx, &allusers); err != nil {
 			log.Fatal(err)
 		}
-		c.JSON(http.StatusOK, allusers[0])
+		if len(allusers) > 0 {
+			c.JSON(http.StatusOK, allusers[0])
+		} else {
+			c.JSON(http.StatusOK, "No users available!")
+		}
 
 	}
 }
