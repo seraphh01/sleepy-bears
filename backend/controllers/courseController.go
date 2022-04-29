@@ -20,7 +20,6 @@ import (
 var courseCollection *mongo.Collection = database.OpenCollection(database.Client, "Course")
 var proposedCourseCollection *mongo.Collection = database.OpenCollection(database.Client, "ProposedCourse")
 
-//TODO adding a course from the list of proposed courses should remove it from the proposed courses db
 func AddCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
@@ -127,7 +126,6 @@ func GetCourses() gin.HandlerFunc {
 	}
 }
 
-//TODO a teacher should be able to propose at most 2 optional courses
 func AddProposedCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
@@ -137,8 +135,39 @@ func AddProposedCourse() gin.HandlerFunc {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 		var course models.Course
+		var user models.User
+
+		proposerid := c.Param("proposerid")
+		real_proposerid, _ := primitive.ObjectIDFromHex(proposerid)
+		err := userCollection.FindOne(ctx, bson.M{"_id": real_proposerid}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer": user})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if count >= 2 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "This teacher has already proposed two courses!"})
+			return
+		}
+
+		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer": user})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if countAccepted+count >= 2 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "This teacher has already proposed two courses!"})
+			return
+		}
+
 		ctype := "OPTIONAL"
 		course.CourseType = &ctype
+		course.Proposer = &user
 		if err := c.BindJSON(&course); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
