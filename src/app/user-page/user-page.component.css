@@ -7,14 +7,14 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    color: #ffe8d6;
+    color: #FCFFE7;
 }
 
 .left-menu {
     display: flex;
     flex-wrap:nowrap;
     width: 20%;
-    background-color: #cb997e;
+    background-color: #DEA057;
     padding: 20px;
     box-sizing: border-box;
     align-items: center;
@@ -27,7 +27,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 80%;
-    background-color: #ffe8d6;
+    background-color: #FCFFE7;
     padding: 20px;
     box-sizing: border-box;
     flex-flow: column;
@@ -67,7 +67,7 @@
 }
 
 .middle-content {
-    background-color: #cb997e;
+    background-color: #DEA057;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: auto;
@@ -75,7 +75,7 @@
 }
 
 .top-content {
-    background-color: #cb997e;
+    background-color: #DEA057;
     border-radius: 10px;
     padding: 50px;
     color: ffe8d6;
@@ -92,16 +92,16 @@
 
 .logout-button {
     padding: 10px 30px;
-    background-color: #a5a58d;
-    color: #6b705c;
+    background-color: #CE9461;
+    color: #FCFFE7;
     border-radius: 10px;
 
 }
 
 .logout-button:hover {
     cursor: pointer;
-    background-color: #6b705c;
-    color: #a5a58d;
+    background-color: #FCFFE7;
+    color: #CE9461;
     box-shadow: 1px 3px 2px black;
 }
 
