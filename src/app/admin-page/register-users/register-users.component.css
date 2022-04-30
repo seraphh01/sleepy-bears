@@ -1,0 +1,28 @@
+.invalid-input{
+    background-color: red;
+}
+
+.valid-input {
+    background-color: green;
+}
+
+.register-container {
+    border: 1px solid #FCFFE7;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: auto;
+}
+
+table {
+    border: 2px solid black;
+}
+
+table td{
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+}
+
+.table-header {
+    font-weight: bold;
+}
