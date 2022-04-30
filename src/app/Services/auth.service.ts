@@ -46,4 +46,11 @@ export class AuthService {
   public clearToken(){
     sessionStorage.removeItem("token");
   }
+
+  public deleteUser(username: string){
+    let headers = new HttpHeaders().set(
+      "token", sessionStorage.getItem("token")!
+    );
+    return this.http.delete(`${environment.url}/users/remove/${username}`, {headers: headers});
+  }
 }

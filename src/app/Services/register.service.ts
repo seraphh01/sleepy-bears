@@ -10,14 +10,10 @@ export class RegisterService {
 
   constructor(private client: HttpClient) { }
 
-  public RegisterStudent(data: RegisterDto[]){
+  public RegisterStudents(data: RegisterDto[], type: string){
     let headers = new HttpHeaders().set(
       "token", sessionStorage.getItem("token")!
     )
-    this.client.post(`${environment.url}/users/generate`, {userdtos: data}, {headers: headers}).subscribe(res => {
-        console.log(res);
-    }, error => {
-        console.error(error);
-    });
+    return this.client.post(`${environment.url}/users/generate/${type}`, {userdtos: data}, {headers: headers});
   }
 }

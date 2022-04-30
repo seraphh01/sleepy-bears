@@ -40,6 +40,9 @@ html{
   padding-left: 10px;
 }
 
+.button:hover {
+
+}
 
 .growButton{
   display: block;
@@ -205,7 +208,7 @@ html{
   cursor: pointer;
 }
 
-.button {
+.button:hover {
   background: #4CAF50;
   color: #fff;
   border-radius: 5px;
