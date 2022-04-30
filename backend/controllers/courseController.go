@@ -243,3 +243,49 @@ func GetProposedCourses() gin.HandlerFunc {
 
 	}
 }
+
+func GetCoursesByYear() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		// recordPerPage := 10
+		recordPerPage, err := strconv.Atoi(c.Query("recordPerPage"))
+		if err != nil || recordPerPage < 1 {
+			recordPerPage = 10
+		}
+
+		page, err1 := strconv.Atoi(c.Query("page"))
+		if err1 != nil || page < 1 {
+			page = 1
+		}
+
+		startIndex := (page - 1) * recordPerPage
+		startIndex, err = strconv.Atoi(c.Query("startIndex"))
+		year, err := strconv.Atoi(c.Param("year"))
+		matchStage := bson.D{{"$match", bson.D{{"year", year}}}}
+		groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"_id", "null"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"data", bson.D{{"$push", "$$ROOT"}}}}}}
+		projectStage := bson.D{
+			{"$project", bson.D{
+				{"_id", 0},
+				{"total_count", 1},
+				{"proposed_course_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},
+			}}}
+
+		result, err := courseCollection.Aggregate(ctx, mongo.Pipeline{
+			matchStage, groupStage, projectStage})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while listing course items"})
+		}
+		var courses []bson.M
+		if err = result.All(ctx, &courses); err != nil {
+			log.Fatal(err)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses[0])
+		} else {
+			c.JSON(http.StatusOK, "No courses available in that academic year")
+		}
+
+	}
+}
