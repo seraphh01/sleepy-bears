@@ -15,25 +15,25 @@
         </div>
         <div class="middle-content">
             <div *ngIf="this.user">
-                <h1>{{this.user!.name}}'s Page:</h1>
+                <h1>Page:</h1>
                 <br>
 
-                <h2 *ngIf="this.user.usertype=='STUDENT'">
+                <div *ngIf="this.user.usertype=='STUDENT'">
                     <app-student-page></app-student-page>
-                </h2>
+                </div>
 
-                <h2 *ngIf="this.user.usertype=='ADMIN'">
+                <div *ngIf="this.user.usertype=='ADMIN'">
                     <app-admin-page></app-admin-page>
-                </h2>
+                </div>
 
-                <h2 *ngIf="this.user.usertype=='TEACHER'">
+                <div *ngIf="this.user.usertype=='TEACHER'">
                     <app-teacher-page></app-teacher-page>
-                </h2>
+                </div>
 
-                <h2 *ngIf="this.user.usertype=='CHIEF'">
+                <div *ngIf="this.user.usertype=='CHIEF'">
                     <app-teacher-page></app-teacher-page>
                     <app-chief-page></app-chief-page>
-                </h2>
+                </div>
                 
             </div>
             <div *ngIf="!this.user">
