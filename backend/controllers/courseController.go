@@ -22,7 +22,7 @@ var proposedCourseCollection *mongo.Collection = database.OpenCollection(databas
 
 func AddCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+		if err := helpers.CheckUserType(c, "CHIEF"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
