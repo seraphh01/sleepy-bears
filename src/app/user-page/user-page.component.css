@@ -42,10 +42,10 @@
 }
 
 .greeting {
-    font-size: 40px;
+    font-size:x-large;
     border-radius: 10px;
     padding: 60px 0px 60px 0px;
-    color: ffe8d6;
+    width: fit-content;
 }
 
 .bears{

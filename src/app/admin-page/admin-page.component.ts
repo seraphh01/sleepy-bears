@@ -47,7 +47,7 @@ export class AdminPageComponent implements OnInit {
       return;
     }
 
-    this.registerService.RegisterStudents([this.register!]).subscribe();
+    this.registerService.RegisterStudents([this.register!], this.form.get("usertype")?.value).subscribe();
   }
 
   async fileChanged(e: any) {
@@ -81,7 +81,7 @@ export class AdminPageComponent implements OnInit {
       
     }
 
-    this.registerService.RegisterStudents(studentList).subscribe(res => {
+    this.registerService.RegisterStudents(studentList, this.usertype).subscribe(res => {
       this.registeredStudents = res;
 
       for(let user of this.registeredStudents){
