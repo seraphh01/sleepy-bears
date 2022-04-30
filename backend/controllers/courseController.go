@@ -77,10 +77,6 @@ func AddCourse() gin.HandlerFunc {
 
 func GetCourses() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
 		// recordPerPage := 10
@@ -97,13 +93,13 @@ func GetCourses() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		startIndex, err = strconv.Atoi(c.Query("startIndex"))
 
-		matchStage := bson.D{{"$match", bson.D{{}}}}
-		groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"_id", "null"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"data", bson.D{{"$push", "$$ROOT"}}}}}}
+		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
+		groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}}, {Key: "total_count", Value: bson.D{{Key: "$sum", Value: 1}}}, {Key: "data", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}}}}}
 		projectStage := bson.D{
-			{"$project", bson.D{
-				{"_id", 0},
-				{"total_count", 1},
-				{"course_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},
+			{Key: "$project", Value: bson.D{
+				{Key: "_id", Value: 0},
+				{Key: "total_count", Value: 1},
+				{Key: "course_items", Value: bson.D{{Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage}}}},
 			}}}
 
 		result, err := courseCollection.Aggregate(ctx, mongo.Pipeline{
@@ -200,7 +196,7 @@ func AddProposedCourse() gin.HandlerFunc {
 
 func GetProposedCourses() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+		if err := helpers.CheckUserType(c, "CHIEF"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -220,13 +216,13 @@ func GetProposedCourses() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		startIndex, err = strconv.Atoi(c.Query("startIndex"))
 
-		matchStage := bson.D{{"$match", bson.D{{}}}}
-		groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"_id", "null"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"data", bson.D{{"$push", "$$ROOT"}}}}}}
+		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
+		groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}}, {Key: "total_count", Value: bson.D{{Key: "$sum", Value: 1}}}, {Key: "data", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}}}}}
 		projectStage := bson.D{
-			{"$project", bson.D{
-				{"_id", 0},
-				{"total_count", 1},
-				{"proposed_course_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},
+			{Key: "$project", Value: bson.D{
+				{Key: "_id", Value: 0},
+				{Key: "total_count", Value: 1},
+				{Key: "proposed_course_items", Value: bson.D{{Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage}}}},
 			}}}
 
 		result, err := proposedCourseCollection.Aggregate(ctx, mongo.Pipeline{
@@ -266,13 +262,13 @@ func GetCoursesByYear() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		startIndex, err = strconv.Atoi(c.Query("startIndex"))
 		year, err := strconv.Atoi(c.Param("year"))
-		matchStage := bson.D{{"$match", bson.D{{"year", year}}}}
-		groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"_id", "null"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"data", bson.D{{"$push", "$$ROOT"}}}}}}
+		matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "year", Value: year}}}}
+		groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}}, {Key: "total_count", Value: bson.D{{Key: "$sum", Value: 1}}}, {Key: "data", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}}}}}
 		projectStage := bson.D{
-			{"$project", bson.D{
-				{"_id", 0},
-				{"total_count", 1},
-				{"proposed_course_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},
+			{Key: "$project", Value: bson.D{
+				{Key: "_id", Value: 0},
+				{Key: "total_count", Value: 1},
+				{Key: "course_items", Value: bson.D{{Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage}}}},
 			}}}
 
 		result, err := courseCollection.Aggregate(ctx, mongo.Pipeline{
