@@ -17,30 +17,22 @@ import (
 
 var enrollmentCollection *mongo.Collection = database.OpenCollection(database.Client, "Enrollment")
 
-func AddEnrollment() gin.HandlerFunc {
+// Used by a student to enroll to an optional course
+func AddOptionalEnrollment() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		var enrollment models.Enrollment
 
-		if err := c.BindJSON(&enrollment); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
 		var user models.User
 		var course models.Course
-
-		userid := c.Param("userid")
-		courseid := c.Param("courseid")
-		real_user_id, _ := primitive.ObjectIDFromHex(userid)
-		real_course_id, _ := primitive.ObjectIDFromHex(courseid)
-		enrollment.ID = primitive.NewObjectID()
-
-		err := userCollection.FindOne(ctx, bson.M{"_id": real_user_id}).Decode(&user)
+		var enrollment models.Enrollment
+		username := c.GetString("username")
+		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -49,10 +41,20 @@ func AddEnrollment() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, "You can only enroll yourself!")
 			return
 		}
+		courseid := c.Param("courseid")
+		userid := user.ID.Hex()
+		real_user_id, _ := primitive.ObjectIDFromHex(userid)
+		real_course_id, _ := primitive.ObjectIDFromHex(courseid)
+		enrollment.ID = primitive.NewObjectID()
 
 		err = courseCollection.FindOne(ctx, bson.M{"_id": real_course_id}).Decode(&course)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		allowedType := "OPTIONAL"
+		if *course.CourseType != allowedType {
+			c.JSON(http.StatusBadRequest, "You can only enroll to optional courses!")
 			return
 		}
 
