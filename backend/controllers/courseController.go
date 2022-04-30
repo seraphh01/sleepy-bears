@@ -137,15 +137,19 @@ func AddProposedCourse() gin.HandlerFunc {
 		var course models.Course
 		var user models.User
 
-		proposerid := c.Param("proposerid")
-		real_proposerid, _ := primitive.ObjectIDFromHex(proposerid)
-		err := userCollection.FindOne(ctx, bson.M{"_id": real_proposerid}).Decode(&user)
+		username := c.GetString("username")
+		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		if err := helpers.MatchUserTypeToUid(c, *user.Username); err != nil {
+			c.JSON(http.StatusUnauthorized, "You can only propose your own courses!")
+			return
+		}
+		realUserID, _ := primitive.ObjectIDFromHex(user.ID.Hex())
 
-		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer": user})
+		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -155,7 +159,7 @@ func AddProposedCourse() gin.HandlerFunc {
 			return
 		}
 
-		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer": user})
+		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
