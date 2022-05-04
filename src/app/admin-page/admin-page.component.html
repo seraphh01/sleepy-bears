@@ -1,1 +1,4 @@
 <app-register-users></app-register-users>
+<div *ngIf="this.students">
+    <app-view-users [students]="this.students"></app-view-users>
+</div>

@@ -8,6 +8,8 @@ import { RegisterService } from '../Services/register.service';
 import { RegisterDto } from '../models/register-dto.model';
 import { RegisterModel } from '../models/register.model';
 import {UserModel} from '../models/user.model'
+import { AdminService } from '../Services/admin.service';
+import { Student } from 'src/models/Student';
 
 @Component({
   selector: 'app-admin-page',
@@ -15,9 +17,11 @@ import {UserModel} from '../models/user.model'
   styleUrls: ['./admin-page.component.css']
 })
 export class AdminPageComponent implements OnInit {
+  students!: Student[];
+  constructor(private service: AdminService){}
 
-  constructor(){}
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+   
+    this.students = await this.service.getStudents();
   }
 }
