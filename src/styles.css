@@ -4,3 +4,8 @@ body {
     padding: 0;
     margin: 0;
 }
+
+.border-container {
+    border: 1px solid white;
+    padding: 5px;
+}

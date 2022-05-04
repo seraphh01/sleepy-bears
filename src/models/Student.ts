@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
-export default class Student {
-    constructor(public name: string, public id?: ObjectId) {
-        
-    }
+export interface Student {
+    username: string;
+    email: string;
+    
 }

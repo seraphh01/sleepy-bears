@@ -12,6 +12,7 @@ import { StudentPageComponent } from './student-page/student-page.component';
 import { TeacherPageComponent } from './teacher-page/teacher-page.component';
 import { ChiefPageComponent } from './chief-page/chief-page.component';
 import { RegisterUsersComponent } from './admin-page/register-users/register-users.component';
+import { ViewUsersComponent } from './admin-page/view-users/view-users.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { RegisterUsersComponent } from './admin-page/register-users/register-use
     StudentPageComponent,
     TeacherPageComponent,
     ChiefPageComponent,
-    RegisterUsersComponent
+    RegisterUsersComponent,
+    ViewUsersComponent
   ],
   imports: [
     BrowserModule,
