@@ -47,6 +47,10 @@ export class AuthService {
     sessionStorage.removeItem("token");
   }
 
+  public endSession(){
+    sessionStorage.clear();
+  }
+
   public deleteUser(username: string){
     let headers = new HttpHeaders().set(
       "token", sessionStorage.getItem("token")!

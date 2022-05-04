@@ -39,6 +39,7 @@ export class LoginFormComponent implements OnInit {
     if(this.username != undefined && this.password != undefined){
       this.authService.login(this.username, this.password).subscribe(result => {
         sessionStorage.setItem("token", result.token);
+        sessionStorage.setItem("username", result.username);
         this.redirect();
       }, error => {
           let containerBody = <HTMLElement>document.querySelector('.box');
@@ -57,6 +58,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   public redirect(){
-    this.router.navigate([`users/${this.username}`]);
+    this.router.navigate([`users`]);
   }
 }

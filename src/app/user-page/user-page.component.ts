@@ -11,13 +11,13 @@ import { AuthService } from '../Services/auth.service';
 export class UserPageComponent implements OnInit {
   public user!: UserModel;
   public username?: string;
-
+  
   constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) { 
 
   }
 
   ngOnInit(): void {
-    let username = this.route.snapshot.paramMap.get("username");
+    let username = sessionStorage.getItem("username")
     
     this.username = username!;
 
@@ -28,14 +28,7 @@ export class UserPageComponent implements OnInit {
   }
 
   public logOut(){
-    this.authService.clearToken();
+    this.authService.endSession();
     this.router.navigate([""]);
-  }
-
-  public goToUserTypePage(){
-    let userType = this.user!.usertype;
-    let userName = this.user!.username;
-
-    this.router.navigate([`${userType}/${userName}`]);
   }
 }

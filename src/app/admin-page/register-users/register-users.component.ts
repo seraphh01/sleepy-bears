@@ -84,11 +84,11 @@ export class RegisterUsersComponent implements OnInit {
     this.registerService.RegisterStudents(studentList, this.usertype).subscribe(res => {
       this.registeredStudents = res;
 
-      for(let user of this.registeredStudents){
-        this.authService.deleteUser(user.username).subscribe((res) => {
-          console.log("deleted: " + user.username);
-        });
-      }
+      // for(let user of this.registeredStudents){
+      //   this.authService.deleteUser(user.username).subscribe((res) => {
+      //     console.log("deleted: " + user.username);
+      //   });
+      // }
 
     }, error => {console.log(error)});
   }
