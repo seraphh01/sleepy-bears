@@ -149,6 +149,8 @@ func GetUsers() gin.HandlerFunc {
 		}
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
+		var role = c.Param("type")
+
 		// recordPerPage := 10
 		recordPerPage, err := strconv.Atoi(c.Query("recordPerPage"))
 		if err != nil || recordPerPage < 1 {
@@ -163,7 +165,7 @@ func GetUsers() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		startIndex, err = strconv.Atoi(c.Query("startIndex"))
 
-		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
+		matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "usertype", Value: strings.ToUpper(role)}}}}
 		groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}}, {Key: "total_count", Value: bson.D{{Key: "$sum", Value: 1}}}, {Key: "data", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}}}}}
 		projectStage := bson.D{
 			{Key: "$project", Value: bson.D{
@@ -185,7 +187,7 @@ func GetUsers() gin.HandlerFunc {
 		if len(allusers) > 0 {
 			c.JSON(http.StatusOK, allusers[0])
 		} else {
-			c.JSON(http.StatusOK, "No users available!")
+			c.JSON(http.StatusOK, "No users of this type available!")
 		}
 
 	}
