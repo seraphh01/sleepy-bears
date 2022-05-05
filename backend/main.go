@@ -35,6 +35,7 @@ func main() {
 	routes.UserRoutes(router)
 	routes.StudentRoutes(router)
 	routes.TeacherRoutes(router)
+	routes.ChiefRoutes(router)
 	routes.AdminRoutes(router)
 
 	router.Run("127.0.0.1:" + port)
