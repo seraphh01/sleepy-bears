@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -360,5 +361,43 @@ func GenerateUsers() gin.HandlerFunc {
 			generatedUsers = append(generatedUsers, GenerateUser(*user.Name, *user.CNP, c))
 		}
 		c.JSON(http.StatusOK, generatedUsers)
+	}
+}
+
+func GetStudentsByGroup() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		groupNumber, err := strconv.Atoi(c.Param("groupnumber"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		var users []models.User
+		cursor, err := userCollection.Find(ctx, bson.M{"group.number": groupNumber})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var user models.User
+			err := cursor.Decode(&user)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			users = append(users, user)
+		}
+		if len(users) > 0 {
+			c.JSON(http.StatusOK, users)
+		} else {
+			c.JSON(http.StatusOK, "No students from this group!")
+		}
+
 	}
 }

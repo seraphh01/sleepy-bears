@@ -9,10 +9,12 @@ import (
 
 func AdminRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.Use(middleware.Authentication())
+	incomingRoutes.GET("/users/type/:type", controllers.GetUsers())
+	incomingRoutes.GET("/users/username/:username", controllers.GetUser())
+	incomingRoutes.GET("/users/group/:groupnumber", controllers.GetStudentsByGroup())
 	incomingRoutes.POST("/users/generate/:type", controllers.GenerateUsers())
-	incomingRoutes.GET("/users/:type", controllers.GetUsers())
-	incomingRoutes.GET("/user/:username", controllers.GetUser())
-	incomingRoutes.PUT("/user/update/:username", controllers.UpdateUser())
-	incomingRoutes.DELETE("/user/remove/:username", controllers.DeleteUser())
+	incomingRoutes.PUT("/users/update/:username", controllers.UpdateUser())
+	incomingRoutes.DELETE("/users/remove/:username", controllers.DeleteUser())
 	incomingRoutes.POST("/groups/add", controllers.AddGroup())
+	incomingRoutes.POST("/groups/add_student/:groupnumber/:username", controllers.AddStudentToGroup())
 }

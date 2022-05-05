@@ -97,3 +97,56 @@ func AddGroup() gin.HandlerFunc {
 		c.JSON(http.StatusOK, resultInsertionNumber)
 	}
 }
+
+func AddStudentToGroup() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		groupNumber, err := strconv.Atoi(c.Param("groupnumber"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		username := c.Param("username")
+
+		var student models.User
+		err = userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&student)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		allowedType := "STUDENT"
+		if *student.UserType != allowedType {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "User is not of student type"})
+			return
+		}
+		var group models.Group
+		err = groupCollection.FindOne(ctx, bson.M{"number": groupNumber}).Decode(&group)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		student.Group = &group
+		update := bson.M{"group": student.Group}
+		result, err := userCollection.UpdateOne(ctx, bson.M{"username": student.Username}, bson.M{"$set": update})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var updatedUser models.User
+		if result.MatchedCount == 1 {
+			err := userCollection.FindOne(ctx, bson.M{"username": student.Username}).Decode(&updatedUser)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+		}
+		c.JSON(http.StatusOK, updatedUser)
+	}
+}
