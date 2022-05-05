@@ -37,7 +37,7 @@ func ApproveCourse() gin.HandlerFunc {
 			return
 		}
 
-		if studentEnrollmentCount < 2 {
+		if studentEnrollmentCount < 20 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot approve the course since less than 20 students are enrolled"})
 			return
 		}
