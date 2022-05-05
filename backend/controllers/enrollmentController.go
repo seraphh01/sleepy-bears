@@ -17,8 +17,8 @@ import (
 
 var enrollmentCollection *mongo.Collection = database.OpenCollection(database.Client, "Enrollment")
 
-// Used by a student to enroll to an optional course
-func AddOptionalEnrollment() gin.HandlerFunc {
+//TODO add enrollment function into courseCollection. Make sure user doesn't enroll in the same course twice.
+func AddEnrollment() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -50,11 +50,6 @@ func AddOptionalEnrollment() gin.HandlerFunc {
 		err = proposedCourseCollection.FindOne(ctx, bson.M{"_id": real_course_id}).Decode(&course)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		allowedType := "OPTIONAL"
-		if *course.CourseType != allowedType {
-			c.JSON(http.StatusBadRequest, "You can only enroll to optional courses!")
 			return
 		}
 
@@ -91,4 +86,55 @@ func GetEnrollmentsCountByCourseID(c *gin.Context, courseID primitive.ObjectID) 
 		return -1
 	}
 	return count
+}
+
+func GradeStudent() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var enrollment models.Enrollment
+		var grade models.Grade
+		username := c.Param("studentusername")
+
+		courseid := c.Param("courseid")
+		realCourseID, _ := primitive.ObjectIDFromHex(courseid)
+
+		err := enrollmentCollection.FindOne(ctx, bson.M{"user.username": username, "course._id": realCourseID}).Decode(&enrollment)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if err := c.BindJSON(&grade); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if helpers.MatchUserToUsername(c, *enrollment.Course.Proposer.Username) != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You can only grade your own course!"})
+			return
+		}
+		enrollment.Grades = append(enrollment.Grades, grade)
+
+		update := bson.M{"grades": enrollment.Grades}
+		result, err := enrollmentCollection.UpdateOne(ctx, bson.M{"user.username": username, "course._id": realCourseID}, bson.M{"$set": update})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		var updatedGrades models.Enrollment
+		if result.MatchedCount == 1 {
+			err := enrollmentCollection.FindOne(ctx, bson.M{"user.username": username, "course._id": realCourseID}).Decode(&updatedGrades)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+		}
+		c.JSON(http.StatusOK, updatedGrades)
+	}
 }

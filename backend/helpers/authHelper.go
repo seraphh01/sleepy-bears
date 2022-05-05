@@ -31,3 +31,14 @@ func MatchUserTypeToUid(c *gin.Context, username_ string) (err error) {
 	err = CheckUserType(c, userType)
 	return err
 }
+
+func MatchUserToUsername(c *gin.Context, username_ string) (err error) {
+	username := c.GetString("username")
+	err = nil
+	if username != username_ {
+		err = errors.New("Not authorized to access this resource!")
+		return err
+	}
+
+	return err
+}
