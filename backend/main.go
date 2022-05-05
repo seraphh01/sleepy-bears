@@ -33,8 +33,9 @@ func main() {
 
 	routes.AuthRoutes(router)
 	routes.UserRoutes(router)
-	routes.CourseRoutes(router)
-	routes.EnrollmentRouter(router)
+	routes.StudentRoutes(router)
+	routes.TeacherRoutes(router)
+	routes.AdminRoutes(router)
 
 	router.Run("127.0.0.1:" + port)
 }
