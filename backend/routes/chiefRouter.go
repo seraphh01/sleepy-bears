@@ -10,5 +10,5 @@ import (
 func ChiefRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.Use(middleware.Authentication())
 	incomingRoutes.GET("/proposed_courses", controllers.GetProposedCourses())
-	incomingRoutes.POST("/courses/approve/:id", controllers.AddCourse())
+	incomingRoutes.POST("/courses/approve/:id", controllers.ApproveCourse())
 }

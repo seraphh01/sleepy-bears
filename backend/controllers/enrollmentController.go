@@ -47,7 +47,7 @@ func AddOptionalEnrollment() gin.HandlerFunc {
 		real_course_id, _ := primitive.ObjectIDFromHex(courseid)
 		enrollment.ID = primitive.NewObjectID()
 
-		err = courseCollection.FindOne(ctx, bson.M{"_id": real_course_id}).Decode(&course)
+		err = proposedCourseCollection.FindOne(ctx, bson.M{"_id": real_course_id}).Decode(&course)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -80,4 +80,15 @@ func AddOptionalEnrollment() gin.HandlerFunc {
 		c.JSON(http.StatusOK, resultInsertionNumber)
 
 	}
+}
+
+func GetEnrollmentsCountByCourseID(c *gin.Context, courseID primitive.ObjectID) int64 {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"course._id": courseID})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return -1
+	}
+	return count
 }

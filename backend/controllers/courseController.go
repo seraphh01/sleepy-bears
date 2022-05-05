@@ -19,7 +19,7 @@ import (
 var courseCollection *mongo.Collection = database.OpenCollection(database.Client, "Course")
 var proposedCourseCollection *mongo.Collection = database.OpenCollection(database.Client, "ProposedCourse")
 
-func AddCourse() gin.HandlerFunc {
+func ApproveCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "CHIEF"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -31,7 +31,16 @@ func AddCourse() gin.HandlerFunc {
 
 		courseID := c.Param("id")
 		realCourseID, _ := primitive.ObjectIDFromHex(courseID)
+		var studentEnrollmentCount = GetEnrollmentsCountByCourseID(c, realCourseID)
 
+		if studentEnrollmentCount < 0 {
+			return
+		}
+
+		if studentEnrollmentCount < 2 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Cannot approve the course since less than 20 students are enrolled"})
+			return
+		}
 		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"_id": realCourseID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
