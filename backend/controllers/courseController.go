@@ -6,6 +6,7 @@ import (
 	"backend/models"
 	"context"
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -28,6 +29,11 @@ func ApproveCourse() gin.HandlerFunc {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 		var course models.Course
+		var amount models.Amount
+		if err := c.BindJSON(&amount); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		courseID := c.Param("id")
 		realCourseID, _ := primitive.ObjectIDFromHex(courseID)
@@ -56,13 +62,24 @@ func ApproveCourse() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		ctype := "OPTIONAL"
+		if *course.CourseType == ctype {
+			course.MaxAmount = &amount
+		} else {
+			var max = math.MaxInt32
+			course.MaxAmount.Max = max
+		}
 
 		validationErr := validate.Struct(course)
 		if validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
 			return
 		}
-
+		err = DeleteEnrollmentsByCourseID(realCourseID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 		result, err := proposedCourseCollection.DeleteOne(ctx, bson.M{"_id": realCourseID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
