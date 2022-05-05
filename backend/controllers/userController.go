@@ -80,6 +80,7 @@ func SignUp() gin.HandlerFunc {
 
 		user.ID = primitive.NewObjectID()
 		token, refreshToken, _ := helpers.GenerateAllTokens(*user.Email, *user.Name, *user.Username, *user.UserType)
+		user.Group = nil
 		user.Token = &token
 		user.RefreshToken = &refreshToken
 

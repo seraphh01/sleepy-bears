@@ -12,6 +12,7 @@ type User struct {
 	UserType           *string            `json:"usertype" validate:"required,eq=STUDENT|eq=TEACHER|eq=ADMIN|eq=CHIEF"`
 	Name               *string            `json:"name" validate:"required"`
 	ProfileDescription *string            `json:"profiledescription"`
+	Group              *Group             `json:"group"`
 	Token              *string            `json:"token"`
 	RefreshToken       *string            `json:"refreshtoken"`
 }
