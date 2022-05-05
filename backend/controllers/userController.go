@@ -316,6 +316,8 @@ func GenerateUser(name string, CNP string, c *gin.Context) models.User {
 	generatedUser.Token = &token
 	generatedUser.RefreshToken = &refreshToken
 
+	generatedUser.Group = nil
+
 	count, err := userCollection.CountDocuments(ctx, bson.M{"username": generatedUser.Username})
 	if err != nil {
 		var badUser models.User

@@ -1,0 +1,99 @@
+package controllers
+
+import (
+	"backend/database"
+	"backend/helpers"
+	"backend/models"
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
+var groupCollection *mongo.Collection = database.OpenCollection(database.Client, "Group")
+
+func GetGroupsByYear() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		var groups []models.Group
+		year, err := strconv.Atoi(c.Param("year"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		cursor, err := groupCollection.Find(ctx, bson.M{"year": year})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var group models.Group
+			err := cursor.Decode(&group)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			groups = append(groups, group)
+		}
+		if len(groups) > 0 {
+			c.JSON(http.StatusOK, groups)
+		} else {
+			c.JSON(http.StatusOK, "No groups available!")
+		}
+	}
+}
+
+func AddGroup() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		var group models.Group
+		defer cancel()
+
+		if err := c.BindJSON(&group); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		validationErr := validate.Struct(group)
+		if validationErr != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+			return
+		}
+
+		count, err := groupCollection.CountDocuments(ctx, bson.M{"number": group.Number})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while checking for the group number"})
+			log.Panic(err)
+			return
+		}
+
+		if count > 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "this group number already exists"})
+			return
+		}
+
+		group.ID = primitive.NewObjectID()
+
+		resultInsertionNumber, insertErr := groupCollection.InsertOne(ctx, group)
+		if insertErr != nil {
+			msg := fmt.Sprintf("Group was not created")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+			return
+		}
+		c.JSON(http.StatusOK, resultInsertionNumber)
+	}
+}

@@ -14,4 +14,5 @@ func AdminRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.GET("/user/:username", controllers.GetUser())
 	incomingRoutes.PUT("/user/update/:username", controllers.UpdateUser())
 	incomingRoutes.DELETE("/user/remove/:username", controllers.DeleteUser())
+	incomingRoutes.POST("/groups/add", controllers.AddGroup())
 }
