@@ -40,7 +40,7 @@ export class AuthService {
     let headers = new HttpHeaders().set(
       "token", sessionStorage.getItem("token")!
     );
-    return this.http.get<UserModel>(`${environment.url}/users/${username}`, {headers: headers});
+    return this.http.get<UserModel>(`${environment.url}/users/username/${username}`, {headers: headers});
   }
 
   public clearToken(){
