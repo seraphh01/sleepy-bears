@@ -1,0 +1,70 @@
+
+
+#courseButton{
+    background-color: rgb(206, 128, 141);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 17px;
+    color:white;
+    border-radius: 10%;
+}
+
+#coursesDiv{
+    font-size: 33px;
+    border-bottom: 2px solid currentColor;
+}
+
+#enrolCourse{
+    border-bottom: 2px solid currentColor;
+}
+
+#prev{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+    display: none;
+}
+
+
+#next{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+    display: none;
+}
+
+#add{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+    display: none;
+}
+
+.buttons{
+    display:flex;
+}
+
+#courses{
+    font-size: 28px;
+}
+
+#myCourses{
+    font-size: 24px;
+}
+
+#enrolCourse{
+    font-size: 40px;
+}

@@ -1,1 +1,11 @@
-<p>student-page works!</p>
+<p><span id="enrolCourse">Enrollment Courses</span></p>
+<p><span id="coursesDiv">Your Courses:</span></p>
+<br><div id="myCourses">{{allMyCourses}}</div>
+<br>
+<button (click)="showCourses()" id="courseButton">Show Courses</button>
+<pre id="courses"> {{currentCourse}}</pre>
+<div class="buttons">
+    <button (click)="prevCourse()" id="next">Prev</button>
+    <button (click)="addCourse()" id="add">Add</button>
+    <button (click)="nextCourse()" id="prev">Next</button>    
+</div>
