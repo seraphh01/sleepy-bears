@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Course } from 'src/models/course.model';
+import { TeacherService } from '../Services/teacher.service';
 
 @Component({
   selector: 'app-teacher-page',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./teacher-page.component.css']
 })
 export class TeacherPageComponent implements OnInit {
+  proposedCourses!: Course[];
+  constructor(private service: TeacherService) { }
 
-  constructor() { }
-
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.proposedCourses = await this.service.getProposedCourses();
+    console.log(this.proposedCourses);
   }
 
 }
