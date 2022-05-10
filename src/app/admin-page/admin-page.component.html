@@ -1,4 +1,8 @@
-<app-register-users></app-register-users>
-<div *ngIf="this.students">
+<button (click)="getStudents()">Show Students</button>
+<button (click)="switchActivePage(RegisterPage)">Register Users</button>
+<div *ngIf="isPageActive(RegisterPage)">
+    <app-register-users></app-register-users>
+</div>
+<div *ngIf="this.students && isPageActive(StudentPage)">
     <app-view-users [students]="this.students"></app-view-users>
 </div>
