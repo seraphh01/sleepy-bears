@@ -20,7 +20,7 @@
                 <br>
 
                 <div *ngIf="this.user.usertype=='STUDENT'">
-                    <app-student-page></app-student-page>
+                    <app-student-page [student]="this.user"></app-student-page>
                 </div>
 
                 <div *ngIf="this.user.usertype=='ADMIN'">

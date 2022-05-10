@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Course } from 'src/models/course.model';
+import { Student } from 'src/models/Student';
+import { UserModel } from '../models/user.model';
+import { StudentService } from '../Services/student.service';
 
 @Component({
   selector: 'app-student-page',
@@ -8,25 +12,31 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./student-page.component.css']
 })
 export class StudentPageComponent implements OnInit {
+  @Input() student!: UserModel;
 
-  courses = ["Math","Algebra"];
-  currentCourse = "";
+  show = false;
+  courses!:Course[];
+  optionalCourses!: Course[];
+  currentCourse!: Course;
   slideIndex = 0;
   allMyCourses = "";
   courseList = Array<string>();
 
-  
-  constructor(private http:HttpClient) {
+  constructor(private service: StudentService ) {
+
   }
 
+  async ngOnInit(){
+    let year = 1;
+    if(this.student!.group!)
+    year = this.student.group.year;
+    this.courses = await this.service.getMandatoryCourses(year);
+    this.optionalCourses = await this.service.getOptionalCourses(this.student!.username);
+  }
+  
   showCourses(){
       this.currentCourse = this.courses[this.slideIndex];
-      let nextButton = <HTMLElement>document.getElementById('next');
-      nextButton.style.display = 'block';
-      let prevButton = <HTMLElement>document.getElementById('prev');
-      prevButton.style.display = 'block';
-      let addButton = <HTMLElement>document.getElementById('add');
-      addButton.style.display = 'block';
+      this.show = true;
   }
 
   nextCourse(){
@@ -39,20 +49,16 @@ export class StudentPageComponent implements OnInit {
     this.showCourses();
   }
 
-  addCourse(){
-    let ok = 0;
-    for(let i=0; i<this.courseList.length; ++i){
-      if(this.courseList[i] == this.courses[this.slideIndex]){
-        ok = 1;
-      }
-    }
-    if(ok == 0){
-      this.allMyCourses+=  this.courses[this.slideIndex] + " | ";
-      this.courseList.push( this.courses[this.slideIndex]);
-    }
-  }
-
-  ngOnInit(): void {
-  }
-
+  // addCourse(){
+  //   let ok = 0;
+  //   for(let i=0; i<this.courseList.length; ++i){
+  //     if(this.courseList[i] == this.courses[this.slideIndex]){
+  //       ok = 1;
+  //     }
+  //   }
+  //   if(ok == 0){
+  //     this.allMyCourses+=  this.courses[this.slideIndex] + " | ";
+  //     this.courseList.push( this.courses[this.slideIndex]);
+  //   }
+  // }
 }

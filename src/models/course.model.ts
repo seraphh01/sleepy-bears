@@ -2,7 +2,7 @@ import { Amount } from "./amount.model";
 import { ObjectId } from "mongodb";
 
 export interface Course {
-    id: ObjectId;
+    ID: ObjectId;
     name: string;
     courseType: string;
     year: number;

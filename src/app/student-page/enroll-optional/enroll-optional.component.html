@@ -1,0 +1,4 @@
+<div *ngIf="this.courseList" class="border-container">
+    <h1>Enroll</h1>
+    <p *ngFor="let course of this.courseList">{{course.name}}<button (click)="enroll(course.ID)">Enroll</button></p>
+</div>

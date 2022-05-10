@@ -17,6 +17,8 @@ import { TokenInterceptor } from './Services/intercepter';
 import { ProposeCourseComponent } from './teacher-page/propose-course/propose-course.component';
 import {MatInputModule} from '@angular/material/input';
 import { ViewProposedComponent } from './teacher-page/view-proposed/view-proposed.component';
+import { ViewCoursesComponent } from './student-page/view-courses/view-courses.component';
+import { EnrollOptionalComponent } from './student-page/enroll-optional/enroll-optional.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +32,9 @@ import { ViewProposedComponent } from './teacher-page/view-proposed/view-propose
     RegisterUsersComponent,
     ViewUsersComponent,
     ProposeCourseComponent,
-    ViewProposedComponent
+    ViewProposedComponent,
+    ViewCoursesComponent,
+    EnrollOptionalComponent
   ],
   imports: [
     BrowserModule,

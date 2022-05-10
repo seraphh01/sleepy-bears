@@ -1,3 +1,5 @@
+import { Group } from "src/models/group.model";
+
 export interface UserModel {
     username: String;
     email: String;
@@ -6,5 +8,6 @@ export interface UserModel {
     name:String;
     profileDescription:String;
     token:string;
+    group: Group;
     refreshToken: string;
 }
