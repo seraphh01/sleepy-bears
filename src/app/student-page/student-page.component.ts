@@ -49,16 +49,4 @@ export class StudentPageComponent implements OnInit {
     this.showCourses();
   }
 
-  // addCourse(){
-  //   let ok = 0;
-  //   for(let i=0; i<this.courseList.length; ++i){
-  //     if(this.courseList[i] == this.courses[this.slideIndex]){
-  //       ok = 1;
-  //     }
-  //   }
-  //   if(ok == 0){
-  //     this.allMyCourses+=  this.courses[this.slideIndex] + " | ";
-  //     this.courseList.push( this.courses[this.slideIndex]);
-  //   }
-  // }
 }

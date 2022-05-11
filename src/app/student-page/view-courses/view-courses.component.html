@@ -1,4 +1,4 @@
 <div *ngIf="this.courses" class="border-container">
-    <h3>{{this.courseType}} courses</h3>
-    <p *ngFor="let course of this.courses">{{course.name}}</p>
+    <h3 id="title">{{this.courseType}} courses</h3>
+    <pre id="text" *ngFor="let course of this.courses">    {{course.name}}</pre>
 </div>

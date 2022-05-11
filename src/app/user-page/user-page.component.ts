@@ -31,8 +31,4 @@ export class UserPageComponent implements OnInit {
     this.authService.endSession();
     this.router.navigate([""]);
   }
-
-  public expand(){
-    
-  }
 }

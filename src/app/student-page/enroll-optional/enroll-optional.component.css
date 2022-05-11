@@ -1,0 +1,21 @@
+
+
+#enrollButton{
+    color: white;
+    background-color: rgb(211, 137, 149);
+    border-radius: 10%;
+}
+
+#text{
+    font-size: x-large;
+}
+
+#title{
+    padding-left: 10px;
+    text-decoration: underline;
+}
+
+#box{
+    display: flex;
+    flex-direction: column;
+}

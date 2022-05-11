@@ -1,16 +1,3 @@
-<!-- <div class="border-container">
-    <p><span id="enrolCourse">Enrollment Courses</span></p>
-    <p><span id="coursesDiv">Your Courses:</span></p>
-    <br><div id="myCourses">{{allMyCourses}}</div>
-    <br>
-    <button (click)="showCourses()" id="courseButton">Show Courses</button>
-    <pre id="courses"> {{currentCourse}}</pre>
-    <div class="buttons" *ngIf="this.show==true">
-        <button (click)="prevCourse()" id="next">Prev</button>
-        <button (click)="addCourse()" id="add">Add</button>
-        <button (click)="nextCourse()" id="prev">Next</button>    
-    </div>
-</div> -->
 
 <app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
 <app-view-courses [courses]="this.optionalCourses" [courseType]="'Optional'"></app-view-courses>
