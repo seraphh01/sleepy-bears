@@ -18,10 +18,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = database.OpenCollection(database.Client, "User")
+var userCollection = database.OpenCollection(database.Client, "User")
 var validate = validator.New()
 
 func HashPassword(password string) string {
@@ -306,8 +305,8 @@ func GenerateUser(name string, CNP string, c *gin.Context) models.User {
 	validationErr := validate.Struct(&generatedUser)
 	if validationErr != nil {
 		var badUser models.User
-		var error = "USER VALIDATION ERROR"
-		badUser.Name = &error
+		var err = "USER VALIDATION ERROR"
+		badUser.Name = &err
 		return badUser
 	}
 	hashedPassword := HashPassword(password)
@@ -322,23 +321,23 @@ func GenerateUser(name string, CNP string, c *gin.Context) models.User {
 	count, err := userCollection.CountDocuments(ctx, bson.M{"username": generatedUser.Username})
 	if err != nil {
 		var badUser models.User
-		var error = "Error making user w/ " + CNP
-		badUser.Name = &error
+		var err = "Error making user w/ " + CNP
+		badUser.Name = &err
 		return badUser
 	}
 
 	if count > 0 {
 		var badUser models.User
-		var error = "CNP ALREADY EXISTS"
-		badUser.Name = &error
+		var err = "CNP ALREADY EXISTS"
+		badUser.Name = &err
 		return badUser
 	}
 
 	_, insertErr := userCollection.InsertOne(ctx, generatedUser)
 	if insertErr != nil {
 		var badUser models.User
-		var error = "USER GENERATION ERROR"
-		badUser.Name = &error
+		var err = "USER GENERATION ERROR"
+		badUser.Name = &err
 		return badUser
 	}
 	generatedUser.Password = &password

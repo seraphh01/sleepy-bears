@@ -9,14 +9,12 @@ import (
 
 	"backend/database"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// SignedDetails
 type SignedDetails struct {
 	Email    string
 	Name     string
@@ -26,9 +24,9 @@ type SignedDetails struct {
 	jwt.StandardClaims
 }
 
-var userCollection *mongo.Collection = database.OpenCollection(database.Client, "User")
+var userCollection = database.OpenCollection(database.Client, "User")
 
-var SECRET_KEY string = os.Getenv("SECRET_KEY")
+var SecretKey = os.Getenv("SECRET_KEY")
 
 // GenerateAllTokens generates both the detailed token and refresh token
 func GenerateAllTokens(email string, Name string, Username string, UserType string) (signedToken string, signedRefreshToken string, err error) {
@@ -48,8 +46,8 @@ func GenerateAllTokens(email string, Name string, Username string, UserType stri
 		},
 	}
 
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(SECRET_KEY))
-	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(SECRET_KEY))
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(SecretKey))
+	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(SecretKey))
 
 	if err != nil {
 		log.Panic(err)
@@ -65,7 +63,7 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 		signedToken,
 		&SignedDetails{},
 		func(token *jwt.Token) (interface{}, error) {
-			return []byte(SECRET_KEY), nil
+			return []byte(SecretKey), nil
 		},
 	)
 
@@ -90,14 +88,14 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 	return claims, msg
 }
 
-//UpdateAllTokens renews the user tokens when they login
+//UpdateAllTokens renews the user tokens when they log in
 func UpdateAllTokens(signedToken string, signedRefreshToken string, username string) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
 	var updateObj primitive.D
 
-	updateObj = append(updateObj, bson.E{"token", signedToken})
-	updateObj = append(updateObj, bson.E{"refreshtoken", signedRefreshToken})
+	updateObj = append(updateObj, bson.E{Key: "token", Value: signedToken})
+	updateObj = append(updateObj, bson.E{Key: "refreshtoken", Value: signedRefreshToken})
 
 	upsert := true
 	filter := bson.M{"username": username}

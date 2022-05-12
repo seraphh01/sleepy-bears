@@ -14,11 +14,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var courseCollection *mongo.Collection = database.OpenCollection(database.Client, "Course")
-var proposedCourseCollection *mongo.Collection = database.OpenCollection(database.Client, "ProposedCourse")
+var courseCollection = database.OpenCollection(database.Client, "Course")
+var proposedCourseCollection = database.OpenCollection(database.Client, "ProposedCourse")
 
 func ApproveCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -256,6 +255,38 @@ func GetCoursesByYear() gin.HandlerFunc {
 			c.JSON(http.StatusOK, courses)
 		} else {
 			c.JSON(http.StatusOK, "No courses available in this academic year")
+		}
+	}
+}
+
+func GetProposedCoursesByYear() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		year, err := strconv.Atoi(c.Param("year"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"year": year})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var course models.Course
+			err := cursor.Decode(&course)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, course)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses)
+		} else {
+			c.JSON(http.StatusOK, "No proposed courses available in this academic year")
 		}
 	}
 }
