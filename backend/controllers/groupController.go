@@ -14,10 +14,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var groupCollection *mongo.Collection = database.OpenCollection(database.Client, "Group")
+var groupCollection = database.OpenCollection(database.Client, "Group")
 
 func GetGroupsByYear() gin.HandlerFunc {
 	return func(c *gin.Context) {

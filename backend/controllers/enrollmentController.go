@@ -12,13 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var enrollmentCollection *mongo.Collection = database.OpenCollection(database.Client, "Enrollment")
+var enrollmentCollection = database.OpenCollection(database.Client, "Enrollment")
 
-//TODO add enrollment function into courseCollection. Make sure user doesn't enroll in the same course twice.
-//TODO 2 when student enrolls, check that the maximum number of enrollments at that course was not reached
 func AddEnrollment() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
@@ -44,12 +41,12 @@ func AddEnrollment() gin.HandlerFunc {
 		}
 
 		userid := user.ID.Hex()
-		real_user_id, _ := primitive.ObjectIDFromHex(userid)
+		realUserId, _ := primitive.ObjectIDFromHex(userid)
 		courseid := c.Param("courseid")
-		real_course_id, _ := primitive.ObjectIDFromHex(courseid)
+		realCourseId, _ := primitive.ObjectIDFromHex(courseid)
 		enrollment.ID = primitive.NewObjectID()
 
-		err = proposedCourseCollection.FindOne(ctx, bson.M{"_id": real_course_id}).Decode(&course)
+		err = proposedCourseCollection.FindOne(ctx, bson.M{"_id": realCourseId}).Decode(&course)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -57,7 +54,7 @@ func AddEnrollment() gin.HandlerFunc {
 
 		enrollment.User = &user
 		enrollment.Course = &course
-		count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"user._id": real_user_id, "course._id": real_course_id})
+		count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"user._id": realUserId, "course._id": realCourseId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -65,6 +62,10 @@ func AddEnrollment() gin.HandlerFunc {
 		if count != 0 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "You have already enrolled for this course!"})
 			return
+		}
+		var studentEnrollmentCount = int(GetEnrollmentsCountByCourseID(c, realCourseId))
+		if studentEnrollmentCount >= course.MaxAmount.Max {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "You have already reached the maximum enrollment for this course!"})
 		}
 		resultInsertionNumber, insertErr := enrollmentCollection.InsertOne(ctx, enrollment)
 		if insertErr != nil {
@@ -152,9 +153,9 @@ func ViewGrades() gin.HandlerFunc {
 		var username = c.GetString("username")
 
 		courseid := c.Param("courseid")
-		real_course_id, _ := primitive.ObjectIDFromHex(courseid)
+		realCourseId, _ := primitive.ObjectIDFromHex(courseid)
 		var enrollment models.Enrollment
-		err := enrollmentCollection.FindOne(ctx, bson.M{"user.username": username, "course._id": real_course_id}).Decode(&enrollment)
+		err := enrollmentCollection.FindOne(ctx, bson.M{"user.username": username, "course._id": realCourseId}).Decode(&enrollment)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

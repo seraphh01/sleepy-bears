@@ -400,3 +400,55 @@ func GetStudentsByGroup() gin.HandlerFunc {
 
 	}
 }
+
+func SignContract() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var user models.User
+		err := userCollection.FindOne(ctx, bson.M{"username": c.GetString("username")}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		year, err := strconv.Atoi(c.Param("year"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		cursor, err := courseCollection.Find(ctx, bson.M{"year": year, "coursetype": "MANDATORY"})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var course models.Course
+			err := cursor.Decode(&course)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			var enrollment models.Enrollment
+			enrollment.ID = primitive.NewObjectID()
+			enrollment.User = &user
+			enrollment.Course = &course
+			count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"user._id": user.ID, "course._id": course.ID})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			if count != 0 {
+				continue
+			}
+			_, insertErr := enrollmentCollection.InsertOne(ctx, enrollment)
+			if insertErr != nil {
+				msg := fmt.Sprintf("Enrollment item was not created")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+				return
+			}
+		}
+		c.JSON(http.StatusOK, "Contract signed!")
+	}
+}

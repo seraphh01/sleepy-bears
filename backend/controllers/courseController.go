@@ -6,7 +6,6 @@ import (
 	"backend/models"
 	"context"
 	"fmt"
-	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -65,8 +64,9 @@ func ApproveCourse() gin.HandlerFunc {
 		if *course.CourseType == ctype {
 			course.MaxAmount = &amount
 		} else {
-			var max = math.MaxInt32
-			course.MaxAmount.Max = max
+			var max models.Amount
+			max.Max = 2147483647
+			course.MaxAmount = &max
 		}
 
 		validationErr := validate.Struct(course)
@@ -187,6 +187,55 @@ func AddProposedCourse() gin.HandlerFunc {
 		course.ID = primitive.NewObjectID()
 
 		resultInsertionNumber, insertErr := proposedCourseCollection.InsertOne(ctx, course)
+		if insertErr != nil {
+			msg := fmt.Sprintf("Course item was not created")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+			return
+		}
+		defer cancel()
+
+		c.JSON(http.StatusOK, resultInsertionNumber)
+
+	}
+}
+
+func AddMandatoryCourse() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "CHIEF"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var course models.Course
+		var user models.User
+
+		username := c.Param("teacher")
+		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		ctype := "MANDATORY"
+		course.CourseType = &ctype
+		course.Proposer = &user
+		var max models.Amount
+		max.Max = 2147483647
+		course.MaxAmount = &max
+		if err := c.BindJSON(&course); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		validationErr := validate.Struct(course)
+		if validationErr != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+			return
+		}
+
+		course.ID = primitive.NewObjectID()
+
+		resultInsertionNumber, insertErr := courseCollection.InsertOne(ctx, course)
 		if insertErr != nil {
 			msg := fmt.Sprintf("Course item was not created")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
