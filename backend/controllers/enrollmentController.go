@@ -174,3 +174,31 @@ func DeleteEnrollmentsByCourseID(courseId primitive.ObjectID) error {
 	}
 	return nil
 }
+
+func GetOptionalEnrollmentsByStudentUsername() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		username := c.Param("username")
+		var courses []models.Course
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"user.username": username, "course.coursetype": "OPTIONAL"})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, *enrollment.Course)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses)
+		} else {
+			c.JSON(http.StatusOK, "No courses available for this student")
+		}
+	}
+}
