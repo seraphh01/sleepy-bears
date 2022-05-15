@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { resourceUsage } from 'process';
 import { environment } from 'src/environments/environment.prod';
 import { Course } from 'src/models/course.model';
 

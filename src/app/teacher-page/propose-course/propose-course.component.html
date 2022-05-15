@@ -1,16 +1,16 @@
 <div class="border-container">
     <h3>Propose an optional course: </h3>
-    <form>
+    <form [formGroup]="formGroup">
         <label for="name">Name: </label>
-        <input type="text" id="name" matInput><br>
+        <input type="text" id="name" matInput formControlName="name"><br>
     
         <label for="year">Year: </label>
-        <input type="text" id="year" matInput><br>
+        <input type="text" id="year" matInput formControlName="year"><br>
     
         <label for="max">Max students: </label>
-        <input type="text" id="max" matInput><br>
+        <input type="text" id="max" matInput formControlName="maxStudents"><br>
         
-        <button (click)="proposeCourse()">Propose</button>
+        <button (click)="proposeCourse()" [disabled]="!this.formGroup.valid">Propose</button>
     </form>
 </div>
 
