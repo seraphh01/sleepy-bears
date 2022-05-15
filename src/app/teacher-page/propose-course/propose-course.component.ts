@@ -26,10 +26,16 @@ export class ProposeCourseComponent implements OnInit {
   public proposeCourse(){
     let course: Course = {} as Course;
     course.courseType = "OPTIONAL";
-    course.name = "name"
-    course.year = 1
-    course.maxAmount = {max: 40} as Amount;
-    this.teacherService.proposeCourse(course);
-    console.log(course);
+    course.name = this.formGroup.get("name")!.value;
+    course.year = this.formGroup.get("year")!.value;
+    course.maxAmount = {max: this.formGroup.get("maxStudents")!.value} as Amount;
+    try {
+      this.teacherService.proposeCourse(course).subscribe(res => {
+        alert(res);
+        window.location.reload();
+      }, err => alert(err.message));
+    }catch(error: any){
+      alert(error);
+    }
   }
 }

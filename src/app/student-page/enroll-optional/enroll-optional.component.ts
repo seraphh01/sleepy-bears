@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ObjectId } from 'mongodb';
+import { skip } from 'rxjs';
 import { StudentService } from 'src/app/Services/student.service';
 import { TeacherService } from 'src/app/Services/teacher.service';
 import { Course } from 'src/models/course.model';
@@ -12,6 +13,7 @@ import { Course } from 'src/models/course.model';
 export class EnrollOptionalComponent implements OnInit {
   courseList!:Course[];
 
+  @Input() studentEnrollments!: Course[];
 
   constructor(private studentService: StudentService, private teacherService: TeacherService) { 
 
@@ -23,7 +25,12 @@ export class EnrollOptionalComponent implements OnInit {
 
   async ngOnInit() {
     this.courseList = await this.teacherService.getProposedCourses();
-    console.log(this.courseList);
+    let newList: Course[] = [];
+    this.courseList.forEach(course => {
+      if(!this.studentEnrollments.find(c => c.ID == course.ID))
+        newList.push(course);
+    });
+    this.courseList = newList;
   }
 
 }

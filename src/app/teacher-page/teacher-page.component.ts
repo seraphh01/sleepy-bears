@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Course } from 'src/models/course.model';
+import { UserModel } from '../models/user.model';
 import { TeacherService } from '../Services/teacher.service';
 
 @Component({
@@ -8,12 +9,12 @@ import { TeacherService } from '../Services/teacher.service';
   styleUrls: ['./teacher-page.component.css']
 })
 export class TeacherPageComponent implements OnInit {
+  @Input() user!: UserModel;
   proposedCourses!: Course[];
   constructor(private service: TeacherService) { }
 
   async ngOnInit() {
-    this.proposedCourses = await this.service.getProposedCourses();
-    console.log(this.proposedCourses);
+    this.proposedCourses = await this.service.getProposedCoursesByTeacher(this.user!.username);
   }
 
 }

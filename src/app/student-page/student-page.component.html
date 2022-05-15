@@ -1,4 +1,8 @@
 
-<app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
-<app-view-courses [courses]="this.optionalCourses" [courseType]="'Optional'"></app-view-courses>
-<app-enroll-optional></app-enroll-optional>
+
+<div *ngIf="this.courses && this.optionalCourses">
+    <app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
+    <app-view-courses [courses]="this.optionalCourses" [courseType]="'Optional'"></app-view-courses>
+    <app-enroll-optional [studentEnrollments]="this.optionalCourses"></app-enroll-optional>
+</div>
+

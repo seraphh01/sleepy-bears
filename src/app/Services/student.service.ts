@@ -23,7 +23,7 @@ export class StudentService {
 
   public getOptionalCourses(user_name: String): Promise<Course[]>{
     let promise = new Promise<Course[]>(resolve => {
-      this.client.get<Course[]>(`${environment.url}/enrollments/${user_name}`).subscribe((res: Course[]) => {
+      this.client.get<Course[]>(`${environment.url}/enrollments/getbyusername/${user_name}`).subscribe((res: Course[]) => {
         console.log(res);
         resolve(res);
       });

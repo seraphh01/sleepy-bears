@@ -27,11 +27,11 @@
                 </div>
 
                 <div *ngIf="this.user.usertype=='TEACHER'">
-                    <app-teacher-page></app-teacher-page>
+                    <app-teacher-page [user]="this.user"></app-teacher-page>
                 </div>
 
                 <div *ngIf="this.user.usertype=='CHIEF'">
-                    <app-teacher-page></app-teacher-page>
+                    <app-teacher-page [user]="this.user"></app-teacher-page>
                     <app-chief-page></app-chief-page>
                 </div>
                 
