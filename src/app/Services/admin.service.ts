@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import {Student} from 'src/models/Student';
 
@@ -32,6 +32,13 @@ export class AdminService {
     })
 
     return promise;
+   }
+
+   public deleteUser(username: String){
+     return this.client.delete(`${environment.url}/users/remove/${username}`).pipe(
+      map( res => {return res;} ), 
+      catchError(err => {return throwError(() => new Error(err.error))})
+    )
    }
 
 }

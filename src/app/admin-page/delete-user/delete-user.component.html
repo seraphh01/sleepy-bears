@@ -1,0 +1,8 @@
+<div class="border-container">
+    <h4>Delete a user</h4>
+    <form [formGroup]="this.usernameGroup">
+        <input matInput type="text" id="username" placeholder="username" formControlName="username">
+        <button (click)="deleteUser()" [disabled]="!this.usernameGroup.valid">Delete</button>
+    </form>
+</div>
+

@@ -1,8 +1,13 @@
 <button (click)="getStudents()">Show Students</button>
 <button (click)="switchActivePage(RegisterPage)">Register Users</button>
+<button (click)="switchActivePage('Delete User')">Delete User</button>
+
 <div *ngIf="isPageActive(RegisterPage)">
     <app-register-users></app-register-users>
 </div>
 <div *ngIf="this.students && isPageActive(StudentPage)">
     <app-view-users [students]="this.students"></app-view-users>
+</div>
+<div *ngIf="isPageActive('Delete User')">
+    <app-delete-user></app-delete-user>
 </div>

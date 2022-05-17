@@ -19,6 +19,7 @@ import {MatInputModule} from '@angular/material/input';
 import { ViewProposedComponent } from './teacher-page/view-proposed/view-proposed.component';
 import { ViewCoursesComponent } from './student-page/view-courses/view-courses.component';
 import { EnrollOptionalComponent } from './student-page/enroll-optional/enroll-optional.component';
+import { DeleteUserComponent } from './admin-page/delete-user/delete-user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import { EnrollOptionalComponent } from './student-page/enroll-optional/enroll-o
     ProposeCourseComponent,
     ViewProposedComponent,
     ViewCoursesComponent,
-    EnrollOptionalComponent
+    EnrollOptionalComponent,
+    DeleteUserComponent
   ],
   imports: [
     BrowserModule,
