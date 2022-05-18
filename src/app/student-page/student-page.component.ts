@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Course } from 'src/models/course.model';
 import { Student } from 'src/models/Student';
-import { UserModel } from '../models/user.model';
+import { UserModel } from 'src/models/user.model';
 import { StudentService } from '../Services/student.service';
 
 @Component({

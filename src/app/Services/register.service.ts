@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RegisterDto } from '../models/register-dto.model';
+import { RegisterDto } from '../../models/register-dto.model';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({

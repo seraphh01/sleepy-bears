@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Course } from 'src/models/course.model';
-import { UserModel } from '../models/user.model';
+import { UserModel } from 'src/models/user.model';
 import { TeacherService } from '../Services/teacher.service';
 
 @Component({

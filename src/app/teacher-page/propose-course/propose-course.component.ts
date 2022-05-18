@@ -14,9 +14,9 @@ export class ProposeCourseComponent implements OnInit {
   formGroup: FormGroup;
   constructor(private teacherService: TeacherService) {
     this.formGroup = new FormGroup({
-      name: new FormControl("Name", Validators.required),
+      name: new FormControl("Course Name", Validators.required),
       year: new FormControl(1, [Validators.required, Validators.min(1)]),
-      maxStudents: new FormControl(100, [Validators.required, Validators.max(200)])
+      maxStudents: new FormControl(100, [Validators.required, Validators.max(200), Validators.min(20)])
     })
    }
 
@@ -25,10 +25,10 @@ export class ProposeCourseComponent implements OnInit {
 
   public proposeCourse(){
     let course: Course = {} as Course;
-    course.courseType = "OPTIONAL";
+    course.coursetype = "OPTIONAL";
     course.name = this.formGroup.get("name")!.value;
     course.year = this.formGroup.get("year")!.value;
-    course.maxAmount = {max: this.formGroup.get("maxStudents")!.value} as Amount;
+    course.maxamount = {max: this.formGroup.get("maxStudents")!.value} as Amount;
     try {
       this.teacherService.proposeCourse(course).subscribe(res => {
         alert(res);

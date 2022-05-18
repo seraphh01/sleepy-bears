@@ -1,4 +1,4 @@
-import { Group } from "src/models/group.model";
+import { Group } from "./group.model";
 
 export interface UserModel {
     username: String;

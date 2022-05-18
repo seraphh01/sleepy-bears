@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, shareReplay } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { RegisterModel } from '../models/register.model';
-import { UserModel } from '../models/user.model';
+import { RegisterModel } from '../../models/register.model';
+import { UserModel } from '../../models/user.model';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({

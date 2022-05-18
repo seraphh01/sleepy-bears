@@ -3,7 +3,7 @@ import { FormGroup, FormControl, EmailValidator } from '@angular/forms';
 import { AuthService } from '../Services/auth.service';
 import { Router, ActivatedRoute, Route } from '@angular/router';
 import { asLiteral } from '@angular/compiler/src/render3/view/util';
-import { RegisterModel } from '../models/register.model';
+import { RegisterModel } from 'src/models/register.model';
 
 @Component({
   selector: 'app-login-form',

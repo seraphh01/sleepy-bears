@@ -5,9 +5,9 @@ import { Validators } from '@angular/forms';
 import { AuthService } from '../../Services/auth.service';
 import { FileService } from '../../Services/file-service.service';
 import { RegisterService } from '../../Services/register.service';
-import { RegisterDto } from '../../models/register-dto.model';
-import { RegisterModel } from '../../models/register.model';
-import {UserModel} from '../../models/user.model'
+import { RegisterDto } from '../../../models/register-dto.model';
+import { RegisterModel } from '../../../models/register.model';
+import {UserModel} from '../../../models/user.model'
 
 @Component({
   selector: 'app-register-users',
