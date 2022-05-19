@@ -328,7 +328,6 @@ func GetWorstTeacherResults() gin.HandlerFunc {
 	}
 }
 
-//get all students sorted by average grade
 func GetAllStudentsSortedByAverageGradeDesc() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -359,5 +358,51 @@ func GetAllStudentsSortedByAverageGradeDesc() gin.HandlerFunc {
 			sortedAverageGrades = append(sortedAverageGrades, pair.second.(float64))
 		}
 		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
+	}
+}
+
+func GetAllStudentsSortedByAverageGradeDescGivenGroup(groupid primitive.ObjectID) []Pair {
+
+	students := GetStudentsByGroupForStatistics(groupid)
+
+	var pairs []Pair
+	for _, student := range students {
+		var averageGrade = GetAverageGradeByStudentID(student.ID)
+		if averageGrade != -1 {
+			pairs = append(pairs, Pair{student, averageGrade})
+		}
+
+	}
+	sort.Slice(pairs, func(i, j int) bool {
+		return pairs[i].second.(float64) > pairs[j].second.(float64)
+	})
+	return pairs
+
+}
+
+func AllStudentsFromAllGroupsSortedByPerformanceDesc() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var groups []models.Group
+		groups = getAllGroupsForStatistics()
+		var pairs []Pair
+		for _, group := range groups {
+			var pair = GetAllStudentsSortedByAverageGradeDescGivenGroup(group.ID)
+			for _, studentGradePair := range pair {
+				pairs = append(pairs, Pair{studentGradePair, group})
+			}
+		}
+
+		var sortedStudents []models.User
+		var sortedGroups []models.Group
+		var sortedAverageGrades []float64
+		for _, pair := range pairs {
+			sortedStudents = append(sortedStudents, pair.first.(Pair).first.(models.User))
+			sortedAverageGrades = append(sortedAverageGrades, pair.first.(Pair).second.(float64))
+			sortedGroups = append(sortedGroups, pair.second.(models.Group))
+		}
+		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades, "groups": sortedGroups})
+
 	}
 }
