@@ -9,6 +9,9 @@ import (
 //CheckUserType renews the user tokens when they log in
 func CheckUserType(c *gin.Context, role string) (err error) {
 	userType := c.GetString("usertype")
+	if userType == "CHIEF" && role == "TEACHER" {
+		return nil
+	}
 	err = nil
 	if userType != role {
 		err = errors.New("unauthorized to access this resource")

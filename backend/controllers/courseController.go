@@ -446,3 +446,25 @@ func GetCoursesBySemesterForStatistics(semester int) []models.Course {
 		return []models.Course{}
 	}
 }
+
+func GetStudentsByCourse() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var students []models.User
+		var course models.Course
+		courseId := c.Param("courseid")
+		realCourseId, _ := primitive.ObjectIDFromHex(courseId)
+		err := courseCollection.FindOne(ctx, bson.M{"_id": realCourseId}).Decode(&course)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		students = GetStudentsFromCourses([]models.Course{course})
+		if len(students) > 0 {
+			c.JSON(http.StatusOK, students)
+		} else {
+			c.JSON(http.StatusOK, "No students enrolled in this course")
+		}
+	}
+}

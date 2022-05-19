@@ -12,4 +12,5 @@ func TeacherRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/proposed_courses/add", controllers.AddProposedCourse())
 	incomingRoutes.POST("/grades/add/:studentusername/:courseid", controllers.GradeStudent())
 	incomingRoutes.GET("/proposed_courses/getby/:username", controllers.GetProposedCoursesByTeacherUsername())
+	incomingRoutes.GET("/students/bycourse/:courseid", controllers.GetStudentsByCourse())
 }
