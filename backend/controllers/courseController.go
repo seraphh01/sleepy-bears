@@ -396,3 +396,28 @@ func GetAllCoursesForStatistics() []models.Course {
 		return []models.Course{}
 	}
 }
+
+func GetCoursesByYearForStatistics(year int) []models.Course {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var courses []models.Course
+	cursor, err := courseCollection.Find(ctx, bson.M{"year": year})
+	if err != nil {
+		return []models.Course{}
+	}
+	for cursor.Next(ctx) {
+		var course models.Course
+		err := cursor.Decode(&course)
+		if err != nil {
+			fmt.Println(err)
+			return []models.Course{}
+		}
+		courses = append(courses, course)
+	}
+	if len(courses) > 0 {
+		return courses
+	} else {
+		return []models.Course{}
+	}
+}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -328,7 +329,7 @@ func GetWorstTeacherResults() gin.HandlerFunc {
 	}
 }
 
-func GetAllStudentsSortedByAverageGradeDesc() gin.HandlerFunc {
+func GetAllStudentsFromGroupSortedByAverageGradeDesc() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
@@ -404,5 +405,66 @@ func AllStudentsFromAllGroupsSortedByPerformanceDesc() gin.HandlerFunc {
 		}
 		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades, "groups": sortedGroups})
 
+	}
+}
+
+func GetStudentsFromCourses(courses []models.Course) []models.User {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	var students []models.User
+	added := map[string]bool{}
+	for _, course := range courses {
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"course._id": course.ID})
+		if err != nil {
+			fmt.Println(err)
+			return []models.User{}
+		}
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				fmt.Println(err)
+				return []models.User{}
+			}
+			student := *enrollment.User
+			if added[*student.Username] != true {
+				added[*student.Username] = true
+				students = append(students, *enrollment.User)
+			}
+		}
+	}
+	return students
+}
+
+func GetAllStudentsFromYearSortedByAverageGradeDesc() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var students []models.User
+		var courses []models.Course
+
+		year, _ := strconv.Atoi(c.Param("year"))
+		courses = GetCoursesByYearForStatistics(year)
+		students = GetStudentsFromCourses(courses)
+
+		var pairs []Pair
+		for _, student := range students {
+			var averageGrade = GetAverageGradeByStudentID(student.ID)
+			if averageGrade != -1 {
+				pairs = append(pairs, Pair{student, averageGrade})
+			}
+
+		}
+		sort.Slice(pairs, func(i, j int) bool {
+			return pairs[i].second.(float64) > pairs[j].second.(float64)
+		})
+
+		var sortedStudents []models.User
+		var sortedAverageGrades []float64
+		for _, pair := range pairs {
+			sortedStudents = append(sortedStudents, pair.first.(models.User))
+			sortedAverageGrades = append(sortedAverageGrades, pair.second.(float64))
+		}
+		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
 	}
 }
