@@ -148,6 +148,30 @@ func GradeStudent() gin.HandlerFunc {
 	}
 }
 
+func RemoveEnrollment() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		username := c.GetString("username")
+		courseId := c.Param("courseid")
+		realCourseId, _ := primitive.ObjectIDFromHex(courseId)
+
+		result, err := enrollmentCollection.DeleteOne(ctx, bson.M{"user.username": username, "course._id": realCourseId})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		if result.DeletedCount < 1 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment was not found!"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"success": "Enrollment was deleted!"})
+	}
+}
+
 func ViewGrades() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
