@@ -23,4 +23,5 @@ func AdminRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.GET("/users/allgroups/allstudents/performancedesc", controllers.AllStudentsFromAllGroupsSortedByPerformanceDesc())
 
 	incomingRoutes.GET("/users/studentsbyyear/performancedesc/:year", controllers.GetAllStudentsFromYearSortedByAverageGradeDesc())
+	incomingRoutes.GET("/users/studentsbysemester/performancedesc/:semester", controllers.GetAllStudentsFromSemesterSortedByAverageGradeDesc())
 }

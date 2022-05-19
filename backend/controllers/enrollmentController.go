@@ -468,3 +468,36 @@ func GetAllStudentsFromYearSortedByAverageGradeDesc() gin.HandlerFunc {
 		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
 	}
 }
+
+func GetAllStudentsFromSemesterSortedByAverageGradeDesc() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var students []models.User
+		var courses []models.Course
+
+		semester, _ := strconv.Atoi(c.Param("semester"))
+		courses = GetCoursesBySemesterForStatistics(semester)
+		students = GetStudentsFromCourses(courses)
+
+		var pairs []Pair
+		for _, student := range students {
+			var averageGrade = GetAverageGradeByStudentID(student.ID)
+			if averageGrade != -1 {
+				pairs = append(pairs, Pair{student, averageGrade})
+			}
+
+		}
+		sort.Slice(pairs, func(i, j int) bool {
+			return pairs[i].second.(float64) > pairs[j].second.(float64)
+		})
+
+		var sortedStudents []models.User
+		var sortedAverageGrades []float64
+		for _, pair := range pairs {
+			sortedStudents = append(sortedStudents, pair.first.(models.User))
+			sortedAverageGrades = append(sortedAverageGrades, pair.second.(float64))
+		}
+		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
+	}
+}
