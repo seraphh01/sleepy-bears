@@ -371,3 +371,28 @@ func GetProposedCoursesByTeacherUsername() gin.HandlerFunc {
 		}
 	}
 }
+
+func GetAllCoursesForStatistics() []models.Course {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var courses []models.Course
+	cursor, err := courseCollection.Find(ctx, bson.M{})
+	if err != nil {
+		return []models.Course{}
+	}
+	for cursor.Next(ctx) {
+		var course models.Course
+		err := cursor.Decode(&course)
+		if err != nil {
+			fmt.Println("error for some reason")
+			return []models.Course{}
+		}
+		courses = append(courses, course)
+	}
+	if len(courses) > 0 {
+		return courses
+	} else {
+		return []models.Course{}
+	}
+}

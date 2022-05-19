@@ -202,3 +202,84 @@ func GetOptionalEnrollmentsByStudentUsername() gin.HandlerFunc {
 		}
 	}
 }
+
+func GetAverageGradeByCourseID(c *gin.Context, realCourseId primitive.ObjectID) float64 {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	cursor, err := enrollmentCollection.Find(ctx, bson.M{"course._id": realCourseId})
+
+	if err != nil {
+		fmt.Println(err)
+		return -1
+	}
+	var total float64 = 0
+	var totalCount = 0
+	for cursor.Next(ctx) {
+		var enrollment models.Enrollment
+		err := cursor.Decode(&enrollment)
+		if err != nil {
+			fmt.Println(err)
+			return -1
+		}
+		var sum float64 = 0
+		var count = 0
+		for _, grade := range enrollment.Grades {
+			sum += float64(grade.Grade)
+			count += 1
+		}
+		var average float64
+		average = sum / float64(count)
+		total += average
+		totalCount += 1
+	}
+	if totalCount == 0 {
+		return -1
+	}
+	return total / float64(totalCount)
+}
+
+func GetBestTeacherResults() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var courses []models.Course
+		courses = GetAllCoursesForStatistics()
+		var bestAverage float64 = -1
+		var bestTeacher models.User
+		for _, course := range courses {
+			var averageGrade = GetAverageGradeByCourseID(c, course.ID)
+			if averageGrade > bestAverage {
+				bestAverage = averageGrade
+				bestTeacher = *course.Proposer
+			}
+		}
+		if bestAverage == -1 {
+			c.JSON(http.StatusOK, "No grades available to determine best teacher")
+		} else {
+			c.JSON(http.StatusOK, gin.H{"bestTeacher": bestTeacher, "averageGrade": bestAverage})
+		}
+	}
+}
+
+func GetWorstTeacherResults() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var courses []models.Course
+		courses = GetAllCoursesForStatistics()
+		var worstAverage float64 = 10000
+		var worstTeacher models.User
+		for _, course := range courses {
+			var averageGrade = GetAverageGradeByCourseID(c, course.ID)
+			if averageGrade < worstAverage && averageGrade != -1 {
+				worstAverage = averageGrade
+				worstTeacher = *course.Proposer
+			}
+		}
+		if worstAverage == -1 {
+			c.JSON(http.StatusOK, "No grades available to determine worst teacher")
+		} else {
+			c.JSON(http.StatusOK, gin.H{"bestTeacher": worstTeacher, "averageGrade": worstAverage})
+		}
+	}
+}
