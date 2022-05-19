@@ -448,3 +448,30 @@ func SignContract() gin.HandlerFunc {
 		c.JSON(http.StatusOK, "Contract signed!")
 	}
 }
+
+func GetStudentsByGroupForStatistics(groupID primitive.ObjectID) []models.User {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var users []models.User
+	cursor, err := userCollection.Find(ctx, bson.M{"group._id": groupID})
+	if err != nil {
+		fmt.Println(err)
+		return []models.User{}
+	}
+	for cursor.Next(ctx) {
+		var user models.User
+		err := cursor.Decode(&user)
+		if err != nil {
+			fmt.Println(err)
+			return []models.User{}
+		}
+		users = append(users, user)
+	}
+	if len(users) > 0 {
+		return users
+	} else {
+		return []models.User{}
+	}
+
+}

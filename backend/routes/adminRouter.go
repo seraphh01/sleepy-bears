@@ -17,4 +17,5 @@ func AdminRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.DELETE("/users/remove/:username", controllers.DeleteUser())
 	incomingRoutes.POST("/groups/add", controllers.AddGroup())
 	incomingRoutes.POST("/groups/add_student/:groupnumber/:username", controllers.AddStudentToGroup())
+	incomingRoutes.GET("/users/studentsbygroup/performancedesc/:groupid", controllers.GetAllStudentsSortedByAverageGradeDesc())
 }

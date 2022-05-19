@@ -7,12 +7,17 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sort"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type Pair struct {
+	first, second interface{}
+}
 
 var enrollmentCollection = database.OpenCollection(database.Client, "Enrollment")
 
@@ -238,6 +243,45 @@ func GetAverageGradeByCourseID(c *gin.Context, realCourseId primitive.ObjectID) 
 	return total / float64(totalCount)
 }
 
+func GetAverageGradeByStudentID(realStudentId primitive.ObjectID) float64 {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	cursor, err := enrollmentCollection.Find(ctx, bson.M{"user._id": realStudentId})
+
+	if err != nil {
+		fmt.Println(err)
+		return -1
+	}
+	var total float64 = 0
+	var totalCount = 0
+	for cursor.Next(ctx) {
+		var enrollment models.Enrollment
+		err := cursor.Decode(&enrollment)
+		if err != nil {
+			fmt.Println(err)
+			return -1
+		}
+		var sum float64 = 0
+		var count = 0
+		for _, grade := range enrollment.Grades {
+			sum += float64(grade.Grade)
+			count += 1
+		}
+		if count == 0 {
+			continue
+		}
+		var average float64
+		average = sum / float64(count)
+		total += average
+		totalCount += 1
+	}
+	if totalCount == 0 {
+		return -1
+	}
+
+	return total / float64(totalCount)
+}
+
 func GetBestTeacherResults() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -281,5 +325,39 @@ func GetWorstTeacherResults() gin.HandlerFunc {
 		} else {
 			c.JSON(http.StatusOK, gin.H{"bestTeacher": worstTeacher, "averageGrade": worstAverage})
 		}
+	}
+}
+
+//get all students sorted by average grade
+func GetAllStudentsSortedByAverageGradeDesc() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var students []models.User
+
+		groupid := c.Param("groupid")
+		realgroupid, _ := primitive.ObjectIDFromHex(groupid)
+		students = GetStudentsByGroupForStatistics(realgroupid)
+
+		var pairs []Pair
+		for _, student := range students {
+			var averageGrade = GetAverageGradeByStudentID(student.ID)
+			if averageGrade != -1 {
+				pairs = append(pairs, Pair{student, averageGrade})
+			}
+
+		}
+		sort.Slice(pairs, func(i, j int) bool {
+			return pairs[i].second.(float64) > pairs[j].second.(float64)
+		})
+
+		var sortedStudents []models.User
+		var sortedAverageGrades []float64
+		for _, pair := range pairs {
+			sortedStudents = append(sortedStudents, pair.first.(models.User))
+			fmt.Println(pair.second.(float64))
+			sortedAverageGrades = append(sortedAverageGrades, pair.second.(float64))
+		}
+		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
 	}
 }
