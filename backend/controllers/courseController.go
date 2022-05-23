@@ -130,13 +130,14 @@ func GetCourses() gin.HandlerFunc {
 
 func getCurrentAcademicYear() models.AcademicYear {
 	currentTime := time.Now()
+	july, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
 	oct, err := time.Parse(time.RFC822, "01 Oct "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
 	if err != nil {
 		fmt.Println("Invalid current time")
 		return models.AcademicYear{}
 	}
 	var academicYear models.AcademicYear
-	if currentTime.After(oct) {
+	if currentTime.After(july) {
 		academicYear.StartDate = oct
 		endDate, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year()+1)+" 0:00 UTC")
 		if err != nil {
