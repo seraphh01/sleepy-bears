@@ -409,12 +409,17 @@ func SignContract() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
-		year, err := strconv.Atoi(c.Param("year"))
+		yearId := c.Param("academic_year_id")
+		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		cursor, err := courseCollection.Find(ctx, bson.M{"year": year, "coursetype": "MANDATORY"})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		cursor, err := courseCollection.Find(ctx, bson.M{"academic_year._id": realYearId, "coursetype": "MANDATORY"})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

@@ -12,5 +12,5 @@ func StudentRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/enrollments/add/:courseid", controllers.AddEnrollment())
 	incomingRoutes.DELETE("/enrollments/remove/:courseid", controllers.RemoveEnrollment())
 	incomingRoutes.GET("/enrollments/grades/:courseid", controllers.ViewGrades())
-	incomingRoutes.POST("/enrollments/signcontract/:year", controllers.SignContract())
+	incomingRoutes.POST("/enrollments/signcontract/:academic_year_id", controllers.SignContract())
 }

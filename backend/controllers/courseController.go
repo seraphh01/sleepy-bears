@@ -17,6 +17,7 @@ import (
 
 var courseCollection = database.OpenCollection(database.Client, "Course")
 var proposedCourseCollection = database.OpenCollection(database.Client, "ProposedCourse")
+var academicYearCollection = database.OpenCollection(database.Client, "AcademicYears")
 
 func ApproveCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -127,6 +128,48 @@ func GetCourses() gin.HandlerFunc {
 	}
 }
 
+func getCurrentAcademicYear() models.AcademicYear {
+	currentTime := time.Now()
+	oct, err := time.Parse(time.RFC822, "01 Oct "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
+	if err != nil {
+		fmt.Println("Invalid current time")
+		return models.AcademicYear{}
+	}
+	var academicYear models.AcademicYear
+	if currentTime.After(oct) {
+		academicYear.StartDate = oct
+		endDate, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year()+1)+" 0:00 UTC")
+		if err != nil {
+			fmt.Println("Invalid end date")
+			return models.AcademicYear{}
+		}
+		academicYear.EndDate = endDate
+	} else {
+		prevDate, err := time.Parse(time.RFC822, "01 Oct "+strconv.Itoa(currentTime.Year()-1)+" 0:00 UTC")
+		if err != nil {
+			fmt.Println("Invalid start date")
+			return models.AcademicYear{}
+		}
+		academicYear.StartDate = prevDate
+		endDate, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
+		if err != nil {
+			fmt.Println("Invalid end date")
+			return models.AcademicYear{}
+		}
+		academicYear.EndDate = endDate
+	}
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	count, err := academicYearCollection.CountDocuments(ctx, bson.M{"start_date": academicYear.StartDate, "end_date": academicYear.EndDate})
+	if err != nil {
+		return models.AcademicYear{}
+	}
+	if count == 0 {
+		academicYearCollection.InsertOne(ctx, academicYear)
+	}
+	return academicYear
+}
+
 func AddProposedCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
@@ -150,7 +193,21 @@ func AddProposedCourse() gin.HandlerFunc {
 		}
 		realUserID, _ := primitive.ObjectIDFromHex(user.ID.Hex())
 
-		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID})
+		ctype := "OPTIONAL"
+		course.CourseType = &ctype
+		course.Proposer = &user
+		if err := c.BindJSON(&course); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		academicYear := getCurrentAcademicYear()
+		if academicYear == (models.AcademicYear{}) {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking for current academic year"})
+			return
+		}
+		course.AcademicYear = &academicYear
+
+		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academic_year._id": course.AcademicYear.ID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -160,21 +217,13 @@ func AddProposedCourse() gin.HandlerFunc {
 			return
 		}
 
-		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID})
+		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academic_year._id": course.AcademicYear.ID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		if countAccepted+count >= 2 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "This teacher has already proposed two courses!"})
-			return
-		}
-
-		ctype := "OPTIONAL"
-		course.CourseType = &ctype
-		course.Proposer = &user
-		if err := c.BindJSON(&course); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
@@ -276,17 +325,18 @@ func GetProposedCourses() gin.HandlerFunc {
 	}
 }
 
-func GetCoursesByYear() gin.HandlerFunc {
+func GetCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		year, err := strconv.Atoi(c.Param("year"))
+		yearId := c.Param("academic_year_id")
+		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		var courses []models.Course
-		cursor, err := courseCollection.Find(ctx, bson.M{"year": year})
+		cursor, err := courseCollection.Find(ctx, bson.M{"academic_year._id": realYearId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -308,17 +358,18 @@ func GetCoursesByYear() gin.HandlerFunc {
 	}
 }
 
-func GetProposedCoursesByYear() gin.HandlerFunc {
+func GetProposedCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		year, err := strconv.Atoi(c.Param("year"))
+		yearId := c.Param("academic_year_id")
+		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		var courses []models.Course
-		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"year": year})
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"academic_year._id": realYearId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -402,7 +453,7 @@ func GetCoursesByYearForStatistics(year int) []models.Course {
 	defer cancel()
 
 	var courses []models.Course
-	cursor, err := courseCollection.Find(ctx, bson.M{"year": year})
+	cursor, err := courseCollection.Find(ctx, bson.M{"year_of_study": year})
 	if err != nil {
 		return []models.Course{}
 	}
