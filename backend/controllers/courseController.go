@@ -130,8 +130,8 @@ func GetCourses() gin.HandlerFunc {
 
 func getCurrentAcademicYear() models.AcademicYear {
 	currentTime := time.Now()
-	july, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
-	oct, err := time.Parse(time.RFC822, "01 Oct "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
+	july, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
+	oct, err := time.Parse(time.RFC1123, "01 Oct "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
 	if err != nil {
 		fmt.Println("Invalid current time")
 		return models.AcademicYear{}
@@ -139,20 +139,20 @@ func getCurrentAcademicYear() models.AcademicYear {
 	var academicYear models.AcademicYear
 	if currentTime.After(july) {
 		academicYear.StartDate = oct
-		endDate, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year()+1)+" 0:00 UTC")
+		endDate, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year()+1)+" 0:00 UTC")
 		if err != nil {
 			fmt.Println("Invalid end date")
 			return models.AcademicYear{}
 		}
 		academicYear.EndDate = endDate
 	} else {
-		prevDate, err := time.Parse(time.RFC822, "01 Oct "+strconv.Itoa(currentTime.Year()-1)+" 0:00 UTC")
+		prevDate, err := time.Parse(time.RFC1123, "01 Oct "+strconv.Itoa(currentTime.Year()-1)+" 0:00 UTC")
 		if err != nil {
 			fmt.Println("Invalid start date")
 			return models.AcademicYear{}
 		}
 		academicYear.StartDate = prevDate
-		endDate, err := time.Parse(time.RFC822, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
+		endDate, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
 		if err != nil {
 			fmt.Println("Invalid end date")
 			return models.AcademicYear{}
