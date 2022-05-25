@@ -1,0 +1,24 @@
+div{
+    font-family: arial, sans-serif;
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+h3{
+    border-bottom: 2px solid currentColor;
+    width:255px;
+}
+
+form{
+    padding-bottom: 40px;
+}
+
+#buttonName{
+    background-color: pink;
+    border-radius: 10px;
+    font-family: arial, sans-serif;
+}
+
+#buttonName:hover{
+    background-color: rgb(219, 109, 128); 
+}
