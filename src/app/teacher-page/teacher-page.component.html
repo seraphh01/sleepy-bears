@@ -2,3 +2,7 @@
     <app-view-proposed [proposedCourses]="this.proposedCourses"></app-view-proposed>
 </div>
 <app-propose-course></app-propose-course>
+
+<div *ngIf="this.proposedCourses">
+    <app-add-student-grade [proposedCourses]="this.proposedCourses"></app-add-student-grade>
+</div>

@@ -1,0 +1,18 @@
+<div>
+    <h1>Add Grade</h1>
+    <table>
+        <tr>
+            <th>CourseName</th>
+            <th>StudentName</th>
+            <th>Grade</th>
+            <th>Add</th>
+        </tr>
+        <tr *ngFor="let course of proposedCourses">
+            <th>{{course.name}}</th>
+            <th>StudentName</th>
+            <th><input [(ngModel)]="grade"></th>
+            <th><button (click)="gradeStudent(course.name)">Add</button></th>
+        </tr>
+    </table>
+
+</div>
