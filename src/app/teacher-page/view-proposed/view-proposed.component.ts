@@ -11,7 +11,6 @@ export class ViewProposedComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.proposedCourses);
   }
 
 }

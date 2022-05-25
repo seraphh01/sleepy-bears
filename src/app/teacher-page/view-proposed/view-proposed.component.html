@@ -1,4 +1,16 @@
 <div class="border-container">
     <h3>Proposed Courses: </h3>
-    <p *ngFor="let course of this.proposedCourses">{{course.name}} max: {{course.maxamount.max}}, year: {{course.year}}</p>
+    <table>
+        <tr>
+            <th>CourseName</th>
+            <th>MaxAmount</th>
+            <th>Year</th>
+        </tr>
+        <tr *ngFor="let course of this.proposedCourses">
+            <th>{{course.name}}</th>
+            <th>{{course.maxamount.max}}</th>
+            <th>{{course.year}}</th>
+        </tr>
+    </table>
+    <br>
 </div>
