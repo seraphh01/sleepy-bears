@@ -143,10 +143,16 @@ func Login() gin.HandlerFunc {
 
 func GetUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		//if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+		//	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		//	return
+		//}
+
+		if helpers.CheckUserType(c, "ADMIN") != nil && helpers.CheckUserType(c, "CHIEF") != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Not authorized"})
 			return
 		}
+
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		var role = c.Param("type")
 		defer cancel()
