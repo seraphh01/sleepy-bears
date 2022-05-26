@@ -122,10 +122,10 @@ func GradeStudent() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if helpers.MatchUserToUsername(c, *enrollment.Course.Proposer.Username) != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "You can only grade your own course!"})
-			return
-		}
+		//if helpers.MatchUserToUsername(c, *enrollment.Course.Proposer.Username) != nil {
+		//	c.JSON(http.StatusBadRequest, gin.H{"error": "You can only grade your own course!"})
+		//	return
+		//}
 		enrollment.Grades = append(enrollment.Grades, grade)
 
 		update := bson.M{"grades": enrollment.Grades}
@@ -586,5 +586,36 @@ func GetAllStudentsFromSemesterSortedByAverageGradeDesc() gin.HandlerFunc {
 			sortedAverageGrades = append(sortedAverageGrades, pair.second.(float64))
 		}
 		c.JSON(http.StatusOK, bson.M{"students": sortedStudents, "averageGrade": sortedAverageGrades})
+	}
+}
+
+func ViewAllGradesByYear() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var username = c.Param("username")
+		var year = getCurrentAcademicYear()
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"user.username": username, "course.academicyear._id": year.ID})
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		var grades [][]models.Grade
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, *enrollment.Course)
+			grades = append(grades, enrollment.Grades)
+		}
+		c.JSON(http.StatusOK, gin.H{"courses": courses, "grades": grades})
 	}
 }

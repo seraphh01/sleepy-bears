@@ -14,4 +14,5 @@ func StudentRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.GET("/enrollments/grades/:courseid", controllers.ViewGradesByCourse())
 	incomingRoutes.GET("/enrollments/grades", controllers.ViewAllGrades())
 	incomingRoutes.POST("/enrollments/signcontract/:academic_year_id", controllers.SignContract())
+	incomingRoutes.GET("/enrollments/grades/by-year/:username", controllers.ViewAllGradesByYear())
 }
