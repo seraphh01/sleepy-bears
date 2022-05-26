@@ -86,6 +86,88 @@ func AddEnrollment() gin.HandlerFunc {
 	}
 }
 
+func AddEnrollmentsToYearOfStudy() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		var user models.User
+		var enrollment models.Enrollment
+		var academicYear models.AcademicYear
+		academicYear = getCurrentAcademicYear()
+		if academicYear == (models.AcademicYear{}) {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get academic year"})
+			return
+		}
+		username := c.GetString("username")
+		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err := helpers.MatchUserTypeToUid(c, *user.Username); err != nil {
+			c.JSON(http.StatusUnauthorized, "You can only enroll yourself!")
+			return
+		}
+		yearOfStudy, err := strconv.Atoi(c.Param("year_of_study"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		userid := user.ID.Hex()
+		realUserId, _ := primitive.ObjectIDFromHex(userid)
+		cursor, err := courseCollection.Find(ctx, bson.M{"academicyear._id": academicYear.ID, "yearofstudy": yearOfStudy})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var course models.Course
+			err := cursor.Decode(&course)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				continue
+			}
+			enrollment.ID = primitive.NewObjectID()
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				continue
+			}
+
+			enrollment.User = &user
+			enrollment.Course = &course
+			count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"user._id": realUserId, "course._id": course.ID})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				continue
+			}
+			if count != 0 {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "You have already enrolled for this course!"})
+				continue
+			}
+			var studentEnrollmentCount = int(GetEnrollmentsCountByCourseID(c, course.ID))
+			if studentEnrollmentCount >= course.MaxAmount.Max {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "You have already reached the maximum enrollment for this course!"})
+				continue
+			}
+			resultInsertionNumber, insertErr := enrollmentCollection.InsertOne(ctx, enrollment)
+			if insertErr != nil {
+				msg := fmt.Sprintf("Enrollment item was not created")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+				continue
+			}
+			defer cancel()
+
+			c.JSON(http.StatusOK, resultInsertionNumber)
+		}
+	}
+}
+
 func GetEnrollmentsCountByCourseID(c *gin.Context, courseID primitive.ObjectID) int64 {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
