@@ -23,6 +23,8 @@ import { DeleteUserComponent } from './admin-page/delete-user/delete-user.compon
 import { AddStudentGradeComponent } from './teacher-page/add-student-grade/add-student-grade.component';
 import { ListStudentGradeComponent } from './teacher-page/list-student-grade/list-student-grade.component';
 import { SemesterPerformanceComponent } from './admin-page/semester-performance/semester-performance.component';
+import { ApproveCoursesComponent } from './chief-page/approve-courses/approve-courses.component';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { SemesterPerformanceComponent } from './admin-page/semester-performance/
     DeleteUserComponent,
     AddStudentGradeComponent,
     ListStudentGradeComponent,
-    SemesterPerformanceComponent
+    SemesterPerformanceComponent,
+    ApproveCoursesComponent
   ],
   imports: [
     BrowserModule,

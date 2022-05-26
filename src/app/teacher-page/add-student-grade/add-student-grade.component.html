@@ -1,5 +1,5 @@
-<br><br>
-<div>
+
+<div class="border-container">
     <h1>Add Grade</h1>
     <table>
         <tr *ngFor="let course of proposedCourses">
@@ -8,6 +8,10 @@
                     <td colspan="3">Course: {{course.name}}</td>
                 </tr>
                 <div  *ngIf="this.studentsOfCourse!.get(course.ID) && this.studentsOfCourse.get(course.ID)!.length > 0 " >
+                    <tr>
+                        <td>Student Name</td>
+                        <td>Grade</td>
+                    </tr>
                     <tr *ngFor="let student of this.studentsOfCourse.get(course.ID)">
                         <th>{{student.name}}</th>
                         <th><input id="{{course.ID}}{{student.username}}" type="number" min="1" max="10"></th>

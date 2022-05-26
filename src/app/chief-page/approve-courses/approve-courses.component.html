@@ -1,0 +1,15 @@
+<div *ngIf="this.courses" class="border-container">
+    <h3 id="title">Approve proposed courses</h3>
+    <table>
+        <tr>
+            <td>Course Name</td>
+            <td>Proposed by</td>
+        </tr>
+        <tr id="text" *ngFor="let course of this.courses">
+            <td>{{course.name}} </td>
+            <td>{{course.proposer.name}}</td>
+            <td><button (click)="approveCourse(course.ID)">Approve</button></td>
+        </tr>
+    </table>
+    
+</div>

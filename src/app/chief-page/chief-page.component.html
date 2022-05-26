@@ -1,1 +1,4 @@
-<p>chief-page works!</p>
+<div *ngIf="this.optionalCourses">
+    <app-approve-courses [courses]="this.optionalCourses"></app-approve-courses>
+</div>
+
