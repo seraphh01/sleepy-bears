@@ -1,16 +1,16 @@
 
 <div class="border-container">
     <h3>View Student Grades</h3>
-    <div  *ngFor="let course of this.proposedCourses">
+    <div *ngFor="let course of this.courseStudentGrades.keys()">
         <p>{{course.name}}</p>
         <table>
             <tr>
                 <th>Student</th>
                 <th>Grade</th>
             </tr>
-            <tr *ngFor="let student of students">
-                <th>{{student.username}}</th>
-                <th>{{getStudentGrade(student.username)}}</th>
+            <tr *ngFor="let entry of this.courseStudentGrades.get(course)">
+                <th>{{entry.student.username}}</th>
+                <th>{{entry.grades}}</th>
             </tr>
         </table>
     </div>

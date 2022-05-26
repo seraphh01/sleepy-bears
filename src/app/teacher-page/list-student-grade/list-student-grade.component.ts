@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ObjectID } from 'bson';
 import { TeacherService } from 'src/app/Services/teacher.service';
 import { Course } from 'src/models/course.model';
 import { Grade } from 'src/models/Grade.model';
 import { Student } from 'src/models/Student';
+import { StudentGrade } from 'src/models/studentGrade.model';
 
 @Component({
   selector: 'app-list-student-grade',
@@ -10,20 +12,31 @@ import { Student } from 'src/models/Student';
   styleUrls: ['./list-student-grade.component.css']
 })
 export class ListStudentGradeComponent implements OnInit {
-  @Input() proposedCourses!: Course[];
+  @Input() mandatoryCourses!: Course[];
   students: Student[] = [];
-  courseGrades: Grade[] = [];
+  courseGrades: Grade[][] = [];
+  courses: Course[] = [];
+  courseStudentGrades!: Map<Course,StudentGrade[]>;
 
-  constructor(private teacherService: TeacherService) { }
+  constructor(private teacherService: TeacherService) { 
+    this.courseStudentGrades = new Map<Course,StudentGrade[]>();
+  }
 
   ngOnInit(): void {
-      this.teacherService.getStudentsAtCourse(this.proposedCourses[0].ID).subscribe((res: any) => {
+      this.courses = this.mandatoryCourses;
+      console.log(this.courses);
+      this.courses.forEach(element => {
+        this.getGrades(element)
+      });
+  }
+
+  getGrades(course: Course){
+    this.teacherService.getStudentsAtCourse(course.ID).subscribe((res: any) => {
+      this.courseStudentGrades.set(course,new Array<StudentGrade>());
+
       let students = res['students'];
       let studentGrades = res['grades'];
       var i : number;
-
-      this.students = new Array<Student>();
-      this.courseGrades = new Array<Grade>();
 
       if(students.length == 0){
         alert("No students enrolled");
@@ -31,12 +44,14 @@ export class ListStudentGradeComponent implements OnInit {
       }
 
       for(i=0;i<students.length;i++){
-        let student = students[i];
-        let grade = studentGrades[i];
-        this.students.push(student);
-        this.courseGrades.push(grade);
+        let grades = Array<number>();
+        studentGrades[i].forEach(
+          (grade:Grade) => grades.push(grade.grade)
+        )
+        this.courseStudentGrades.get(course)?.push({student: students[i],grades: grades});
       }
    });
+      console.log(this.courseStudentGrades);
   }
 
   getStudentGrade(studentName: string){
@@ -48,7 +63,7 @@ export class ListStudentGradeComponent implements OnInit {
       }
     }
     if(this.courseGrades[index] == null){
-      return "no grade";
+      return [];
     }
     return this.courseGrades[index];
   }
