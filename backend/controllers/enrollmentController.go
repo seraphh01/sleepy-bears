@@ -195,6 +195,39 @@ func ViewGradesByCourse() gin.HandlerFunc {
 	}
 }
 
+func ViewGradesByCourseAllStudents() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		courseid := c.Param("courseid")
+		realCourseId, _ := primitive.ObjectIDFromHex(courseid)
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"course._id": realCourseId})
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var students []models.User
+		var grades [][]models.Grade
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			students = append(students, *enrollment.User)
+			grades = append(grades, enrollment.Grades)
+		}
+
+		c.JSON(http.StatusOK, gin.H{"students": students, "grades": grades})
+	}
+}
+
 func ViewAllGrades() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
