@@ -12,8 +12,8 @@ type Course struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	Name         *string            `json:"name" validate:"required,min=2,max=40"`
 	CourseType   *string            `json:"coursetype" validate:"required,eq=MANDATORY|eq=OPTIONAL"`
-	AcademicYear *AcademicYear      `json:"academic_year" validate:"required"`
-	YearOfStudy  *int               `json:"year_of_study" validate:"required,min=1"`
+	AcademicYear *AcademicYear      `json:"academicyear" validate:"required"`
+	YearOfStudy  *int               `json:"yearofstudy" validate:"required,min=1"`
 	Proposer     *User              `json:"proposer" validate:"required"`
 	MaxAmount    *Amount            `json:"maxamount" validate:"required,min=20"`
 	Credits      *int               `json:"credits" validate:"required,min=2"`

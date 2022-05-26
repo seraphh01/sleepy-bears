@@ -199,7 +199,7 @@ func AddProposedCourse() gin.HandlerFunc {
 		}
 		course.AcademicYear = &academicYear
 
-		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academic_year._id": course.AcademicYear.ID})
+		count, err := proposedCourseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academicyear._id": course.AcademicYear.ID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -209,7 +209,7 @@ func AddProposedCourse() gin.HandlerFunc {
 			return
 		}
 
-		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academic_year._id": course.AcademicYear.ID})
+		countAccepted, err := courseCollection.CountDocuments(ctx, bson.M{"proposer._id": realUserID, "academicyear._id": course.AcademicYear.ID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -321,14 +321,14 @@ func GetCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		yearId := c.Param("academic_year_id")
+		yearId := c.Param("academicyear_id")
 		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		var courses []models.Course
-		cursor, err := courseCollection.Find(ctx, bson.M{"academic_year._id": realYearId})
+		cursor, err := courseCollection.Find(ctx, bson.M{"academicyear._id": realYearId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -354,14 +354,14 @@ func GetProposedCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		yearId := c.Param("academic_year_id")
+		yearId := c.Param("academicyear_id")
 		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		var courses []models.Course
-		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"academic_year._id": realYearId})
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"academicyear._id": realYearId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -393,7 +393,7 @@ func GetCoursesByYearOfStudy() gin.HandlerFunc {
 			return
 		}
 		var courses []models.Course
-		cursor, err := courseCollection.Find(ctx, bson.M{"year_of_study": year_of_study})
+		cursor, err := courseCollection.Find(ctx, bson.M{"yearofstudy": year_of_study})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -425,7 +425,7 @@ func GetProposedCoursesByYearOfStudy() gin.HandlerFunc {
 			return
 		}
 		var courses []models.Course
-		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"year_of_study": year_of_study})
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"yearofstudy": year_of_study})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -509,7 +509,7 @@ func GetCoursesByYearForStatistics(year int) []models.Course {
 	defer cancel()
 
 	var courses []models.Course
-	cursor, err := courseCollection.Find(ctx, bson.M{"year_of_study": year})
+	cursor, err := courseCollection.Find(ctx, bson.M{"yearofstudy": year})
 	if err != nil {
 		return []models.Course{}
 	}
