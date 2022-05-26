@@ -19,9 +19,11 @@ func AdminRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/groups/add_student/:groupnumber/:username", controllers.AddStudentToGroup())
 	incomingRoutes.GET("/users/studentsbygroup/performancedesc/:groupid", controllers.GetAllStudentsFromGroupSortedByAverageGradeDesc())
 
-	//this one works but it would be better if you simply called the previous one for each group
+	//this one works, but it would be better if you simply called the previous one for each group
 	incomingRoutes.GET("/users/allgroups/allstudents/performancedesc", controllers.AllStudentsFromAllGroupsSortedByPerformanceDesc())
 
 	incomingRoutes.GET("/users/studentsbyyear/performancedesc/:year", controllers.GetAllStudentsFromYearSortedByAverageGradeDesc())
 	incomingRoutes.GET("/users/studentsbysemester/performancedesc/:semester", controllers.GetAllStudentsFromSemesterSortedByAverageGradeDesc())
+
+	incomingRoutes.POST("/makechief/:username", controllers.MakeTeacherChief())
 }

@@ -486,3 +486,28 @@ func GetStudentsByGroupForStatistics(groupID primitive.ObjectID) []models.User {
 	}
 
 }
+
+func MakeTeacherChief() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "ADMIN"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var user models.User
+		err := userCollection.FindOne(ctx, bson.M{"username": c.Param("username")}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		usertype := "CHIEF"
+		user.UserType = &usertype
+		_, err = userCollection.ReplaceOne(ctx, bson.M{"_id": user.ID}, user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, "User is now a chief!")
+	}
+}
