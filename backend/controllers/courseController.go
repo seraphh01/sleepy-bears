@@ -183,20 +183,13 @@ func AddProposedCourse() gin.HandlerFunc {
 		var course models.Course
 		var user models.User
 
-		username := c.GetString("username")
+		username := c.Param("username")
 		err := userCollection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := helpers.MatchUserTypeToUid(c, *user.Username); err != nil {
-			c.JSON(http.StatusUnauthorized, "You can only propose your own courses!")
-			return
-		}
 		realUserID, _ := primitive.ObjectIDFromHex(user.ID.Hex())
-
-		ctype := "OPTIONAL"
-		course.CourseType = &ctype
 		course.Proposer = &user
 		if err := c.BindJSON(&course); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
