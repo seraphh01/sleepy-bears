@@ -7,4 +7,5 @@ export interface Course {
     coursetype: string;
     year: number;
     maxamount: Amount;
+    year_of_study: number;
 }

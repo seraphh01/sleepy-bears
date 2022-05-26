@@ -20,6 +20,9 @@ import { ViewProposedComponent } from './teacher-page/view-proposed/view-propose
 import { ViewCoursesComponent } from './student-page/view-courses/view-courses.component';
 import { EnrollOptionalComponent } from './student-page/enroll-optional/enroll-optional.component';
 import { DeleteUserComponent } from './admin-page/delete-user/delete-user.component';
+import { AddStudentGradeComponent } from './teacher-page/add-student-grade/add-student-grade.component';
+import { ListStudentGradeComponent } from './teacher-page/list-student-grade/list-student-grade.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +39,9 @@ import { DeleteUserComponent } from './admin-page/delete-user/delete-user.compon
     ViewProposedComponent,
     ViewCoursesComponent,
     EnrollOptionalComponent,
-    DeleteUserComponent
+    DeleteUserComponent,
+    AddStudentGradeComponent,
+    ListStudentGradeComponent
   ],
   imports: [
     BrowserModule,

@@ -2,17 +2,21 @@
 <div>
     <h1>Add Grade</h1>
     <table>
-        <tr>
-            <th>CourseName</th>
-            <th>StudentName</th>
-            <th>Grade</th>
-            <th>Add</th>
-        </tr>
         <tr *ngFor="let course of proposedCourses">
-            <th>{{course.name}}</th>
-            <th>StudentName</th>
-            <th><input [(ngModel)]="grade"></th>
-            <th><button (click)="gradeStudent(course.name)">Add</button></th>
+            <table>
+                <tr >
+                    <td colspan="3">Course: {{course.name}}</td>
+                </tr>
+                <div  *ngIf="this.studentsOfCourse!.get(course.ID) && this.studentsOfCourse.get(course.ID)!.length > 0 " >
+                    <tr *ngFor="let student of this.studentsOfCourse.get(course.ID)">
+                        <th>{{student.name}}</th>
+                        <th><input id="{{course.ID}}{{student.username}}" type="number" min="1" max="10"></th>
+                        <th><button (click)="gradeStudent(course.ID, student.username)">Add</button></th>
+                    </tr>
+                </div>
+            </table>
+            
+
         </tr>
     </table>
 

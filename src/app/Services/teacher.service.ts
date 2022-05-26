@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ObjectId } from 'mongodb';
 import { catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Course } from 'src/models/course.model';
+import { Pipe } from './pipe.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +41,14 @@ export class TeacherService {
     });
 
     return promise;
+  }
+
+  public getStudentsByCourse(courseID: ObjectId){
+    return Pipe.makePipe(this.client.get(`${environment.url}/students/bycourse/${courseID}`));
+  }
+
+  public gradeStudent(courseId: ObjectId, studentUserName: String, grade: number){
+    console.log(grade)
+    return Pipe.makePipe(this.client.post(`${environment.url}/grades/add/${studentUserName}/${courseId}`, {grade: grade}))
   }
 }
