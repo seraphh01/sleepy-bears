@@ -7,7 +7,10 @@ body {
 
 .border-container {
     border: 1px solid white;
-    padding: 5px;
+    padding: 10px;
+    padding-left: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 }
 
 div{
@@ -18,14 +21,32 @@ table{
     border-collapse: collapse;
     font-size: 0.9em;
     font-family: sans-serif;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 }
 
 table,th,td{
     border: 0.2px solid rgb(254, 177, 177);
+    padding: 5px;
 }
 
 h3{
     border-bottom: 2px solid currentColor;
     font-family: arial, sans-serif;
+}
+
+input{
+    margin-top: 8px;
+    border-radius: 5px;
+    border-color: rgb(219, 96, 116);
+    border-width: 1px;
+}
+
+button{
+    background-color: pink;
+    border-radius: 10px;
+    font-family: arial, sans-serif;
+}
+
+button:hover{
+    background-color: rgb(219, 109, 128); 
 }

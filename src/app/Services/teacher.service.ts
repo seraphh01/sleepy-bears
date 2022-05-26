@@ -51,4 +51,9 @@ export class TeacherService {
     console.log(grade)
     return Pipe.makePipe(this.client.post(`${environment.url}/grades/add/${studentUserName}/${courseId}`, {grade: grade}))
   }
+
+  public getGradesAtCourse(courseId: ObjectId){
+    return Pipe.makePipe(this.client.get(`${environment.url}/students/average/${courseId}`))
+  }
+
 }

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TeacherService } from 'src/app/Services/teacher.service';
 import { Course } from 'src/models/course.model';
 import { Grade } from 'src/models/Grade.model';
 
@@ -9,13 +10,18 @@ import { Grade } from 'src/models/Grade.model';
 })
 export class ListStudentGradeComponent implements OnInit {
   @Input() proposedCourses!: Course[];
-  constructor() { }
+  constructor(private teacherService: TeacherService) { }
 
   ngOnInit(): void {
+    this.teacherService.getGradesAtCourse(
+      this.proposedCourses[0].ID
+    ).subscribe(
+      grades => console.log(grades),
+      error => alert(error)
+    );
   }
 
   printGrades(){
-    
   }
 
 }

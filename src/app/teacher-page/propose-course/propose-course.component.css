@@ -13,12 +13,9 @@ form{
     padding-bottom: 40px;
 }
 
-#buttonName{
-    background-color: pink;
-    border-radius: 10px;
-    font-family: arial, sans-serif;
+
+label{
+    color: rgb(246, 242, 242);
+    font-family:arial, sans-serif;
 }
 
-#buttonName:hover{
-    background-color: rgb(219, 109, 128); 
-}
