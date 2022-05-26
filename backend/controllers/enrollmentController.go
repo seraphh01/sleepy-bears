@@ -172,7 +172,7 @@ func RemoveEnrollment() gin.HandlerFunc {
 	}
 }
 
-func ViewGrades() gin.HandlerFunc {
+func ViewGradesByCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -192,6 +192,36 @@ func ViewGrades() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, enrollment.Grades)
+	}
+}
+
+func ViewAllGrades() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := helpers.CheckUserType(c, "STUDENT"); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var username = c.GetString("username")
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"user.username": username})
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		var grades [][]models.Grade
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, *enrollment.Course)
+			grades = append(grades, enrollment.Grades)
+		}
+		c.JSON(http.StatusOK, gin.H{"courses": courses, "grades": grades})
 	}
 }
 
