@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Course } from 'src/models/course.model';
+import { UserModel } from 'src/models/user.model';
 import { UserService } from '../Services/user.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { UserService } from '../Services/user.service';
   styleUrls: ['./chief-page.component.css']
 })
 export class ChiefPageComponent implements OnInit {
-  
+  @Input() user!: UserModel;
+
   optionalCourses! : Course[];
 
   constructor(private userService: UserService) { }

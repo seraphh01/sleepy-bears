@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ObjectId } from 'mongodb';
 import { environment } from 'src/environments/environment.prod';
+import { Amount } from 'src/models/amount.model';
+import { Course } from 'src/models/course.model';
 import { Pipe } from './pipe.model';
 
 @Injectable({
@@ -14,6 +16,10 @@ export class ChiefService {
 
   public approveCourse(courseId: ObjectId){
     return Pipe.makePipe(this.client.post(`${environment.url}/courses/approve/${courseId}`, {}))
+  }
+
+  public addMandatoryCourse(userName: string, course: Course){
+    return Pipe.makePipe(this.client.post(`${environment.url}/courses/addmandatory/${userName}`, course))
   }
 }
 

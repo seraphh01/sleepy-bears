@@ -1,0 +1,22 @@
+<div class="border-container">
+    <h3>Add mandatory course</h3>
+    <form [formGroup]="this.courseForm">
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Year of study</td>
+                <td>Credits</td>
+                <td>Semester</td>
+            </tr>
+            <tr>
+                <td><input type="text" formControlName="name"></td>
+                <td><input type="number" formControlName="year_of_study"></td>
+                <td><input type="text" formControlName="credits"></td>
+                <td><input type="text" formControlName="semester"></td>
+                <td><button (click)="addCourse()" [disabled]="!this.courseForm.valid">Add course</button></td>
+            </tr>
+        </table>
+    </form>
+    
+</div>
+

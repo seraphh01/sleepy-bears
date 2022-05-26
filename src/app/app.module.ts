@@ -24,6 +24,7 @@ import { AddStudentGradeComponent } from './teacher-page/add-student-grade/add-s
 import { ListStudentGradeComponent } from './teacher-page/list-student-grade/list-student-grade.component';
 import { SemesterPerformanceComponent } from './admin-page/semester-performance/semester-performance.component';
 import { ApproveCoursesComponent } from './chief-page/approve-courses/approve-courses.component';
+import { AddCourseComponent } from './chief-page/add-course/add-course.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ApproveCoursesComponent } from './chief-page/approve-courses/approve-co
     AddStudentGradeComponent,
     ListStudentGradeComponent,
     SemesterPerformanceComponent,
-    ApproveCoursesComponent
+    ApproveCoursesComponent,
+    AddCourseComponent
   ],
   imports: [
     BrowserModule,
