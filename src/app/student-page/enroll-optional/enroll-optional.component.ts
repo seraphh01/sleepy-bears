@@ -19,12 +19,17 @@ export class EnrollOptionalComponent implements OnInit {
 
   }
   
-  enroll(courseID:ObjectId){
-    this.studentService.enroll(courseID.toString());
+  enroll(course:Course){
+    this.studentService.enroll(course.ID.toString()).subscribe(res => {
+      alert(`Succesfully enrolled to ${course?.name}!`);
+      window.location.reload();
+    });
   }
 
   async ngOnInit() {
     this.courseList = await this.teacherService.getProposedCourses();
+    console.log(this.courseList);
+    console.log(this.studentEnrollments);
     let newList: Course[] = [];
     this.courseList.forEach(course => {
       if(!this.studentEnrollments.find(c => c.ID == course.ID))
@@ -33,4 +38,12 @@ export class EnrollOptionalComponent implements OnInit {
     this.courseList = newList;
   }
 
+  private findCourse(courseId: ObjectId){
+    for(let course of this.courseList){
+      if(course.ID == courseId)
+        return course;
+    }
+
+    return null;
+  }
 }

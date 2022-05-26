@@ -1,0 +1,15 @@
+<div *ngIf="this.grades && this.grades.length > 0" class="border-container">
+    <h3>View Grades</h3>
+    <table>
+        <tr>
+            <td>Course</td>
+            <td>Grades</td>
+            <td>Average</td>
+        </tr>
+        <tr *ngFor="let course of this.courses; let i = index">
+            <td>{{course.name}}</td>
+            <td>{{getGradesValues(this.grades[i]!)}}</td>
+            <td>{{average(this.grades[i]!)}}</td>
+        </tr>
+    </table>
+ </div>
