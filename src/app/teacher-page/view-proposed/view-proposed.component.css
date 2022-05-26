@@ -1,0 +1,23 @@
+div{
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+table{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+table,th,td{
+    border: 0.2px solid rgb(254, 177, 177);
+}
+
+h3{
+    border-bottom: 2px solid currentColor;
+    width: 175px;
+    font-family: arial, sans-serif;
+}
