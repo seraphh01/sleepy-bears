@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RegisterModel } from '../../models/register.model';
 import { UserModel } from '../../models/user.model';
 import { environment } from 'src/environments/environment.prod';
+import { AcademicYear } from 'src/models/academic-year.model';
+import { Pipe } from './pipe.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +43,10 @@ export class AuthService {
       "token", sessionStorage.getItem("token")!
     );
     return this.http.get<UserModel>(`${environment.url}/users/username/${username}`, {headers: headers});
+  }
+
+  public getAcademicYear(): Observable<AcademicYear>{
+    return Pipe.makePipe(this.http.get<AcademicYear>(`${environment.url}/academicYear`))
   }
 
   public clearToken(){
