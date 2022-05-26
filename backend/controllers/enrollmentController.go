@@ -126,6 +126,14 @@ func AddEnrollmentsToYearOfStudy() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		count, err := enrollmentCollection.CountDocuments(ctx, bson.M{"user._id": realUserId, "course.academicyear._id": academicYear.ID})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if count > 1 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Already enrolled in 2 years of study in this academic year"})
+		}
 		for cursor.Next(ctx) {
 			var course models.Course
 			err := cursor.Decode(&course)
