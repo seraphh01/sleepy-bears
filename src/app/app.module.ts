@@ -22,6 +22,7 @@ import { EnrollOptionalComponent } from './student-page/enroll-optional/enroll-o
 import { DeleteUserComponent } from './admin-page/delete-user/delete-user.component';
 import { AddStudentGradeComponent } from './teacher-page/add-student-grade/add-student-grade.component';
 import { ListStudentGradeComponent } from './teacher-page/list-student-grade/list-student-grade.component';
+import { SemesterPerformanceComponent } from './admin-page/semester-performance/semester-performance.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ListStudentGradeComponent } from './teacher-page/list-student-grade/lis
     EnrollOptionalComponent,
     DeleteUserComponent,
     AddStudentGradeComponent,
-    ListStudentGradeComponent
+    ListStudentGradeComponent,
+    SemesterPerformanceComponent
   ],
   imports: [
     BrowserModule,

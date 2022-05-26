@@ -27,7 +27,7 @@ export class AdminPageComponent implements OnInit {
   constructor(private service: AdminService){}
 
   async ngOnInit(): Promise<void> {
-   
+   this.service.getSemesterStudentsPerformance(2).subscribe(res => {console.log(res)});
   }
 
   public async getStudents(){

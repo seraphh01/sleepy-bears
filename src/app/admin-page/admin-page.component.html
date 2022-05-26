@@ -1,6 +1,8 @@
 <button (click)="getStudents()">Show Students</button>
 <button (click)="switchActivePage(RegisterPage)">Register Users</button>
 <button (click)="switchActivePage('Delete User')">Delete User</button>
+<button (click)="switchActivePage('Semester')">Semester Performance</button>
+
 
 <div *ngIf="isPageActive(RegisterPage)">
     <app-register-users></app-register-users>
@@ -10,4 +12,7 @@
 </div>
 <div *ngIf="isPageActive('Delete User')">
     <app-delete-user></app-delete-user>
+</div>
+<div *ngIf="isPageActive('Semester')">
+    <app-semester-performance></app-semester-performance>
 </div>

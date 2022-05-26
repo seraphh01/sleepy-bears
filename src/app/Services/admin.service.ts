@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import {Student} from 'src/models/Student';
+import { Pipe } from './pipe.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,10 @@ export class AdminService {
       map( res => {return res;} ), 
       catchError(err => {return throwError(() => new Error(err.error))})
     )
+   }
+
+   public getSemesterStudentsPerformance(semester: number){
+      return Pipe.makePipe(this.client.get(`${environment.url}/users/studentsbysemester/performancedesc/${semester}`))
    }
 
 }

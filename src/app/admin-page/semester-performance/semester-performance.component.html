@@ -1,0 +1,19 @@
+
+    <label for="semester">Semester: </label>
+    <input id="semester" name="semester" [(ngModel)]="semester" type="number" min="1" max="6">
+    <button (click)="showPerformance()">Show</button>
+
+<div *ngIf="this.performance && this.performance.size > 0">
+    <table>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>Average grade</th>
+        </tr>
+        <tr *ngFor="let key of this.performance.keys()">
+            <td>{{key.name}}</td>
+            <td>{{this.performance.get(key)}}</td>
+        </tr>
+    </table>
+</div>
