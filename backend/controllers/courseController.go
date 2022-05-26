@@ -159,7 +159,17 @@ func getCurrentAcademicYear() models.AcademicYear {
 	} else {
 		return foundAcademicYear
 	}
+}
 
+func GetCurrentAcademicYear() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		academicYear := getCurrentAcademicYear()
+		if academicYear == (models.AcademicYear{}) {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking for current academic year"})
+			return
+		}
+		c.JSON(http.StatusOK, academicYear)
+	}
 }
 
 func AddProposedCourse() gin.HandlerFunc {

@@ -17,4 +17,5 @@ func UserRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.GET("/proposed_courses/academic_year/:academic_year_id", controllers.GetProposedCoursesByAcademicYear())
 	incomingRoutes.GET("/proposed_courses/year_of_study/:year_of_study", controllers.GetProposedCoursesByYearOfStudy())
 	incomingRoutes.GET("/enrollments/getbyusername/:username", controllers.GetOptionalEnrollmentsByStudentUsername())
+	incomingRoutes.GET("/academic_year", controllers.GetCurrentAcademicYear())
 }
