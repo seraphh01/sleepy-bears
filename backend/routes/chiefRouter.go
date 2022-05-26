@@ -13,5 +13,4 @@ func ChiefRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/courses/addmandatory/:teacher", controllers.AddMandatoryCourse())
 	incomingRoutes.GET("/enrollments/bestresults", controllers.GetBestTeacherResults())
 	incomingRoutes.GET("/enrollments/worstresults", controllers.GetWorstTeacherResults())
-	incomingRoutes.GET("/students/average/:courseid", controllers.GetAverageGradeAtCourse())
 }

@@ -591,7 +591,7 @@ func GetStudentsByCourse() gin.HandlerFunc {
 
 func GetAverageGradeAtCourse() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := helpers.CheckUserType(c, "CHIEF"); err != nil {
+		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
