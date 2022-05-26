@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Course } from 'src/models/course.model';
+import { Grade } from 'src/models/Grade.model';
 import { Student } from 'src/models/Student';
 import { UserModel } from 'src/models/user.model';
 import { StudentService } from '../Services/student.service';
@@ -21,6 +22,8 @@ export class StudentPageComponent implements OnInit {
   slideIndex = 0;
   allMyCourses = "";
   courseList = Array<string>();
+  presentGrades = false;
+  grades:Grade[] = [];
 
   constructor(private service: StudentService ) {
 
@@ -47,6 +50,10 @@ export class StudentPageComponent implements OnInit {
   prevCourse(){
     this.slideIndex --;
     this.showCourses();
+  }
+
+  showGrades(){
+    this.presentGrades = true;
   }
 
 }

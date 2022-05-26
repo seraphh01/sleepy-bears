@@ -10,6 +10,17 @@
     border-radius: 10%;
 }
 
+button{
+    background-color: pink;
+    size: 20cm;
+    width: 6%;
+    border-radius: 4px;
+}
+
+button:hover{
+    background-color: rgb(243, 155, 169);
+}
+
 #coursesDiv{
     font-size: 33px;
     border-bottom: 2px solid currentColor;

@@ -6,3 +6,16 @@
     <app-enroll-optional [studentEnrollments]="this.optionalCourses"></app-enroll-optional>
 </div>
 
+<div>
+   <h1>View Grades</h1>
+   <button (click)="showGrades()">List</button><br><br>
+   <table *ngIf="this.presentGrades">
+       <tr>
+           <th>Courses</th>
+           <th>Grade</th>
+       </tr>
+       <tr *ngFor="let grade of grades">
+            <th>grade.number</th>
+       </tr>
+   </table>
+</div>
