@@ -324,14 +324,19 @@ func GetCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		yearId := c.Param("academicyear_id")
+		yearId := c.Param("academic_year_id")
 		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		year_of_study, err := strconv.Atoi(c.Param("year_of_study"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 		var courses []models.Course
-		cursor, err := courseCollection.Find(ctx, bson.M{"academicyear._id": realYearId})
+		cursor, err := courseCollection.Find(ctx, bson.M{"academicyear._id": realYearId, "yearofstudy": year_of_study})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -348,7 +353,7 @@ func GetCoursesByAcademicYear() gin.HandlerFunc {
 		if len(courses) > 0 {
 			c.JSON(http.StatusOK, courses)
 		} else {
-			c.JSON(http.StatusOK, "No courses available in this academic year")
+			c.JSON(http.StatusOK, "No courses available in this academic year and year of study")
 		}
 	}
 }
@@ -357,14 +362,19 @@ func GetProposedCoursesByAcademicYear() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		yearId := c.Param("academicyear_id")
+		yearId := c.Param("academic_year_id")
 		realYearId, err := primitive.ObjectIDFromHex(yearId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		year_of_study, err := strconv.Atoi(c.Param("year_of_study"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 		var courses []models.Course
-		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"academicyear._id": realYearId})
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"academicyear._id": realYearId, "yearofstudy": year_of_study})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -381,7 +391,7 @@ func GetProposedCoursesByAcademicYear() gin.HandlerFunc {
 		if len(courses) > 0 {
 			c.JSON(http.StatusOK, courses)
 		} else {
-			c.JSON(http.StatusOK, "No proposed courses available in this academic year")
+			c.JSON(http.StatusOK, "No proposed courses available in this academic year and year of study")
 		}
 	}
 }
