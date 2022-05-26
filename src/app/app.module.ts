@@ -27,6 +27,8 @@ import { ApproveCoursesComponent } from './chief-page/approve-courses/approve-co
 import { AddCourseComponent } from './chief-page/add-course/add-course.component';
 import { BestResultsComponent } from './chief-page/best-results/best-results.component';
 import { WorstResultsComponent } from './chief-page/worst-results/worst-results.component';
+import { ViewGradesComponent } from './student-page/view-grades/view-grades.component';
+import { SignContractComponent } from './student-page/sign-contract/sign-contract.component';
 
 
 @NgModule({
@@ -52,7 +54,9 @@ import { WorstResultsComponent } from './chief-page/worst-results/worst-results.
     ApproveCoursesComponent,
     AddCourseComponent,
     BestResultsComponent,
-    WorstResultsComponent
+    WorstResultsComponent,
+    ViewGradesComponent,
+    SignContractComponent
   ],
   imports: [
     BrowserModule,
