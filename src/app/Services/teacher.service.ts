@@ -32,15 +32,15 @@ export class TeacherService {
 
     return promise;
   }
+  
+  public getProposedCoursesByAcademicYear(year_of_study: number){
+    let academic_year = sessionStorage.getItem("academic_year_id");
+    return Pipe.makePipe(this.client.get(`${environment.url}/proposed_courses/academic_year/${academic_year}/${year_of_study}`))
+  }
 
-  public getProposedCoursesByTeacher(username: String): Promise<Course[]>{
-    let promise = new Promise<Course[]>(resolve => {
-      this.client.get<Course[]>(`${environment.url}/proposed_courses/getby/${username}`).subscribe((res: Course[]) => {
-        resolve(res);
-      })
-    });
+  public getProposedCoursesByTeacher(username: String){
+    return Pipe.makePipe(this.client.get<Course[]>(`${environment.url}/proposed_courses/getby/${username}`));
 
-    return promise;
   }
 
   public getCoursesByTeacher(username: String) {

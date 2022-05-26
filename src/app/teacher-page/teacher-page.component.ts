@@ -15,13 +15,23 @@ export class TeacherPageComponent implements OnInit {
   constructor(private service: TeacherService) { }
 
   async ngOnInit() {
-    this.proposedCourses = await this.service.getProposedCoursesByTeacher(this.user!.username);
+    this.service.getProposedCoursesByTeacher(this.user!.username).subscribe(res => {
+      if(typeof res === 'string'){
+        this.proposedCourses = new Array<Course>();
+        return;
+      }
+      
+      this.proposedCourses = res;
+    }, err => {console.log(err)});
+
+
+
     this.service.getCoursesByTeacher(this.user!.username).subscribe(res => {
       if(typeof res === 'string'){
         this.courses = new Array<Course>();
         return;
       }
-      console.log(res);
+      
       this.courses = res;
     });
   }

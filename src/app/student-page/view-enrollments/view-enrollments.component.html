@@ -1,5 +1,5 @@
 <div *ngIf="this.courses" class="border-container">
-    <h3 id="title">{{this.courseType}} courses</h3>
+    <h3 id="title">Optional courses enrollments</h3>
     <table>
         <tr>
             <td>Course name</td>
@@ -15,8 +15,9 @@
             <td>{{course.credits}}</td>
             <td>{{course.yearofstudy}}</td>
             <td>{{course.semester}}</td>
+            <td><button (click)="unenroll(course.ID)">Unenroll</button></td>
         </tr>
-        <tr *ngIf="!this.courses || this.courses.length == 0">
+        <tr *ngIf="this.courses.length == 0">
             <td colspan="5">There are no courses</td>
         </tr>
     </table>

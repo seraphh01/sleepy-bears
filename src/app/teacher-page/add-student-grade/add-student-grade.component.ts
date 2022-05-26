@@ -24,7 +24,6 @@ export class AddStudentGradeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let courseId = this.proposedCourses[0].ID;
 
     for(let course of this.courses){
       this.studentsOfCourse.set(course.ID, new Array<UserModel>());

@@ -17,4 +17,8 @@ export class UserService {
   public getUsers(type: string){
     return Pipe.makePipe(this.client.get(`${environment.url}/users/type/${type}`))
   }
+
+  public getAcademicYear(){
+    return Pipe.makePipe(this.client.get(`${environment.url}/academic_year`))
+  }
 }

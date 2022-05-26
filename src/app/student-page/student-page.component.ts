@@ -34,7 +34,15 @@ export class StudentPageComponent implements OnInit {
     if(this.student!.group!)
     year = this.student.group.year;
     this.courses = await this.service.getMandatoryCourses(year);
-    this.optionalCourses = await this.service.getOptionalCourses(this.student!.username);
+    this.service.getOptionalCourses(this.student!.username).subscribe(res => {
+      if(typeof res === 'string')
+        this.optionalCourses = new Array<Course>();
+      else
+      this.optionalCourses = res;
+    }, err => {
+      console.log(err);
+      this.optionalCourses = new Array<Course>();
+    });
   }
   
   showCourses(){

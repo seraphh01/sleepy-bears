@@ -5,11 +5,13 @@
             <th>CourseName</th>
             <th>MaxAmount</th>
             <th>Year of study</th>
+            <th>Semester</th>
         </tr>
         <tr *ngFor="let course of this.proposedCourses">
             <th>{{course.name}}</th>
             <th>{{course.maxamount.max}}</th>
             <th>{{course.yearofstudy}}</th>
+            <th>{{course.semester}}</th>
         </tr>
     </table>
     <br>

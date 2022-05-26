@@ -29,6 +29,7 @@ import { BestResultsComponent } from './chief-page/best-results/best-results.com
 import { WorstResultsComponent } from './chief-page/worst-results/worst-results.component';
 import { ViewGradesComponent } from './student-page/view-grades/view-grades.component';
 import { SignContractComponent } from './student-page/sign-contract/sign-contract.component';
+import { ViewEnrollmentsComponent } from './student-page/view-enrollments/view-enrollments.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { SignContractComponent } from './student-page/sign-contract/sign-contrac
     BestResultsComponent,
     WorstResultsComponent,
     ViewGradesComponent,
-    SignContractComponent
+    SignContractComponent,
+    ViewEnrollmentsComponent
   ],
   imports: [
     BrowserModule,

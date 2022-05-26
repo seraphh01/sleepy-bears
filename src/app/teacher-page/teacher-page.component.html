@@ -1,5 +1,8 @@
+<div *ngIf="this.courses">
+    <app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
+</div>
 <div *ngIf="this.proposedCourses">
-    <app-view-proposed [proposedCourses]="this.proposedCourses"></app-view-proposed>
+    <app-view-courses [courses]="this.proposedCourses" [courseType]="'Proposed optional'"></app-view-courses>
 </div>
 <div *ngIf="this.user">
     <app-propose-course [user]="this.user"></app-propose-course>

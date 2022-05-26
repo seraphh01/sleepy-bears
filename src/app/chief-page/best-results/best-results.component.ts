@@ -21,7 +21,7 @@ export class BestResultsComponent implements OnInit {
     this.service.getBestResults().subscribe((res: any) => {
       this.bestTeacher = res['bestTeacher'];
       this.grade = res['averageGrade'];
-    })
+    }, err => {alert(err)})
   }
 
 }

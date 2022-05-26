@@ -20,7 +20,7 @@ export class EnrollOptionalComponent implements OnInit {
   }
   
   enroll(course:Course){
-    this.studentService.enroll(course.ID.toString()).subscribe(res => {
+    this.studentService.enroll(course.ID).subscribe(res => {
       alert(`Succesfully enrolled to ${course?.name}!`);
       window.location.reload();
     });
@@ -30,9 +30,13 @@ export class EnrollOptionalComponent implements OnInit {
     this.courseList = await this.teacherService.getProposedCourses();
     console.log(this.courseList);
     console.log(this.studentEnrollments);
+
+    if(typeof this.studentEnrollments === 'string')
+      return;
+
     let newList: Course[] = [];
     this.courseList.forEach(course => {
-      if(!this.studentEnrollments.find(c => c.ID == course.ID))
+      if(!this.studentEnrollments.find(c => c.name == course.name))
         newList.push(course);
     });
     this.courseList = newList;
