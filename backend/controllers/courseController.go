@@ -502,7 +502,7 @@ func GetMandatoryCoursesByTeacherUsername() gin.HandlerFunc {
 		defer cancel()
 		username := c.Param("username")
 		var courses []models.Course
-		cursor, err := courseCollection.Find(ctx, bson.M{"proposer.username": username, "coursetype": "MANDATORY"})
+		cursor, err := courseCollection.Find(ctx, bson.M{"proposer.username": username})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

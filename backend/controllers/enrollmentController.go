@@ -122,10 +122,10 @@ func GradeStudent() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		//if helpers.MatchUserToUsername(c, *enrollment.Course.Proposer.Username) != nil {
-		//	c.JSON(http.StatusBadRequest, gin.H{"error": "You can only grade your own course!"})
-		//	return
-		//}
+		if helpers.MatchUserToUsername(c, *enrollment.Course.Proposer.Username) != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You can only grade your own course!"})
+			return
+		}
 		enrollment.Grades = append(enrollment.Grades, grade)
 
 		update := bson.M{"grades": enrollment.Grades}
