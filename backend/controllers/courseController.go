@@ -130,43 +130,33 @@ func GetCourses() gin.HandlerFunc {
 
 func getCurrentAcademicYear() models.AcademicYear {
 	currentTime := time.Now()
-	july, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
-	oct, err := time.Parse(time.RFC1123, "01 Oct "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
-	if err != nil {
-		fmt.Println("Invalid current time")
-		return models.AcademicYear{}
-	}
+	//create a primitive datetime given a date
+
+	var july = time.Date(currentTime.Year(), time.July, 1, 0, 0, 0, 0, time.UTC)
+	var oct = time.Date(currentTime.Year(), time.October, 1, 0, 0, 0, 0, time.UTC)
 	var academicYear models.AcademicYear
 	if currentTime.After(july) {
-		academicYear.StartDate = oct
-		endDate, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year()+1)+" 0:00 UTC")
-		if err != nil {
-			fmt.Println("Invalid end date")
-			return models.AcademicYear{}
-		}
-		academicYear.EndDate = endDate
+		academicYear.StartDate = primitive.NewDateTimeFromTime(oct)
+		endDate := time.Date(currentTime.Year()+1, time.July, 1, 0, 0, 0, 0, time.UTC)
+		academicYear.EndDate = primitive.NewDateTimeFromTime(endDate)
 	} else {
-		prevDate, err := time.Parse(time.RFC1123, "01 Oct "+strconv.Itoa(currentTime.Year()-1)+" 0:00 UTC")
-		if err != nil {
-			fmt.Println("Invalid start date")
-			return models.AcademicYear{}
-		}
-		academicYear.StartDate = prevDate
-		endDate, err := time.Parse(time.RFC1123, "01 Jul "+strconv.Itoa(currentTime.Year())+" 0:00 UTC")
-		if err != nil {
-			fmt.Println("Invalid end date")
-			return models.AcademicYear{}
-		}
-		academicYear.EndDate = endDate
+		prevDate := time.Date(currentTime.Year()-1, time.October, 1, 0, 0, 0, 0, time.UTC)
+		academicYear.StartDate = primitive.NewDateTimeFromTime(prevDate)
+		academicYear.EndDate = primitive.NewDateTimeFromTime(july)
 	}
+
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
-	count, err := academicYearCollection.CountDocuments(ctx, bson.M{"start_date": academicYear.StartDate, "end_date": academicYear.EndDate})
+	count, err := academicYearCollection.CountDocuments(ctx, bson.M{"end_date": bson.M{"$gte": primitive.NewDateTimeFromTime(time.Now())}})
 	if err != nil {
 		return models.AcademicYear{}
 	}
 	if count == 0 {
-		academicYearCollection.InsertOne(ctx, academicYear)
+		academicYear.ID = primitive.NewObjectID()
+		_, err := academicYearCollection.InsertOne(ctx, academicYear)
+		if err != nil {
+			return models.AcademicYear{}
+		}
 	}
 	return academicYear
 }
