@@ -147,18 +147,19 @@ func getCurrentAcademicYear() models.AcademicYear {
 
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
-	count, err := academicYearCollection.CountDocuments(ctx, bson.M{"end_date": bson.M{"$gte": primitive.NewDateTimeFromTime(time.Now())}})
+	var foundAcademicYear models.AcademicYear
+	err := academicYearCollection.FindOne(ctx, bson.M{"startdate": academicYear.StartDate, "enddate": academicYear.EndDate}).Decode(&foundAcademicYear)
 	if err != nil {
-		return models.AcademicYear{}
-	}
-	if count == 0 {
 		academicYear.ID = primitive.NewObjectID()
 		_, err := academicYearCollection.InsertOne(ctx, academicYear)
 		if err != nil {
 			return models.AcademicYear{}
 		}
+		return academicYear
+	} else {
+		return foundAcademicYear
 	}
-	return academicYear
+
 }
 
 func AddProposedCourse() gin.HandlerFunc {

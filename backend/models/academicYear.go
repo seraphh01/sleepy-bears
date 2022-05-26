@@ -6,6 +6,6 @@ import (
 
 type AcademicYear struct {
 	ID        primitive.ObjectID `bson:"_id"`
-	StartDate primitive.DateTime `json:"start_date" validate:"required"`
-	EndDate   primitive.DateTime `json:"end_date" validate:"required"`
+	StartDate primitive.DateTime `json:"startdate" validate:"required"`
+	EndDate   primitive.DateTime `json:"enddate" validate:"required"`
 }
