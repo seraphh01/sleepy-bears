@@ -392,6 +392,70 @@ func GetProposedCoursesByAcademicYear() gin.HandlerFunc {
 	}
 }
 
+func GetCoursesByYearOfStudy() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		year_of_study, err := strconv.Atoi(c.Param("year_of_study"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		cursor, err := courseCollection.Find(ctx, bson.M{"year_of_study": year_of_study})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var course models.Course
+			err := cursor.Decode(&course)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, course)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses)
+		} else {
+			c.JSON(http.StatusOK, "No courses available in this year of study")
+		}
+	}
+}
+
+func GetProposedCoursesByYearOfStudy() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		year_of_study, err := strconv.Atoi(c.Param("year_of_study"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		cursor, err := proposedCourseCollection.Find(ctx, bson.M{"year_of_study": year_of_study})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var course models.Course
+			err := cursor.Decode(&course)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, course)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses)
+		} else {
+			c.JSON(http.StatusOK, "No proposed courses available in this year of study")
+		}
+	}
+}
+
 func GetProposedCoursesByTeacherUsername() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := helpers.CheckUserType(c, "TEACHER"); err != nil {
