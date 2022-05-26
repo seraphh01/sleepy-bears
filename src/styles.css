@@ -32,7 +32,13 @@ table,th,td{
 h3{
     border-bottom: 2px solid currentColor;
     font-family: arial, sans-serif;
+    text-shadow: 1px 1px 6px rgb(132, 103, 103);
 }
+
+h1,h2,h4,p{
+    text-shadow: 0.5px 0.5px 6px rgb(136, 108, 108);
+}
+
 
 input{
     margin-top: 8px;

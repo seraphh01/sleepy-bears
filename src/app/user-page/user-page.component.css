@@ -54,6 +54,7 @@
     border-radius: 10px;
     margin-top: 20px;
     box-sizing: border-box;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
 }
 
 .bears:hover {
@@ -95,6 +96,7 @@
     background-color: #CE9461;
     color: #FCFFE7;
     border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
 
 }
 
