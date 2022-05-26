@@ -2,10 +2,14 @@
 <div class="border-container">
     <h3>Add Grade</h3><br>
     <table>
-        <tr *ngFor="let course of proposedCourses">
+        <tr *ngFor="let course of courses">
             <table>
                 <tr >
                     <td colspan="3">Course: {{course.name}}</td>
+                </tr>
+                
+                <tr *ngIf="this.studentsOfCourse.get(course.ID)?.length == 0">
+                    <td colspan="3">No students enrolled in this course</td>
                 </tr>
                 <div  *ngIf="this.studentsOfCourse!.get(course.ID) && this.studentsOfCourse.get(course.ID)!.length > 0 " >
                     <tr>
@@ -19,6 +23,9 @@
                     </tr>
                 </div>
             </table>
+        </tr>
+        <tr *ngIf="this.courses && this.courses.length == 0">
+            <td>There are no courses approved or you are not responsible for any course</td>
         </tr>
     </table>
     <br>

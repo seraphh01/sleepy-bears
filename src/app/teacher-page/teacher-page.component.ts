@@ -11,10 +11,19 @@ import { TeacherService } from '../Services/teacher.service';
 export class TeacherPageComponent implements OnInit {
   @Input() user!: UserModel;
   proposedCourses!: Course[];
+  courses!: Course[];
   constructor(private service: TeacherService) { }
 
   async ngOnInit() {
     this.proposedCourses = await this.service.getProposedCoursesByTeacher(this.user!.username);
+    this.service.getCoursesByTeacher(this.user!.username).subscribe(res => {
+      if(typeof res === 'string'){
+        this.courses = new Array<Course>();
+        return;
+      }
+      console.log(res);
+      this.courses = res;
+    });
   }
 
 }

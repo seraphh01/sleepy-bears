@@ -13,8 +13,8 @@ export class TeacherService {
 
   constructor(private client: HttpClient) { }
 
-  public proposeCourse(course: Course){
-    return this.client.post(`${environment.url}/proposed_courses/add`, course)
+  public proposeCourse(course: Course, username: string){
+    return this.client.post(`${environment.url}/proposed_courses/add/${username}`, course)
     .pipe(
       map(_ => {return `Course ${course.name} was proposed successfully!`}),
       catchError(err => {
@@ -41,6 +41,10 @@ export class TeacherService {
     });
 
     return promise;
+  }
+
+  public getCoursesByTeacher(username: String) {
+    return Pipe.makePipe( this.client.get<Course[]>(`${environment.url}/mandatorycourses/getby/${username}`));
   }
 
   public getStudentsByCourse(courseID: ObjectId){

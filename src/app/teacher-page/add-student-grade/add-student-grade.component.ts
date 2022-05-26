@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 import { StudentService } from 'src/app/Services/student.service';
 import { TeacherService } from 'src/app/Services/teacher.service';
 import { Course } from 'src/models/course.model';
+import { Group } from 'src/models/group.model';
 import { Student } from 'src/models/Student';
 import { UserModel } from 'src/models/user.model';
 
@@ -14,6 +15,7 @@ import { UserModel } from 'src/models/user.model';
 })
 export class AddStudentGradeComponent implements OnInit {
   @Input() proposedCourses!: Course[];
+  @Input() courses!: Course[];
   studentsOfCourse: Map<ObjectId, UserModel[]> = new Map<ObjectId, UserModel[]>();
   students:Student[] = [];
   grade!: number;
@@ -24,7 +26,7 @@ export class AddStudentGradeComponent implements OnInit {
   async ngOnInit() {
     let courseId = this.proposedCourses[0].ID;
 
-    for(let course of this.proposedCourses){
+    for(let course of this.courses){
       this.studentsOfCourse.set(course.ID, new Array<UserModel>());
       this.getStudents(course.ID);
     }
@@ -44,7 +46,11 @@ export class AddStudentGradeComponent implements OnInit {
   }
 
   getStudents(courseId: ObjectId){
-    this.teacherService.getStudentsByCourse(courseId).subscribe((res: UserModel[]) => {
+    this.teacherService.getStudentsByCourse(courseId).subscribe((res: any) => {
+      
+      if(typeof res === 'string'){
+        return;
+      }
       for(let student of res)
         this.studentsOfCourse.get(courseId)?.push(student);
     }, error => {

@@ -1,11 +1,13 @@
 <div *ngIf="this.proposedCourses">
     <app-view-proposed [proposedCourses]="this.proposedCourses"></app-view-proposed>
 </div>
-<app-propose-course></app-propose-course>
-
-<div *ngIf="this.proposedCourses">
-    <app-add-student-grade [proposedCourses]="this.proposedCourses"></app-add-student-grade>
+<div *ngIf="this.user">
+    <app-propose-course [user]="this.user"></app-propose-course>
 </div>
-<div *ngIf="this.proposedCourses">
+
+<div *ngIf="this.proposedCourses && this.courses">
+    <app-add-student-grade [proposedCourses]="this.proposedCourses" [courses]="this.courses"></app-add-student-grade>
+</div>
+<div *ngIf="this.proposedCourses && this.courses">
     <app-list-student-grade [proposedCourses]="this.proposedCourses"></app-list-student-grade>
 </div>

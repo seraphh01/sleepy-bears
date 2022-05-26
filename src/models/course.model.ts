@@ -9,7 +9,7 @@ export interface Course {
     coursetype: string;
     year: number;
     maxamount: Amount;
-    year_of_study: number;
+    yearofstudy: number;
     academic_year: AcademicYear;
     credits: number;
     semester: number;

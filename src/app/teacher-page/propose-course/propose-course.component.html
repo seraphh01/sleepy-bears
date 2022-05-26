@@ -5,10 +5,18 @@
         <input type="text" id="name" formControlName="name"><br><br>
     
         <label for="year">Year: </label><br>
-        <input type="text" id="year" matInput formControlName="year"><br><br>
+        <input type="text" id="year" matInput formControlName="yearofstudy"><br><br>
     
+
         <label for="max">Max students: </label><br>
         <input type="text" id="max" matInput formControlName="maxStudents"><br><br>
+
+        <label for="credits">Credits: </label><br>
+        <input type="text" id="credits" matInput formControlName="credits"><br><br>
+
+        <label for="semester">Semester: </label><br>
+        <input type="text" id="semester" matInput formControlName="semester"><br><br>
+
         <button id="buttonName" (click)="proposeCourse()" [disabled]="!this.formGroup.valid">Propose</button>
     </form>
 </div>

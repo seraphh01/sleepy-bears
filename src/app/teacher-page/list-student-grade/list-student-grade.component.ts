@@ -13,12 +13,7 @@ export class ListStudentGradeComponent implements OnInit {
   constructor(private teacherService: TeacherService) { }
 
   ngOnInit(): void {
-    this.teacherService.getGradesAtCourse(
-      this.proposedCourses[0].ID
-    ).subscribe(
-      grades => console.log(grades),
-      error => alert(error)
-    );
+
   }
 
   printGrades(){
