@@ -13,4 +13,8 @@ export class UserService {
   public getOptionalCourses(){
     return Pipe.makePipe(this.client.get(`${environment.url}/proposed_courses`))
   }
+
+  public getUsers(type: string){
+    return Pipe.makePipe(this.client.get(`${environment.url}/users/type/${type}`))
+  }
 }

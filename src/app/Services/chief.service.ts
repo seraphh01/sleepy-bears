@@ -21,5 +21,13 @@ export class ChiefService {
   public addMandatoryCourse(userName: string, course: Course){
     return Pipe.makePipe(this.client.post(`${environment.url}/courses/addmandatory/${userName}`, course))
   }
+
+  public getBestResults(){
+    return Pipe.makePipe(this.client.get(`${environment.url}/enrollments/bestresults`))
+  }
+
+  public getWorstResults(){
+    return Pipe.makePipe(this.client.get(`${environment.url}/enrollments/worstresults`))
+  }
 }
 

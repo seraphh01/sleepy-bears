@@ -25,6 +25,8 @@ import { ListStudentGradeComponent } from './teacher-page/list-student-grade/lis
 import { SemesterPerformanceComponent } from './admin-page/semester-performance/semester-performance.component';
 import { ApproveCoursesComponent } from './chief-page/approve-courses/approve-courses.component';
 import { AddCourseComponent } from './chief-page/add-course/add-course.component';
+import { BestResultsComponent } from './chief-page/best-results/best-results.component';
+import { WorstResultsComponent } from './chief-page/worst-results/worst-results.component';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { AddCourseComponent } from './chief-page/add-course/add-course.component
     ListStudentGradeComponent,
     SemesterPerformanceComponent,
     ApproveCoursesComponent,
-    AddCourseComponent
+    AddCourseComponent,
+    BestResultsComponent,
+    WorstResultsComponent
   ],
   imports: [
     BrowserModule,
