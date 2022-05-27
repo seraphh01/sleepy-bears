@@ -414,7 +414,7 @@ func GetMandatoryEnrollmentsByStudentUsername() gin.HandlerFunc {
 		if len(courses) > 0 {
 			c.JSON(http.StatusOK, courses)
 		} else {
-			c.JSON(http.StatusOK, "No courses available for this student")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "No courses available for this student"})
 		}
 	}
 }
