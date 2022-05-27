@@ -386,6 +386,39 @@ func GetOptionalEnrollmentsByStudentUsername() gin.HandlerFunc {
 	}
 }
 
+func GetMandatoryEnrollmentsByStudentUsername() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		username := c.Param("username")
+		yearofstudy, err := strconv.Atoi(c.Param("yearofstudy"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		var courses []models.Course
+		cursor, err := enrollmentCollection.Find(ctx, bson.M{"user.username": username, "course.coursetype": "MANDATORY", "course.yearofstudy": yearofstudy})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		for cursor.Next(ctx) {
+			var enrollment models.Enrollment
+			err := cursor.Decode(&enrollment)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			courses = append(courses, *enrollment.Course)
+		}
+		if len(courses) > 0 {
+			c.JSON(http.StatusOK, courses)
+		} else {
+			c.JSON(http.StatusOK, "No courses available for this student")
+		}
+	}
+}
+
 func GetAverageGradeByCourseID(c *gin.Context, realCourseId primitive.ObjectID) float64 {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
