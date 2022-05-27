@@ -1,9 +1,10 @@
 
 
-<div *ngIf="this.courses && this.optionalCourses">
+<div *ngIf="this.courses && this.optionalCourses && this.student">
     <app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
     <app-view-enrollments [courses]="this.optionalCourses"></app-view-enrollments>
-    <app-enroll-optional [studentEnrollments]="this.optionalCourses"></app-enroll-optional>
+    <div></div>
+    <app-enroll-optional [student]="this.student" [studentEnrollments]="this.optionalCourses"></app-enroll-optional>
 </div>
 <app-view-grades></app-view-grades>
 <app-sign-contract [user]="this.student"></app-sign-contract>

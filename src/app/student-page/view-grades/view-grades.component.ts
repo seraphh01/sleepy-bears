@@ -29,8 +29,10 @@ export class ViewGradesComponent implements OnInit, AfterViewInit {
       this.courses = new Array<Course>();
       this.grades = new Array<Grade[]>();
 
+      if(courses == null)
+        return;
+
       if(courses.length == 0){
-        alert("You are not enrolled in any course");
          return;
       }
 

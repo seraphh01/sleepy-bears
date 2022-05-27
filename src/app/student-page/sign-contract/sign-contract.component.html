@@ -1,5 +1,10 @@
 <div class="border-container">
     <h3>Sign contract</h3>
-    <input type="text" name="year" [(ngModel)]="year" placeholder="Year of study">
-    <button (click)="signContract()">Sign</button>
+    <div *ngIf="this.userService.canSign()">
+        <input type="text" name="year" [(ngModel)]="year" placeholder="Year of study">
+        <button (click)="signContract()">Sign</button>
+    </div>
+    <div *ngIf="!this.userService.canSign()">
+        <h3>Not in the signing period!</h3>
+    </div>
 </div>

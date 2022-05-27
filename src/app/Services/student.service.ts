@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ObjectId } from 'mongodb';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { AcademicYear } from 'src/models/academic-year.model';
 import { Course } from 'src/models/course.model';
@@ -27,7 +28,7 @@ export class StudentService {
     return Pipe.makePipe( this.client.get<Course[]>(`${environment.url}/enrollments/getbyusername/${user_name}`));
   }
 
-  public enroll(courseId: ObjectId){
+  public enroll(courseId: ObjectId): Observable<any>{
     return Pipe.makePipe(this.client.post(`${environment.url}/enrollments/add/${courseId}`, {}))
   }
 

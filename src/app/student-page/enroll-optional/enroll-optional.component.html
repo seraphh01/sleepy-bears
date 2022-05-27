@@ -1,4 +1,4 @@
-<div *ngIf="this.courseList && this.courseList.length > 0" class="border-container">
+<div *ngIf="userService.canSign()" class="border-container">
     <h1 id="title">Enroll in the Following Courses</h1>
     <div id="box">
         <pre id="text" *ngFor="let course of this.courseList">    <button id="enrollButton" (click)="enroll(course)">Enroll</button>   {{course.name}}</pre>

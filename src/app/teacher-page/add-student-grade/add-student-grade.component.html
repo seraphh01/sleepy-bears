@@ -1,7 +1,7 @@
 
 <div class="border-container">
-    <h3>Add Grade</h3><br>
-    <table>
+    <h3>Add Grades</h3><br>
+    <table *ngIf="this.userService.inAcademicYear()">
         <tr *ngFor="let course of courses">
             <table>
                 <tr >
@@ -28,5 +28,6 @@
             <td>There are no courses approved or you are not responsible for any course</td>
         </tr>
     </table>
+    <h4 *ngIf="!this.userService.inAcademicYear()">Not in the course of an academic year</h4>
     <br>
 </div>

@@ -15,7 +15,7 @@
             <td>{{course.credits}}</td>
             <td>{{course.yearofstudy}}</td>
             <td>{{course.semester}}</td>
-            <td><button (click)="unenroll(course.ID)">Unenroll</button></td>
+            <td *ngIf="this.userService.canSign()"><button (click)="unenroll(course.ID)">Unenroll</button></td>
         </tr>
         <tr *ngIf="this.courses.length == 0">
             <td colspan="5">There are no courses</td>

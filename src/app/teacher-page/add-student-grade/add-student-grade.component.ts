@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ObjectId } from 'mongodb';
 import { StudentService } from 'src/app/Services/student.service';
 import { TeacherService } from 'src/app/Services/teacher.service';
+import { UserService } from 'src/app/Services/user.service';
 import { Course } from 'src/models/course.model';
 import { Group } from 'src/models/group.model';
 import { Student } from 'src/models/Student';
@@ -20,7 +21,7 @@ export class AddStudentGradeComponent implements OnInit {
   students:Student[] = [];
   grade!: number;
 
-  constructor(private teacherService: TeacherService) { 
+  constructor(private teacherService: TeacherService, public userService: UserService) { 
   }
 
   async ngOnInit() {

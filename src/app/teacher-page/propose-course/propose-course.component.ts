@@ -5,6 +5,7 @@ import { Course } from 'src/models/course.model';
 import { TeacherService } from 'src/app/Services/teacher.service';
 import { Amount } from 'src/models/amount.model';
 import { UserModel } from 'src/models/user.model';
+import { UserService } from 'src/app/Services/user.service';
 
 @Component({
   selector: 'app-propose-course',
@@ -14,7 +15,7 @@ import { UserModel } from 'src/models/user.model';
 export class ProposeCourseComponent implements OnInit {
   @Input() user!: UserModel;
   formGroup: FormGroup;
-  constructor(private teacherService: TeacherService) {
+  constructor(private teacherService: TeacherService, public userService: UserService) {
     this.formGroup = new FormGroup({
       name: new FormControl("Course Name", Validators.required),
       yearofstudy: new FormControl(1, [Validators.required, Validators.min(1)]),

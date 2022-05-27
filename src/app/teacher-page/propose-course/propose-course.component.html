@@ -1,6 +1,6 @@
 <div class="border-container">
     <h3>Propose an optional course: </h3><br>
-    <form [formGroup]="formGroup">
+    <form [formGroup]="formGroup" *ngIf="this.userService.inAcademicYear()">
         <label for="name">Name: </label><br>
         <input type="text" id="name" formControlName="name"><br><br>
     
@@ -19,5 +19,6 @@
 
         <button id="buttonName" (click)="proposeCourse()" [disabled]="!this.formGroup.valid">Propose</button>
     </form>
+    <h4 *ngIf="!this.userService.inAcademicYear()">Not in the course of an academic year</h4>
 </div>
 

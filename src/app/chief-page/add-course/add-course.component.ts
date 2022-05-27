@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ObjectId } from 'mongodb';
 import { ChiefService } from 'src/app/Services/chief.service';
 import { AcademicYear } from 'src/models/academic-year.model';
 import { Course } from 'src/models/course.model';
@@ -29,8 +30,8 @@ export class AddCourseComponent implements OnInit {
     let course: Course = this.courseForm.getRawValue();
     
     course.academic_year = {
-      start_date : new Date(2021, 10, 5),
-      end_date : new Date(2001, 11, 6)
+      startdate : new Date(2021, 10, 5).toDateString(),
+      enddate : new Date(2001, 11, 6).toDateString()
     } as AcademicYear;
     this.service.addMandatoryCourse(this.user!.username.toString(), course).subscribe(
       _ => {

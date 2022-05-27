@@ -24,7 +24,6 @@ export class ListStudentGradeComponent implements OnInit {
 
   ngOnInit(): void {
       this.courses = this.mandatoryCourses;
-      console.log(this.courses);
       this.courses.forEach(element => {
         this.getGrades(element)
       });
@@ -51,7 +50,6 @@ export class ListStudentGradeComponent implements OnInit {
         this.courseStudentGrades.get(course)?.push({student: students[i],grades: grades});
       }
    });
-      console.log(this.courseStudentGrades);
   }
 
   getStudentGrade(studentName: string){

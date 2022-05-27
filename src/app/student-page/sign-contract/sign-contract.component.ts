@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { StudentService } from 'src/app/Services/student.service';
+import { UserService } from 'src/app/Services/user.service';
 import { UserModel } from 'src/models/user.model';
 
 @Component({
@@ -10,7 +11,7 @@ import { UserModel } from 'src/models/user.model';
 export class SignContractComponent implements OnInit {
   @Input() user!: UserModel;
   year: number = 1;
-  constructor(private service: StudentService) { }
+  constructor(private service: StudentService, public userService: UserService) { }
 
   ngOnInit(): void {
   }
