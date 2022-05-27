@@ -1,3 +1,4 @@
+
 .invalid-input{
     background-color: red;
 }
@@ -25,4 +26,25 @@ table td{
 
 .table-header {
     font-weight: bold;
+}
+
+h4, form{
+    padding-left: 10px;
+}
+
+#cnp{
+    padding-left: 5px;
+    margin-left: 5px;
+}
+
+p{
+    margin-left: 10px;
+}
+
+button{
+    margin-left: 10px;
+}
+
+label{
+    margin-left: 10px;
 }
