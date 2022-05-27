@@ -283,7 +283,7 @@ func DeleteUser() gin.HandlerFunc {
 	}
 }
 
-func GenerateUser(name string, CNP string, c *gin.Context) models.User {
+func GenerateUser(name string, CNP string, group models.Group, c *gin.Context) models.User {
 
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
@@ -318,7 +318,7 @@ func GenerateUser(name string, CNP string, c *gin.Context) models.User {
 	generatedUser.Token = &token
 	generatedUser.RefreshToken = &refreshToken
 
-	generatedUser.Group = nil
+	generatedUser.Group = &group
 
 	count, err := userCollection.CountDocuments(ctx, bson.M{"username": generatedUser.Username})
 	if err != nil {
@@ -352,14 +352,28 @@ func GenerateUsers() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
 		var userDTOList models.UserDTOList
 		if err := c.BindJSON(&userDTOList); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		var group models.Group
+		groupid := c.Param("groupid")
+		realGroupId, err := primitive.ObjectIDFromHex(groupid)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		err = groupCollection.FindOne(ctx, bson.M{"_id": realGroupId}).Decode(&group)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		var generatedUsers []models.User
 		for _, user := range userDTOList.UserDTOs {
-			generatedUsers = append(generatedUsers, GenerateUser(*user.Name, *user.CNP, c))
+			generatedUsers = append(generatedUsers, GenerateUser(*user.Name, *user.CNP, group, c))
 		}
 		c.JSON(http.StatusOK, generatedUsers)
 	}

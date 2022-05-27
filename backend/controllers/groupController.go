@@ -87,6 +87,8 @@ func AddGroup() gin.HandlerFunc {
 		}
 
 		group.ID = primitive.NewObjectID()
+		academicYear := getCurrentAcademicYear()
+		group.AcademicYear = &academicYear
 
 		resultInsertionNumber, insertErr := groupCollection.InsertOne(ctx, group)
 		if insertErr != nil {
