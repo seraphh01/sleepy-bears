@@ -27,12 +27,11 @@ export class AdminPageComponent implements OnInit {
   constructor(private service: AdminService){}
 
   async ngOnInit(): Promise<void> {
-   this.service.getSemesterStudentsPerformance(2).subscribe(res => {console.log(res)});
+    
   }
 
   public async getStudents(){
     this.students =  await this.service.getStudents();
-    console.log(this.students);
     this.switchActivePage(this.StudentPage);
   }
 

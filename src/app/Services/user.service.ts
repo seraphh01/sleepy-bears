@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Pipe } from './pipe.model';
 import { Requests } from './requester.model';
@@ -39,11 +40,11 @@ export class UserService {
     return in_year == "true";
   }
 
-  public getGroups(){
+  public getGroups(): Observable<any>{
     let academic_year_id = sessionStorage.getItem("academic_year_id");
 
     if(academic_year_id == null){
-      return [];
+      return new Observable();
     }
 
     return Requests.sendGetRequest(this.client, "/groups", [academic_year_id])

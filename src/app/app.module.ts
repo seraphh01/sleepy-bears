@@ -30,7 +30,9 @@ import { WorstResultsComponent } from './chief-page/worst-results/worst-results.
 import { ViewGradesComponent } from './student-page/view-grades/view-grades.component';
 import { SignContractComponent } from './student-page/sign-contract/sign-contract.component';
 import { ViewEnrollmentsComponent } from './student-page/view-enrollments/view-enrollments.component';
-import {SortStudentByGroupComponent} from './admin-page/sort-student-by-group/sort-student-by-group.component'
+import {SortStudentByGroupComponent} from './admin-page/sort-student-by-group/sort-student-by-group.component';
+import { ViewGroupsComponent } from './admin-page/view-groups/view-groups.component';
+import { AddGroupComponent } from './admin-page/add-group/add-group.component'
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import {SortStudentByGroupComponent} from './admin-page/sort-student-by-group/so
     ViewGradesComponent,
     SignContractComponent,
     ViewEnrollmentsComponent,
-    SortStudentByGroupComponent
+    SortStudentByGroupComponent,
+    ViewGroupsComponent,
+    AddGroupComponent
   ],
   imports: [
     BrowserModule,

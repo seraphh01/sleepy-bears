@@ -1,0 +1,18 @@
+<div class="border-container">
+    <h4>View Groups from current year</h4>
+    <div *ngIf="this.groups">
+        <table>
+            <tr>
+                <td>Group number</td>
+                <td>Year of study</td>
+            </tr>
+            <tr *ngFor="let group of this.groups">
+                <td>{{group.number}}</td>
+                <td>{{group.year}}</td>
+            </tr>
+        </table>
+    </div>
+    <div *ngIf="!this.groups">
+        <p class="warning">There are no groups</p>
+    </div>
+</div>

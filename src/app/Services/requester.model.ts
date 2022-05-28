@@ -5,7 +5,7 @@ import { Pipe } from "./pipe.model";
 export class Requests {
    public static sendGetRequest(client: HttpClient, route: string, params: any[]){
     let paramString: string = "";
-    params.forEach(param => paramString += `/${param.toString()}`)
+    params.forEach(param => paramString += `/${param}`)
     return Pipe.makePipe(client.get(`${environment.url}${route}${paramString}`))
   }
 
