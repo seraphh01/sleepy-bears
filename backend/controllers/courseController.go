@@ -88,7 +88,7 @@ func ApproveCourse() gin.HandlerFunc {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			return
 		}
-		course.ID = primitive.NewObjectID()
+		course.ID = realCourseID
 
 		resultInsertionNumber, err := courseCollection.InsertOne(ctx, course)
 		if err != nil {
