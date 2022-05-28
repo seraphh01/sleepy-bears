@@ -7,13 +7,22 @@
                 <td>Year of study</td>
                 <td>Credits</td>
                 <td>Semester</td>
+                <td>Teacher</td>
+                <td>Add</td>
             </tr>
             <tr>
                 <td><input type="text" formControlName="name"></td>
-                <td><input type="number" formControlName="year_of_study"></td>
+                <td><input type="number" formControlName="yearofstudy"></td>
                 <td><input type="text" formControlName="credits"></td>
-                <td><input type="text" formControlName="semester"></td>
+                <td><input type="text" formControlName="semester"></td>                
+                <td *ngIf="this.teachers && this.teachers.length > 0">
+                    <select formControlName="teacher">
+                        <option value="dadi1234" selected>Select Teacher</option>
+                        <option *ngFor="let teacher of this.teachers" [value]="this.teacher.username">{{teacher.name}}</option>
+                    </select>
+                </td>
                 <td><button (click)="addCourse()" [disabled]="!this.courseForm.valid">Add course</button></td>
+
             </tr>
         </table>
     </form>

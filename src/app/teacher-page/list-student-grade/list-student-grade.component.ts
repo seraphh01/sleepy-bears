@@ -38,10 +38,8 @@ export class ListStudentGradeComponent implements OnInit {
       let studentGrades = res['grades'];
       var i : number;
 
-      if(students.length == 0){
-        alert("No students enrolled");
-         return;
-      }
+      if(students == null || studentGrades == null)
+        return;
 
       for(i=0;i<students.length;i++){
         let grades = Array<number>();

@@ -2,8 +2,8 @@
 <div class="border-container">
     <h3>View Student Grades</h3>
     <div *ngFor="let course of this.courseStudentGrades.keys()">
-        <p>{{course.name}}</p>
-        <table>
+        <p>Course: {{course.name}}</p>
+        <table *ngIf="this.courseStudentGrades.get(course)?.length! > 0 || false">
             <tr>
                 <th>Student</th>
                 <th>Group</th>
@@ -15,6 +15,7 @@
                 <th>{{entry.grades}}</th>
             </tr>
         </table>
+        <p *ngIf="this.courseStudentGrades.get(course)?.length! == 0 || false" class="warning">No students enrolled in this course</p>
     </div>
 
 </div>
