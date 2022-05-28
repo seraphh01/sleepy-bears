@@ -2,7 +2,7 @@
 <button (click)="switchActivePage(RegisterPage)">Register Users</button>
 <button (click)="switchActivePage('Delete User')">Delete User</button>
 <button (click)="switchActivePage('Semester')">Semester Performance</button>
-
+<button (click)="switchActivePage('SortByGroup')">Sort Students ByGroup</button>
 
 <div *ngIf="isPageActive(RegisterPage)">
     <app-register-users></app-register-users>
@@ -15,4 +15,7 @@
 </div>
 <div *ngIf="isPageActive('Semester')">
     <app-semester-performance></app-semester-performance>
+</div>
+<div *ngIf="isPageActive('SortByGroup')">
+    <app-sort-student-by-group></app-sort-student-by-group>
 </div>

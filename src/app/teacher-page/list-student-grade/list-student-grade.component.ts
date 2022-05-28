@@ -50,6 +50,7 @@ export class ListStudentGradeComponent implements OnInit {
         this.courseStudentGrades.get(course)?.push({student: students[i],grades: grades});
       }
    });
+      console.log(this.courseStudentGrades);
   }
 
   getStudentGrade(studentName: string){

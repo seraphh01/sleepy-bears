@@ -1,6 +1,5 @@
 <div class="register-container">
     <h4>Register a new user:</h4>
-
     <form [formGroup]="form">
         <label for="name">Name: </label>
         <input type="text" id="name" formControlName="name"><br><br>
@@ -8,19 +7,18 @@
         <label for="cnp">CNP: </label>
         <input type="text" id="cnp" formControlName="cnp"><br><br>
 
-        <label for="usertype">Usertype</label>
+        <label for="usertype">Usertype </label>
         <select id="usertype" formControlName="usertype">
             <option value="STUDENT" >STUDENT</option>
             <option value="TEACHER" >TEACHER</option>
             <option value="CHIEF" >CHIEF</option>
-        </select><br>
-    
+        </select><br><br>
         <button [disabled]="!this.form.valid" type="submit" (click)="addUser()" (submit)="addUser()">Register</button>
-    </form>
-    
+    </form><br>
     <hr>
-
-    <p>Register list of students from a file(each line should contain the name and cnp separated by comma)</p>
+    <br>
+    <p>Register list of students from a file (each line should</p>
+    <p> contain the name and cnp separated by comma)</p>
     <div class="Block">
         <label id="lbl" for="file">Upload file: </label>
         <input name='file' type='file' (change)="fileChanged($event)" accept=".txt">
@@ -28,10 +26,10 @@
             <option value="STUDENT" >STUDENT</option>
             <option value="TEACHER" >TEACHER</option>
             <option value="CHIEF" >CHIEF</option>
-        </select><br>
+        </select><br><br><br>
         <button (click)="registerUsers()">Register</button>
     </div>
-      
+      <br>
     <div *ngIf="this.registeredStudents && this.registeredStudents.length > 0">
         <h2>Registered Users:</h2>
         <table>
