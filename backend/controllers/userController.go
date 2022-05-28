@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -387,14 +386,15 @@ func GetStudentsByGroup() gin.HandlerFunc {
 		}
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		groupNumber, err := strconv.Atoi(c.Param("groupnumber"))
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		groupID := c.Param("group_id")
+		realGroupId, err2 := primitive.ObjectIDFromHex(groupID)
+		if err2 != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err2.Error()})
 			return
 		}
 
 		var users []models.User
-		cursor, err := userCollection.Find(ctx, bson.M{"group.number": groupNumber})
+		cursor, err := userCollection.Find(ctx, bson.M{"group._id": realGroupId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
