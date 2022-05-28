@@ -7,8 +7,8 @@
 <button (click)="switchActivePage('addGroup')">Add group in current year</button>
 
 
-<div *ngIf="isPageActive(RegisterPage)">
-    <app-register-users></app-register-users>
+<div *ngIf="isPageActive(RegisterPage) && this.groups">
+    <app-register-users [groups]="this.groups"></app-register-users>
 </div>
 <div *ngIf="this.students && isPageActive(StudentPage)">
     <app-view-users [students]="this.students"></app-view-users>

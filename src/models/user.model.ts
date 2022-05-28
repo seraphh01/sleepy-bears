@@ -10,4 +10,5 @@ export interface UserModel {
     token:string;
     group: Group;
     refreshToken: string;
+    CNP: number;
 }

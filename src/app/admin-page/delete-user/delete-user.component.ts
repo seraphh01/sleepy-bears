@@ -21,6 +21,6 @@ export class DeleteUserComponent implements OnInit {
   }
 
   public deleteUser(){
-    this.adminService.deleteUser(this.usernameGroup.get("username")!.value).subscribe(res => {alert(res)}, err => {console.log(err)});
+    this.adminService.deleteUser(this.usernameGroup.get("username")!.value).subscribe(res => {alert("Deleted")}, err => {alert("User not found")});
   }
 }

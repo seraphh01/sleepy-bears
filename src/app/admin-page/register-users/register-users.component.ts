@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { RegisterService } from '../../Services/register.service';
 import { RegisterDto } from '../../../models/register-dto.model';
 import { RegisterModel } from '../../../models/register.model';
 import {UserModel} from '../../../models/user.model'
+import { Group } from 'src/models/group.model';
 
 @Component({
   selector: 'app-register-users',
@@ -15,12 +16,14 @@ import {UserModel} from '../../../models/user.model'
   styleUrls: ['./register-users.component.css']
 })
 export class RegisterUsersComponent implements OnInit {
+  @Input() public groups!: Group[];
+  public group!: Group;
   public register?: RegisterDto;
   public usertype: string = 'STUDENT';
   public form: FormGroup;
   public file!:File;
   public fileContent!:string;
-  public registeredStudents!: any;
+  public registeredStudents!: RegisterModel[];
 
   constructor(private route: ActivatedRoute, private authService: AuthService,
     private registerService: RegisterService, private fileService: FileService) { 
@@ -28,7 +31,8 @@ export class RegisterUsersComponent implements OnInit {
       {
         name: new FormControl('', Validators.required),
         cnp: new FormControl('', [Validators.required, Validators.minLength(13), Validators.maxLength(13)] ),
-        usertype: new FormControl('STUDENT', [Validators.required])
+        usertype: new FormControl('STUDENT', [Validators.required]),
+        group: new FormControl({} as Group, [Validators.required])
       }
     );
 
@@ -38,16 +42,21 @@ export class RegisterUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.group = this.groups[0];
+    this.form.patchValue({group: this.group})
   }
 
   public addUser(){
-    console.log(this.register);
     if(!this.form.valid){
       alert("Invalid values in the form");
       return;
     }
 
-    this.registerService.RegisterStudents([this.register!], this.form.get("usertype")?.value).subscribe();
+    this.registerService.RegisterStudents([this.register!], this.form.get("usertype")?.value, this.form.get("group")?.value).subscribe((res: any) => {
+      
+      this.registeredStudents = res;
+      this.downloadStudentsList();
+    });
   }
 
   async fileChanged(e: any) {
@@ -76,12 +85,11 @@ export class RegisterUsersComponent implements OnInit {
       if(cnp.length != 13 || name.length == 0)
         continue;
 
-
       studentList.push({name: name, CNP: cnp} as RegisterDto);
       
     }
 
-    this.registerService.RegisterStudents(studentList, this.usertype).subscribe(res => {
+    this.registerService.RegisterStudents(studentList, this.usertype, this.group).subscribe((res: any) => {
       this.registeredStudents = res;
 
       // for(let user of this.registeredStudents){
@@ -105,7 +113,10 @@ export class RegisterUsersComponent implements OnInit {
       studentsList += `${student.username}, ${student.password}, ${student.email}, ${student.name}, ${student.usertype}\n`
     }
 
-    console.log(studentsList);
     this.fileService.downloadTextFile(studentsList, '.csv');
+  }
+
+  public groupChanged(e: any){
+    this.group = e.target.value;
   }
 }

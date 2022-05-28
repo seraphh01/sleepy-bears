@@ -1,4 +1,28 @@
-<div class="border-container" *ngIf="this.students && this.students.length > 0">
+<div class="border-container" *ngIf="this.students">
     <h4>Students: </h4>
-    <p *ngFor="let student of this.students">{{student.email}} - {{student.username}}</p>
+    <label for="group">Select Group: </label>
+    <select (change)="viewGroup($event)" name="group" id="group" >
+        <option value="All" selected>All Groups</option>
+        <option *ngFor="let group of this.groups" [value]="group.ID">{{group?.number || "NaN"}}</option>
+    </select><br>
+    <table *ngIf="this.students.length > 0">
+        <tr>
+            <th>Name</th>
+            <th>Group</th>
+            <td>Username.CNP</td>
+            <td>Change Group</td>
+        </tr>
+        <tr *ngFor="let student of this.students">
+            <td>{{student.name}}</td>
+            <td>{{student.group?.number || "NaN"}}</td>
+            <td>{{student.username}}</td>
+            <td>
+                <select (change)="changeGroup(student.username, $event)" name="group" id="group" >
+                    <option value="none" selected disabled hidden>{{student.group?.number || "Nan"}}</option>
+                    <option *ngFor="let group of this.groups" [value]="group.number">{{group?.number || "NaN"}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <p class="warning" *ngIf="this.students.length == 0">there are no students</p>
 </div>

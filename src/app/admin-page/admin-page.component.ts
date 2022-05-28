@@ -11,6 +11,8 @@ import {UserModel} from '../../models/user.model'
 import { AdminService } from '../Services/admin.service';
 import { Student } from 'src/models/Student';
 import { threadId } from 'worker_threads';
+import { Group } from 'src/models/group.model';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-admin-page',
@@ -18,16 +20,21 @@ import { threadId } from 'worker_threads';
   styleUrls: ['./admin-page.component.css']
 })
 export class AdminPageComponent implements OnInit {
+  public groups!: Group[];
   RegisterPage: string = "register";
   StudentPage: string = "students";
 
   activePage = "none";
   register = false;
-  students!: Student[];
-  constructor(private service: AdminService){}
+  students!: UserModel[];
+  constructor(private service: AdminService, private userService: UserService){}
 
   async ngOnInit(): Promise<void> {
-    
+    this.userService.getGroups().subscribe(res => {
+      if(typeof res === 'string')
+        return
+      this.groups = res;
+    },err => console.error(err));
   }
 
   public async getStudents(){
