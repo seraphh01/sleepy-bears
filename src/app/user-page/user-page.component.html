@@ -8,7 +8,8 @@
     <div class="content">
         <div class="top-content" *ngIf="this.user">
             <h1>Logged in as {{this.user.name}}</h1>
-            <h2 *ngIf="this.academicYear">Current year: {{this.getCurrentYear()}}</h2>
+            <h2 *ngIf="this.academicYear && this.userService.inAcademicYear()">Current year: {{this.getCurrentYear()}}</h2>
+            <h2 *ngIf="!this.userService.inAcademicYear()">Wait for next academic year</h2>
         </div>
         <div class="top-content profile" *ngIf="this.user">
             <h1>Profile: {{this.user.profileDescription}}</h1>
