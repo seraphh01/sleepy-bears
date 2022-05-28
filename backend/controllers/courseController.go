@@ -271,6 +271,10 @@ func AddMandatoryCourse() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		academicYear := getCurrentAcademicYear()
+		course.AcademicYear = &academicYear
+
 		validationErr := validate.Struct(course)
 		if validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
