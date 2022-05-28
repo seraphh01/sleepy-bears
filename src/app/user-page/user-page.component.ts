@@ -13,8 +13,9 @@ import { UserService } from '../Services/user.service';
 export class UserPageComponent implements OnInit {
   public user!: UserModel;
   public username?: string;
+  public academicYear!: AcademicYear;
   
-  constructor(private userService: UserService, private route: ActivatedRoute, private authService: AuthService, private router: Router) { 
+  constructor(public userService: UserService, private route: ActivatedRoute, private authService: AuthService, private router: Router) { 
 
   }
 
@@ -39,6 +40,7 @@ export class UserPageComponent implements OnInit {
         sessionStorage.setItem("academic_year_id", res['ID'])
 
         let year = res as AcademicYear;
+        this.academicYear = year;
         
         let currentDate = Date.now();
         let startDate = Date.parse(year.startdate);
@@ -55,5 +57,14 @@ export class UserPageComponent implements OnInit {
         sessionStorage.setItem("can_sign", "false");
         sessionStorage.setItem("in_year", "false");
       })
+  }
+
+  public getCurrentYear(){
+    let format: string = "";
+    format += this.academicYear.startdate.slice(0, 10) + " to ";
+    format += this.academicYear.enddate.slice(0, 10);
+
+    return format;
+
   }
 }
