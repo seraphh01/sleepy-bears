@@ -54,6 +54,8 @@ export class AddCourseComponent implements OnInit {
     }
 
     let course: Course = this.courseForm.getRawValue();
+    course.semester = +course.semester;
+
     let teacher = this.courseForm.get('teacher')?.value || this.user.username;
     course.academic_year = {
       startdate : new Date(2021, 10, 5).toDateString(),

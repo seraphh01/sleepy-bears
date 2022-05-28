@@ -62,3 +62,7 @@ button:hover{
     text-shadow: 0.5px 0.5px 2px rgb(215, 141, 141);
 
 }
+
+.small {
+    width: 50px;
+}

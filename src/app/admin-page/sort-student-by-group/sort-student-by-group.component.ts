@@ -71,6 +71,10 @@ export class SortStudentByGroupComponent implements OnInit {
 
   public viewGroup(e: any){
     let group_number = e.target.value;
-    this.getPerformanceByGroup(group_number)
+
+    if(group_number == "All")
+      this.getPerformance();
+    else
+      this.getPerformanceByGroup(group_number)
   }
 }

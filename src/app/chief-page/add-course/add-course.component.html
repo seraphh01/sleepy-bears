@@ -12,9 +12,9 @@
             </tr>
             <tr>
                 <td><input type="text" formControlName="name"></td>
-                <td><input type="number" formControlName="yearofstudy"></td>
-                <td><input type="text" formControlName="credits"></td>
-                <td><input type="text" formControlName="semester"></td>                
+                <td><input type="number" class="small" formControlName="yearofstudy"></td>
+                <td><input type="text" class="small" formControlName="credits"></td>
+                <td><input type="text" class="small" formControlName="semester"></td>                
                 <td *ngIf="this.teachers && this.teachers.length > 0">
                     <select formControlName="teacher">
                         <option value="dadi1234" selected>Select Teacher</option>
