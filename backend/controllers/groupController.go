@@ -76,7 +76,7 @@ func AddGroup() gin.HandlerFunc {
 			return
 		}
 
-		count, err := groupCollection.CountDocuments(ctx, bson.M{"number": group.Number})
+		count, err := groupCollection.CountDocuments(ctx, bson.M{"number": group.Number, "academicyear._id": academicYear.ID})
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while checking for the group number"})
