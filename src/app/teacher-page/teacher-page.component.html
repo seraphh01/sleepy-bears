@@ -12,5 +12,5 @@
     <app-add-student-grade [proposedCourses]="this.proposedCourses" [courses]="this.courses"></app-add-student-grade>
 </div>
 <div *ngIf="this.proposedCourses && this.courses">
-    <app-list-student-grade [mandatoryCourses]="this.courses" ></app-list-student-grade>
+    <app-list-student-grade [proposedCourses]="this.proposedCourses" [mandatoryCourses]="this.courses" ></app-list-student-grade>
 </div>

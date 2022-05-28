@@ -6,10 +6,12 @@
         <table>
             <tr>
                 <th>Student</th>
+                <th>Group</th>
                 <th>Grade</th>
             </tr>
             <tr *ngFor="let entry of this.courseStudentGrades.get(course)">
                 <th>{{entry.student.name}}</th>
+                <th>{{entry.student.group?.number || "NaN"}}</th>
                 <th>{{entry.grades}}</th>
             </tr>
         </table>

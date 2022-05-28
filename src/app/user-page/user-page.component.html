@@ -17,7 +17,7 @@
         </div>
         <div class="middle-content">
             <div *ngIf="this.user">
-                <h1>Page:</h1>
+                <h1>{{this.user.usertype}} Page:</h1>
                 <br>
 
                 <div *ngIf="this.user.usertype=='STUDENT'">

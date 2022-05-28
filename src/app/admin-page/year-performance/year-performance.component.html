@@ -1,0 +1,26 @@
+    <div class="border-container">
+        <form [formGroup]="formGroup">
+            <label for="year">Year:</label>
+            <input type="number" min="1" placeholder="1" id="year" formControlName="year">
+            <button (click)="viewPerformance()">View</button>
+        </form>
+        <h4>Students: </h4>
+        <div *ngIf="this.studentGrades">
+            <table *ngIf="this.studentGrades.length > 0">
+                <tr>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <td>Username.CNP</td>
+                    <td>GPA</td>
+                </tr>
+                <tr *ngFor="let student of this.studentGrades">
+                    <td>{{student.student.name}}</td>
+                    <td>{{student.student.group?.number || "NaN"}}</td>
+                    <td>{{student.student.username}}</td>
+                    <td>{{student.grades[0]}}</td>
+                </tr>
+            </table>
+            <p class="warning" *ngIf="this.studentGrades.length == 0">there are no grade for any student in this group</p>
+        </div>
+        
+    </div>

@@ -47,13 +47,17 @@ export class StudentPageComponent implements OnInit {
     });
     this.service.getMandatoryCoursesEnrollments(this.student.username, year).subscribe(res =>{
       this.mandatoryCourses = res;
-    }, _ => {
+    }, err => {
+      console.log(err)
       if(!this.userService.canSign() && this.userService.inAcademicYear()){
         while(!confirm("You didn't sign the contract of study. Please sign now!")){
-          this.service.signContract(year).subscribe(_ => {
-            confirm(`Contract signed successfully for year of study ${year}!`)
-          });
+          continue;
+          
         }
+        this.service.signContract(year).subscribe(res => {
+          console.group(res)
+          confirm(`Contract signed successfully for year of study ${year}!`)
+        });
       }
     })
   }

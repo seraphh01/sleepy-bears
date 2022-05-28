@@ -32,7 +32,8 @@ import { SignContractComponent } from './student-page/sign-contract/sign-contrac
 import { ViewEnrollmentsComponent } from './student-page/view-enrollments/view-enrollments.component';
 import {SortStudentByGroupComponent} from './admin-page/sort-student-by-group/sort-student-by-group.component';
 import { ViewGroupsComponent } from './admin-page/view-groups/view-groups.component';
-import { AddGroupComponent } from './admin-page/add-group/add-group.component'
+import { AddGroupComponent } from './admin-page/add-group/add-group.component';
+import { YearPerformanceComponent } from './admin-page/year-performance/year-performance.component'
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AddGroupComponent } from './admin-page/add-group/add-group.component'
     ViewEnrollmentsComponent,
     SortStudentByGroupComponent,
     ViewGroupsComponent,
-    AddGroupComponent
+    AddGroupComponent,
+    YearPerformanceComponent
   ],
   imports: [
     BrowserModule,

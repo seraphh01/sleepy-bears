@@ -2,7 +2,7 @@
 <div class="border-container">
     <h3>Add Grades</h3><br>
     <table *ngIf="this.userService.inAcademicYear()">
-        <tr *ngFor="let course of courses">
+        <tr *ngFor="let course of myCourses">
             <table>
                 <tr >
                     <td colspan="3">Course: {{course.name}}</td>
@@ -14,17 +14,19 @@
                 <div  *ngIf="this.studentsOfCourse!.get(course.ID) && this.studentsOfCourse.get(course.ID)!.length > 0 " >
                     <tr>
                         <td>Student Name</td>
+                        <td>Group</td>
                         <td>Grade</td>
                     </tr>
                     <tr *ngFor="let student of this.studentsOfCourse.get(course.ID)">
                         <th>{{student.name}}</th>
-                        <th><input id="{{course.ID}}{{student.name}}" type="number" min="1" max="10"></th>
+                        <th>{{student.group?.number || "NaN"}}</th>
+                        <th><input id="{{course.ID}}{{student.username}}" type="number" min="1" max="10"></th>
                         <th><button (click)="gradeStudent(course.ID, student.username)">Add</button></th>
                     </tr>
                 </div>
             </table>
         </tr>
-        <tr *ngIf="this.courses && this.courses.length == 0">
+        <tr *ngIf="this.myCourses && this.myCourses.length == 0">
             <td>There are no courses approved or you are not responsible for any course</td>
         </tr>
     </table>

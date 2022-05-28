@@ -49,6 +49,7 @@ export class StudentService {
   }
 
   public signContract(year: number){
+    console.log("signing")
     return Pipe.makePipe(this.client.post(`${environment.url}/enrollments/add/by-year/${year}`, {}))
   }
 }

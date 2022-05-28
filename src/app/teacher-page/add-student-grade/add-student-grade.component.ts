@@ -17,6 +17,8 @@ import { UserModel } from 'src/models/user.model';
 export class AddStudentGradeComponent implements OnInit {
   @Input() proposedCourses!: Course[];
   @Input() courses!: Course[];
+
+  myCourses: Course[] = [];
   studentsOfCourse: Map<ObjectId, UserModel[]> = new Map<ObjectId, UserModel[]>();
   students:Student[] = [];
   grade!: number;
@@ -25,12 +27,12 @@ export class AddStudentGradeComponent implements OnInit {
   }
 
   async ngOnInit() {
-
-    for(let course of this.courses){
+    this.courses.forEach(c => this.myCourses.push(c))
+    this.proposedCourses.forEach(c => this.myCourses.push(c));
+    for(let course of this.myCourses){
       this.studentsOfCourse.set(course.ID, new Array<UserModel>());
       this.getStudents(course.ID);
     }
-
 
     //this.students = await this.teacherService.getStudentsByCourse(courseId.toString());
   }

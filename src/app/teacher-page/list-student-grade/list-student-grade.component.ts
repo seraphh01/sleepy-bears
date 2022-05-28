@@ -13,6 +13,7 @@ import { StudentGrade } from 'src/models/studentGrade.model';
 })
 export class ListStudentGradeComponent implements OnInit {
   @Input() mandatoryCourses!: Course[];
+  @Input() proposedCourses!: Course[];
   students: Student[] = [];
   courseGrades: Grade[][] = [];
   courses: Course[] = [];
