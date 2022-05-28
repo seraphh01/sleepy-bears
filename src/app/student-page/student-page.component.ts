@@ -6,6 +6,7 @@ import { Grade } from 'src/models/Grade.model';
 import { Student } from 'src/models/Student';
 import { UserModel } from 'src/models/user.model';
 import { StudentService } from '../Services/student.service';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-student-page',
@@ -18,6 +19,7 @@ export class StudentPageComponent implements OnInit {
   show = false;
   courses!:Course[];
   optionalCourses!: Course[];
+  mandatoryCourses!: Course[];
   currentCourse!: Course;
   slideIndex = 0;
   allMyCourses = "";
@@ -25,14 +27,14 @@ export class StudentPageComponent implements OnInit {
   presentGrades = false;
   grades:Grade[] = [];
 
-  constructor(private service: StudentService ) {
+  constructor(private service: StudentService , public userService: UserService) {
 
   }
 
   async ngOnInit(){
     let year = 1;
     if(this.student!.group!)
-    year = this.student.group.year;
+      year = this.student.group.year;
     this.courses = await this.service.getMandatoryCourses(year);
     this.service.getOptionalCourses(this.student!.username).subscribe(res => {
       if(typeof res === 'string')
@@ -43,6 +45,18 @@ export class StudentPageComponent implements OnInit {
       console.log(err);
       this.optionalCourses = new Array<Course>();
     });
+    console.log(year);
+    this.service.getMandatoryCoursesEnrollments(this.student.username, year).subscribe(res =>{
+      this.mandatoryCourses = res;
+    }, _ => {
+      if(!this.userService.canSign() && this.userService.inAcademicYear()){
+        while(!confirm("You didn't sign the contract of study. Please sign now!")){
+          this.service.signContract(year).subscribe(_ => {
+            confirm(`Contract signed successfully for year of study ${year}!`)
+          });
+        }
+      }
+    })
   }
   
   showCourses(){

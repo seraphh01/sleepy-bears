@@ -28,6 +28,10 @@ export class StudentService {
     return Pipe.makePipe( this.client.get<Course[]>(`${environment.url}/enrollments/getbyusername/${user_name}`));
   }
 
+  public getMandatoryCoursesEnrollments(user_name: String, yearofstudy: number){
+    return Pipe.makePipe(this.client.get<Course[]>(`${environment.url}/enrollments/getmandatorybyusername/${user_name}/${yearofstudy}`))
+  }
+
   public enroll(courseId: ObjectId): Observable<any>{
     return Pipe.makePipe(this.client.post(`${environment.url}/enrollments/add/${courseId}`, {}))
   }
