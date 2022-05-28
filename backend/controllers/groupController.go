@@ -30,7 +30,7 @@ func GetGroupsByAcademicYear() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		cursor, err := groupCollection.Find(ctx, bson.M{"academic_year._id": realYearId})
+		cursor, err := groupCollection.Find(ctx, bson.M{"academicyear._id": realYearId})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
