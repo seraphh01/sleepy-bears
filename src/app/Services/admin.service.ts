@@ -81,6 +81,10 @@ export class AdminService {
      return this.sendPostRequest("/makechief", [user_name], {})
    }
 
+   public getGroupsPerformane(){
+     return this.sendGetRequest("/users/allgroups/allstudents/performancedesc", []);
+   }
+
    public sendGetRequest(route: string, params: any[]){
      let paramString: string = "";
      params.forEach(param => paramString += `/${param}`)

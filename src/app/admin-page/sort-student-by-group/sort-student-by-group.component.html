@@ -1,6 +1,23 @@
-<div>
-    <p>Sorted Students by Group</p>
-    <table>
-        <th>Group</th>
+<div class="border-container" *ngIf="this.students">
+    <h4>Students: </h4>
+    <label for="group">Select Group: </label>
+    <select (change)="viewGroup($event)" name="group" id="group" >
+        <option value="All" selected>All Groups</option>
+        <option *ngFor="let group of this.groups" [value]="group.number">{{group?.number || "NaN"}}</option>
+    </select><br>
+    <table *ngIf="this.studentGrades.length > 0">
+        <tr>
+            <th>Name</th>
+            <th>Group</th>
+            <td>Username.CNP</td>
+            <td>GPA</td>
+        </tr>
+        <tr *ngFor="let student of this.studentGrades">
+            <td>{{student.student.name}}</td>
+            <td>{{student.student.group?.number || "NaN"}}</td>
+            <td>{{student.student.username}}</td>
+            <td>{{student.grades[0]}}</td>
+        </tr>
     </table>
+    <p class="warning" *ngIf="this.studentGrades.length == 0">there are no grade for any student in this group</p>
 </div>

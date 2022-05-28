@@ -9,7 +9,7 @@
                 <th>Grade</th>
             </tr>
             <tr *ngFor="let entry of this.courseStudentGrades.get(course)">
-                <th>{{entry.student.username}}</th>
+                <th>{{entry.student.name}}</th>
                 <th>{{entry.grades}}</th>
             </tr>
         </table>
