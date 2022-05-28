@@ -45,7 +45,6 @@ export class StudentPageComponent implements OnInit {
       console.log(err);
       this.optionalCourses = new Array<Course>();
     });
-    console.log(year);
     this.service.getMandatoryCoursesEnrollments(this.student.username, year).subscribe(res =>{
       this.mandatoryCourses = res;
     }, _ => {

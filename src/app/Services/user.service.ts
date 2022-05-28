@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { Pipe } from './pipe.model';
+import { Requests } from './requester.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,15 @@ export class UserService {
       return true;
       
     return in_year == "true";
+  }
+
+  public getGroups(){
+    let academic_year_id = sessionStorage.getItem("academic_year_id");
+
+    if(academic_year_id == null){
+      return [];
+    }
+
+    return Requests.sendGetRequest(this.client, "/groups", [academic_year_id])
   }
 }
