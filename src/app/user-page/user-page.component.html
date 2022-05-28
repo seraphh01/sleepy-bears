@@ -8,6 +8,7 @@
     <div class="content">
         <div class="top-content" *ngIf="this.user">
             <h1>Logged in as {{this.user.name}}</h1>
+            <h2 *ngIf="this.academicYear">Current year: {{this.getCurrentYear()}}</h2>
         </div>
         <div class="top-content profile" *ngIf="this.user">
             <h1>Profile: {{this.user.profileDescription}}</h1>
@@ -19,6 +20,7 @@
                 <br>
 
                 <div *ngIf="this.user.usertype=='STUDENT'">
+                    <div class="border-container" *ngIf="this.userService.canSign()"><h3 class="warning">It's the signing contracts period, sign below if you haven't signed yet!</h3></div>
                     <app-student-page [student]="this.user"></app-student-page>
                 </div>
 
