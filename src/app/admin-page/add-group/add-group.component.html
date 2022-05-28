@@ -1,0 +1,12 @@
+<div class="border-container">
+    <h3>Add a group</h3>
+    <for [formGroup]="formGroup">
+        <label for="number">Group number: </label>
+        <input type="number" id="number" formControlName="number">
+
+        <label for="year">Group year:</label>
+        <input matInput type="number" id="year" formControlName="year" [readonly]="true">
+
+        <button (click)="addGroup()" [disabled]="!this.formGroup.valid">Add</button>
+    </for>
+</div>
