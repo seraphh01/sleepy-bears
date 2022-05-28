@@ -17,6 +17,9 @@ import { UserModel } from 'src/models/user.model';
 export class AddStudentGradeComponent implements OnInit {
   @Input() proposedCourses!: Course[];
   @Input() courses!: Course[];
+  @Input() groups!: Group[];
+
+  group_number!: number;
 
   myCourses: Course[] = [];
   studentsOfCourse: Map<ObjectId, UserModel[]> = new Map<ObjectId, UserModel[]>();
@@ -26,7 +29,7 @@ export class AddStudentGradeComponent implements OnInit {
   constructor(private teacherService: TeacherService, public userService: UserService) { 
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.courses.forEach(c => this.myCourses.push(c))
     this.proposedCourses.forEach(c => this.myCourses.push(c));
     for(let course of this.myCourses){
@@ -55,9 +58,21 @@ export class AddStudentGradeComponent implements OnInit {
       }
       for(let student of res)
         this.studentsOfCourse.get(courseId)?.push(student);
+
+      console.log(this.studentsOfCourse)
     }, error => {
       alert(error)
     });
+  }
+
+  public changeGroup(e: any){
+    this.group_number = e.target.value;
+  }
+
+  public getCurrentGroupNumber(){
+    if(this.group_number != null)
+      return this.group_number;
+    return this.groups[0].number;
   }
 
 }

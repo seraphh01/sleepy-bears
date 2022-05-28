@@ -2,6 +2,10 @@
 <div class="border-container">
     <h3>Add Grades</h3><br>
     <table *ngIf="this.userService.inAcademicYear()">
+        <label for="group"></label>
+        <select id="group" (change)="changeGroup($event)">
+            <option *ngFor="let group of this.groups" [value]="group.number">{{group.number}}</option>
+        </select>
         <tr *ngFor="let course of myCourses">
             <table>
                 <tr >
@@ -17,12 +21,16 @@
                         <td>Group</td>
                         <td>Grade</td>
                     </tr>
-                    <tr *ngFor="let student of this.studentsOfCourse.get(course.ID)">
-                        <th>{{student.name}}</th>
-                        <th>{{student.group?.number || "NaN"}}</th>
-                        <th><input id="{{course.ID}}{{student.username}}" type="number" min="1" max="10"></th>
-                        <th><button (click)="gradeStudent(course.ID, student.username)">Add</button></th>
-                    </tr>
+                    <span  *ngFor="let student of this.studentsOfCourse.get(course.ID)">
+                        <tr *ngIf="this.group_number == null || student.group.number == this.getCurrentGroupNumber()">
+                            <th>{{student.name}}</th>
+                            <th>{{student.group?.number || "NaN"}}</th>
+                            <th><input id="{{course.ID}}{{student.username}}" type="number" min="1" max="10"></th>
+                            <th><button (click)="gradeStudent(course.ID, student.username)">Add</button></th>
+                        </tr>
+                        <br>
+                    </span>
+                    
                 </div>
             </table>
         </tr>

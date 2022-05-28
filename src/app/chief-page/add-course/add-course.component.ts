@@ -48,6 +48,11 @@ export class AddCourseComponent implements OnInit {
   }
 
   public addCourse(){
+    if(!this.userService.canSign()){
+      alert("Not in the signing contracts period, can not add more courses!")
+      return;
+    }
+
     let course: Course = this.courseForm.getRawValue();
     let teacher = this.courseForm.get('teacher')?.value || this.user.username;
     course.academic_year = {

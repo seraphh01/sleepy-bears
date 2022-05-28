@@ -1,6 +1,6 @@
 <div *ngIf="this.courses" class="border-container">
     <h3 id="title">Approve proposed courses</h3>
-    <table>
+    <table *ngIf="this.courses.length > 0">
         <tr>
             <td>Course Name</td>
             <td>Proposed by</td>
@@ -11,5 +11,5 @@
             <td><button (click)="approveCourse(course.ID)">Approve</button></td>
         </tr>
     </table>
-    
+    <p class="warning" *ngIf="this.courses.length == 0">There are no courses</p>
 </div>

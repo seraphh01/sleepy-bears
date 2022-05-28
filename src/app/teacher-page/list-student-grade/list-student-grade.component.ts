@@ -34,6 +34,7 @@ export class ListStudentGradeComponent implements OnInit {
     this.teacherService.getStudentsAtCourse(course.ID).subscribe((res: any) => {
       this.courseStudentGrades.set(course,new Array<StudentGrade>());
 
+
       let students = res['students'];
       let studentGrades = res['grades'];
       var i : number;
@@ -43,13 +44,16 @@ export class ListStudentGradeComponent implements OnInit {
 
       for(i=0;i<students.length;i++){
         let grades = Array<number>();
+        
+        if(studentGrades[i] == null)
+          continue;
+
         studentGrades[i].forEach(
           (grade:Grade) => grades.push(grade.grade)
         )
         this.courseStudentGrades.get(course)?.push({student: students[i],grades: grades});
       }
    });
-      console.log(this.courseStudentGrades);
   }
 
   getStudentGrade(studentName: string){

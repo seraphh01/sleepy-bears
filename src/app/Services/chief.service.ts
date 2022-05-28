@@ -15,7 +15,7 @@ export class ChiefService {
   constructor(private client: HttpClient) { }
 
   public approveCourse(courseId: ObjectId){
-    return Pipe.makePipe(this.client.post(`${environment.url}/courses/approve/${courseId}`, {}))
+    return Pipe.makePipe(this.client.post(`${environment.url}/courses/approve/${courseId}`, {max: 150}))
   }
 
   public addMandatoryCourse(userName: string, course: Course){

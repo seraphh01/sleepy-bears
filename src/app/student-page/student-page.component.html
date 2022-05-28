@@ -1,7 +1,7 @@
 
 
 <div *ngIf="this.courses && this.optionalCourses && this.student">
-    <app-view-courses [courses]="this.courses" [courseType]="'Mandatory'"></app-view-courses>
+    <app-view-courses [courses]="this.courses" [courseType]="'Mandatory/Approved'"></app-view-courses>
     <app-view-enrollments [courses]="this.optionalCourses"></app-view-enrollments>
     <div></div>
     <app-enroll-optional [student]="this.student" [studentEnrollments]="this.optionalCourses"></app-enroll-optional>
