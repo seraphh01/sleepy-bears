@@ -1,2 +1,8 @@
 <p>Profile of {{this.user!.name!||'dwa'}}</p>
 
+<div *ngIf="this.user">
+    {{this.user.email}}
+</div>
+
+
+

@@ -1,0 +1,64 @@
+#prev{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+}
+
+
+#next{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+}
+
+#add{
+    background-color: rgb(226, 193, 199);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    border-color: grey;
+    font-size: 15px;
+    color:rgb(189, 109, 109);
+    border-radius: 10%;
+}
+
+.buttons{
+    display:flex;
+}
+
+
+#username{
+    font-size: 28px;
+}
+#email{
+    font-size: 28px;
+}
+#usertype{
+    font-size: 28px;
+}
+#password{
+    font-size: 28px;
+}
+#name{
+    font-size: 28px;
+}
+#profileDescription{
+    font-size: 28px;
+}
+#token{
+    font-size: 28px;
+}
+#group{
+    font-size: 28px;
+}
+
+#CNP{
+    font-size: 28px;
+}
