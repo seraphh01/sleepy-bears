@@ -443,6 +443,9 @@ func GetAverageGradeByCourseID(c *gin.Context, realCourseId primitive.ObjectID) 
 			sum += float64(grade.Grade)
 			count += 1
 		}
+		if count == 0 {
+			continue
+		}
 		var average float64
 		average = sum / float64(count)
 		total += average
